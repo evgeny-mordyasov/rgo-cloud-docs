@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: dev
+
+module-properties:
+  persistence:
+    url: jdbc:postgresql://localhost:5433/auth
+    scheme: auth
+    username: auth_appl
+    password: qwe123
+    maxPoolSize: 5

@@ -10,13 +10,100 @@
 
     <packaging>pom</packaging>
 
+    <modules>
+        <module>rgo-cloud-docs-internal-api</module>
+        <module>rgo-cloud-docs-boot</module>
+    </modules>
+
     <properties>
         <!-- system -->
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- system -->
+
+        <rgo-cloud-common.version>1.0-SNAPSHOT</rgo-cloud-common.version>
+
+        <!-- spring -->
+        <spring-boot.version>2.7.0</spring-boot.version>
+        <spring.version>6.0.2</spring.version>
+        <!-- spring -->
+
+        <!-- db -->
+        <postrgesql.version>42.3.3</postrgesql.version>
+        <h2.version>2.1.210</h2.version>
+        <!-- db -->
+
+        <lombok.version>1.18.22</lombok.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- self module -->
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-cloud-docs-internal-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- self module -->
+
+            <!-- rgo-cloud -->
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-cloud-common-api</artifactId>
+                <version>${rgo-cloud-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-cloud-common-spring</artifactId>
+                <version>${rgo-cloud-common.version}</version>
+            </dependency>
+            <!-- rgo-cloud -->
+
+            <!-- spring -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jdbc</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring-boot.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- spring -->
+
+            <!-- db -->
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postrgesql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
+            </dependency>
+            <!-- db -->
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
@@ -32,6 +119,11 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
