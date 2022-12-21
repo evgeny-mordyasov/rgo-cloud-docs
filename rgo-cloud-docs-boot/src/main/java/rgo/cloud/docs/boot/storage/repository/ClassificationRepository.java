@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-// TODO: validate ID in the service layer
-
 @Slf4j
 public class ClassificationRepository {
     private final DbTxManager tx;
@@ -51,6 +49,10 @@ public class ClassificationRepository {
         }
 
         return Optional.of(list.get(0));
+    }
+
+    public boolean exists(Long entityId) {
+        return findById(entityId).isPresent();
     }
 
     public Classification save(Classification classification) {

@@ -51,6 +51,10 @@ public class LanguageRepository {
         return Optional.of(list.get(0));
     }
 
+    public boolean exists(Long entityId) {
+        return findById(entityId).isPresent();
+    }
+
     public Language save(Language language) {
         MapSqlParameterSource params = new MapSqlParameterSource("name", language.getName());
 

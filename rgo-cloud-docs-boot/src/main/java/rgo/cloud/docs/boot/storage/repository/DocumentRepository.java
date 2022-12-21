@@ -16,9 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-// TODO: нет fetch для classification
-// TODO: validate ID in the service layer
-
 @Slf4j
 public class DocumentRepository {
     private final DbTxManager tx;
@@ -42,6 +39,10 @@ public class DocumentRepository {
         }
 
         return Optional.of(list.get(0));
+    }
+
+    public boolean exists(Long entityId) {
+        return findById(entityId).isPresent();
     }
 
     public Document save(Document document) {

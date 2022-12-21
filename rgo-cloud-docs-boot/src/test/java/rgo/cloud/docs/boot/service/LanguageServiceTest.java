@@ -1,10 +1,12 @@
-package rgo.cloud.docs.boot.storage.repository;
+package rgo.cloud.docs.boot.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import rgo.cloud.common.api.exception.ViolatesConstraintException;
 import rgo.cloud.docs.boot.CommonTest;
+import rgo.cloud.docs.boot.storage.repository.LanguageRepository;
 import rgo.cloud.docs.internal.api.storage.Language;
 
 import java.util.List;
@@ -16,7 +18,10 @@ import static rgo.cloud.docs.boot.EntityGenerator.createRandomLanguage;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class LanguageRepositoryTest extends CommonTest {
+public class LanguageServiceTest extends CommonTest {
+
+    @Autowired
+    private LanguageService service;
 
     @Autowired
     private LanguageRepository repository;
@@ -25,7 +30,7 @@ public class LanguageRepositoryTest extends CommonTest {
     public void findAll_noOneHasBeenFound() {
         int noOneHasBeenFound = 0;
 
-        List<Language> found = repository.findAll();
+        List<Language> found = service.findAll();
 
         assertEquals(noOneHasBeenFound, found.size());
     }
@@ -35,7 +40,7 @@ public class LanguageRepositoryTest extends CommonTest {
         int foundOne = 1;
         repository.save(createRandomLanguage());
 
-        List<Language> found = repository.findAll();
+        List<Language> found = service.findAll();
 
         assertEquals(foundOne, found.size());
     }
@@ -46,7 +51,7 @@ public class LanguageRepositoryTest extends CommonTest {
         repository.save(createRandomLanguage());
         repository.save(createRandomLanguage());
 
-        List<Language> found = repository.findAll();
+        List<Language> found = service.findAll();
 
         assertEquals(foundALot, found.size());
     }
@@ -55,7 +60,7 @@ public class LanguageRepositoryTest extends CommonTest {
     public void findById_notFound() {
         long fakeId = generateId();
 
-        Optional<Language> found = repository.findById(fakeId);
+        Optional<Language> found = service.findById(fakeId);
 
         assertTrue(found.isEmpty());
     }
@@ -64,7 +69,7 @@ public class LanguageRepositoryTest extends CommonTest {
     public void findById_found() {
         Language saved = repository.save(createRandomLanguage());
 
-        Optional<Language> found = repository.findById(saved.getEntityId());
+        Optional<Language> found = service.findById(saved.getEntityId());
 
         assertTrue(found.isPresent());
         assertEquals(saved.getEntityId(), found.get().getEntityId());
@@ -75,7 +80,7 @@ public class LanguageRepositoryTest extends CommonTest {
     public void findByName_notFound() {
         String fakeName = randomString();
 
-        Optional<Language> found = repository.findByName(fakeName);
+        Optional<Language> found = service.findByName(fakeName);
 
         assertTrue(found.isEmpty());
     }
@@ -84,7 +89,7 @@ public class LanguageRepositoryTest extends CommonTest {
     public void findByName_found() {
         Language saved = repository.save(createRandomLanguage());
 
-        Optional<Language> found = repository.findByName(saved.getName());
+        Optional<Language> found = service.findByName(saved.getName());
 
         assertTrue(found.isPresent());
         assertEquals(saved.getEntityId(), found.get().getEntityId());
@@ -93,11 +98,21 @@ public class LanguageRepositoryTest extends CommonTest {
 
     @Test
     public void save() {
+        Language saved = service.save(createRandomLanguage());
+
+        Optional<Language> found = repository.findById(saved.getEntityId());
+
+        assertTrue(found.isPresent());
+        assertEquals(saved.getEntityId(), found.get().getEntityId());
+        assertEquals(saved.getName(), found.get().getName());
+    }
+
+    @Test
+    public void save_nameAlreadyExists() {
         Language created = createRandomLanguage();
+        repository.save(created);
 
-        Language saved = repository.save(created);
-
-        assertEquals(created.getName(), saved.getName());
+        assertThrows(ViolatesConstraintException.class, () -> service.save(created), "Language by name already exist.");
     }
 
     @Test
@@ -108,9 +123,9 @@ public class LanguageRepositoryTest extends CommonTest {
                 .name(randomString())
                 .build();
 
-        Language updated = repository.update(newObj);
+        Language updatedLanguage = service.update(newObj);
 
-        assertEquals(newObj.getEntityId(), updated.getEntityId());
-        assertEquals(newObj.getName(), updated.getName());
+        assertEquals(newObj.getEntityId(), updatedLanguage.getEntityId());
+        assertEquals(newObj.getName(), updatedLanguage.getName());
     }
 }

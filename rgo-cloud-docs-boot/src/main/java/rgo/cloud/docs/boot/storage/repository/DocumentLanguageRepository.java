@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-// TODO: validate ID in the service layer
 // TODO: refactoring *withData
 
 @Slf4j
@@ -54,6 +53,12 @@ public class DocumentLanguageRepository {
         return documentLanguages;
     }
 
+    private Optional<DocumentLanguage> findById(Long entityId) {
+        MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
+        return first(tx.tx(() ->
+                jdbc.query(DocumentLanguageQuery.findById(), params, emptyMapper)));
+    }
+
     public Optional<DocumentLanguage> findByDocumentIdAndLanguageId(Long documentId, Long languageId) {
         MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
                 "document_id", documentId,
@@ -79,6 +84,14 @@ public class DocumentLanguageRepository {
         }
 
         return Optional.of(list.get(0));
+    }
+
+    public boolean exists(Long entityId) {
+        return findById(entityId).isPresent();
+    }
+
+    public boolean exists(Long documentId, Long languageId) {
+        return findByDocumentIdAndLanguageId(documentId, languageId).isPresent();
     }
 
     public DocumentLanguage save(DocumentLanguage documentLanguage) {
@@ -117,6 +130,10 @@ public class DocumentLanguageRepository {
     }
 
     private static final RowMapper<DocumentLanguage> lazyMapper = (rs, num) -> map(rs).build();
+
+    private static final RowMapper<DocumentLanguage> emptyMapper = (rs, num) -> DocumentLanguage.builder()
+            .entityId(rs.getLong("ENTITY_ID"))
+            .build();
 
     private static final RowMapper<DocumentLanguage> mapper = (rs, num) -> map(rs)
             .data(rs.getBytes("DATA"))

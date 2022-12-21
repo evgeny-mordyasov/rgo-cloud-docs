@@ -1,11 +1,17 @@
-package rgo.cloud.docs.boot.storage.repository;
+package rgo.cloud.docs.boot.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import rgo.cloud.common.api.exception.EntityNotFoundException;
+import rgo.cloud.common.api.exception.ViolatesConstraintException;
 import rgo.cloud.docs.boot.CommonTest;
+import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
+import rgo.cloud.docs.boot.storage.repository.DocumentLanguageRepository;
+import rgo.cloud.docs.boot.storage.repository.DocumentRepository;
+import rgo.cloud.docs.boot.storage.repository.LanguageRepository;
 import rgo.cloud.docs.internal.api.storage.Classification;
 import rgo.cloud.docs.internal.api.storage.Document;
 import rgo.cloud.docs.internal.api.storage.DocumentLanguage;
@@ -20,17 +26,20 @@ import static rgo.cloud.docs.boot.EntityGenerator.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class DocumentLanguageRepositoryTest extends CommonTest {
-    
+public class DocumentLanguageServiceTest extends CommonTest {
+
+    @Autowired
+    private DocumentLanguageService service;
+
     @Autowired
     private DocumentLanguageRepository documentLanguageRepository;
-    
+
     @Autowired
     private DocumentRepository documentRepository;
-    
+
     @Autowired
     private ClassificationRepository classificationRepository;
-    
+
     @Autowired
     private LanguageRepository languageRepository;
 
@@ -55,7 +64,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
     public void findAll_noOneHasBeenFound() {
         int noOneHasBeenFound = 0;
 
-        List<DocumentLanguage> found = documentLanguageRepository.findAll();
+        List<DocumentLanguage> found = service.findAll();
 
         assertEquals(noOneHasBeenFound, found.size());
     }
@@ -65,7 +74,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
         int foundOne = 1;
         documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
 
-        List<DocumentLanguage> found = documentLanguageRepository.findAll();
+        List<DocumentLanguage> found = service.findAll();
 
         assertEquals(foundOne, found.size());
     }
@@ -76,7 +85,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
         documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
         documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
 
-        List<DocumentLanguage> found = documentLanguageRepository.findAll();
+        List<DocumentLanguage> found = service.findAll();
 
         assertEquals(foundALot, found.size());
     }
@@ -86,7 +95,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
         int noOneHasBeenFound = 0;
         long fakeDocumentId = generateId();
 
-        List<DocumentLanguage> found = documentLanguageRepository.findByDocumentId(fakeDocumentId);
+        List<DocumentLanguage> found = service.findByDocumentId(fakeDocumentId);
 
         assertEquals(noOneHasBeenFound, found.size());
     }
@@ -96,7 +105,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
         int foundOne = 1;
         documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
 
-        List<DocumentLanguage> found = documentLanguageRepository.findByDocumentId(savedDocument.getEntityId());
+        List<DocumentLanguage> found = service.findByDocumentId(savedDocument.getEntityId());
 
         assertEquals(foundOne, found.size());
     }
@@ -107,7 +116,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
         documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
         documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
 
-        List<DocumentLanguage> found = documentLanguageRepository.findByDocumentId(savedDocument.getEntityId());
+        List<DocumentLanguage> found = service.findByDocumentId(savedDocument.getEntityId());
 
         assertEquals(foundALot, found.size());
     }
@@ -117,7 +126,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
         int noOneHasBeenFound = 0;
         long fakeClassificationId = generateId();
 
-        List<DocumentLanguage> found = documentLanguageRepository.findByClassificationId(fakeClassificationId);
+        List<DocumentLanguage> found = service.findByClassificationId(fakeClassificationId);
 
         assertEquals(noOneHasBeenFound, found.size());
     }
@@ -127,7 +136,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
         int foundOne = 1;
         documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
 
-        List<DocumentLanguage> found = documentLanguageRepository.findByClassificationId(savedDocument.getClassification().getEntityId());
+        List<DocumentLanguage> found = service.findByClassificationId(savedDocument.getClassification().getEntityId());
 
         assertEquals(foundOne, found.size());
     }
@@ -138,7 +147,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
         documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
         documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
 
-        List<DocumentLanguage> found = documentLanguageRepository.findByClassificationId(savedDocument.getClassification().getEntityId());
+        List<DocumentLanguage> found = service.findByClassificationId(savedDocument.getClassification().getEntityId());
 
         assertEquals(foundALot, found.size());
     }
@@ -148,7 +157,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
         long fakeDocumentId = generateId();
         long fakeLanguageId = generateId();
 
-        Optional<DocumentLanguage> found = documentLanguageRepository.findByDocumentIdAndLanguageId(fakeDocumentId, fakeLanguageId);
+        Optional<DocumentLanguage> found = service.findByDocumentIdAndLanguageId(fakeDocumentId, fakeLanguageId);
 
         assertTrue(found.isEmpty());
     }
@@ -158,7 +167,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
         DocumentLanguage saved = documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
 
         Optional<DocumentLanguage> found =
-                documentLanguageRepository.findByDocumentIdAndLanguageId(saved.getDocument().getEntityId(), saved.getLanguage().getEntityId());
+                service.findByDocumentIdAndLanguageId(saved.getDocument().getEntityId(), saved.getLanguage().getEntityId());
 
         assertTrue(found.isPresent());
         assertEquals(saved.getEntityId(), found.get().getEntityId());
@@ -172,7 +181,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
         long fakeDocumentId = generateId();
         long fakeLanguageId = generateId();
 
-        Optional<DocumentLanguage> found = documentLanguageRepository.findByDocumentIdAndLanguageIdWithData(fakeDocumentId, fakeLanguageId);
+        Optional<DocumentLanguage> found = service.findByDocumentIdAndLanguageIdWithData(fakeDocumentId, fakeLanguageId);
 
         assertTrue(found.isEmpty());
     }
@@ -182,7 +191,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
         DocumentLanguage saved = documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
 
         Optional<DocumentLanguage> found =
-                documentLanguageRepository.findByDocumentIdAndLanguageIdWithData(saved.getDocument().getEntityId(), saved.getLanguage().getEntityId());
+                service.findByDocumentIdAndLanguageIdWithData(saved.getDocument().getEntityId(), saved.getLanguage().getEntityId());
 
         assertTrue(found.isPresent());
         assertEquals(saved.getEntityId(), found.get().getEntityId());
@@ -195,7 +204,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
     public void save() {
         DocumentLanguage created = createRandomDocumentLanguage(savedDocument, savedLanguage);
 
-        DocumentLanguage saved = documentLanguageRepository.save(created);
+        DocumentLanguage saved = service.save(created);
 
         assertEquals(created.getDocument().toString(), saved.getDocument().toString());
         assertEquals(created.getLanguage().toString(), saved.getLanguage().toString());
@@ -203,20 +212,24 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
     }
 
     @Test
-    public void deleteById() {
-        DocumentLanguage saved = documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
-        documentLanguageRepository.deleteById(saved.getEntityId());
+    public void save_nameAlreadyExists() {
+        DocumentLanguage created = createRandomDocumentLanguage(savedDocument, savedLanguage);
+        documentLanguageRepository.save(created);
 
-        Optional<DocumentLanguage> found =
-                documentLanguageRepository.findByDocumentIdAndLanguageId(saved.getDocument().getEntityId(), saved.getLanguage().getEntityId());
-
-        assertTrue(found.isEmpty());
+        assertThrows(ViolatesConstraintException.class, () -> service.save(created), "The documentLanguage by documentId and languageId already exists.");
     }
 
     @Test
-    public void deleteById_cascadeDocument() {
+    public void deleteById_notFound() {
+        Long fakeId = generateId();
+
+        assertThrows(EntityNotFoundException.class, () -> service.deleteById(fakeId), "The documentLanguage by id not found.");
+    }
+
+    @Test
+    public void deleteById() {
         DocumentLanguage saved = documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
-        documentRepository.deleteById(saved.getDocument().getEntityId());
+        service.deleteById(saved.getEntityId());
 
         Optional<DocumentLanguage> found =
                 documentLanguageRepository.findByDocumentIdAndLanguageId(saved.getDocument().getEntityId(), saved.getLanguage().getEntityId());

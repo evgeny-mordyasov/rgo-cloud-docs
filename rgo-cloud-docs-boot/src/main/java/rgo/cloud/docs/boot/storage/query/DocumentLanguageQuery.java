@@ -7,6 +7,10 @@ public final class DocumentLanguageQuery {
     private DocumentLanguageQuery() {
     }
 
+    public static String findById() {
+        return "SELECT * FROM " + TABLE_NAME + " WHERE entity_id = :entity_id";
+    }
+
     public static String findAll() {
         return "SELECT dl.entity_id, " +
                 "      l.entity_id as language_id, " +

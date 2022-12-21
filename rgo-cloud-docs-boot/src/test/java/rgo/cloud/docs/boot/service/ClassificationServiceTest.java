@@ -1,24 +1,28 @@
-package rgo.cloud.docs.boot.storage.repository;
+package rgo.cloud.docs.boot.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import rgo.cloud.common.api.exception.EntityNotFoundException;
+import rgo.cloud.common.api.exception.ViolatesConstraintException;
 import rgo.cloud.docs.boot.CommonTest;
+import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
 import rgo.cloud.docs.internal.api.storage.Classification;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
-import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
+import static org.junit.jupiter.api.Assertions.*;
+import static rgo.cloud.common.spring.util.TestCommonUtil.*;
 import static rgo.cloud.docs.boot.EntityGenerator.createRandomClassification;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class ClassificationRepositoryTest extends CommonTest {
+public class ClassificationServiceTest extends CommonTest {
+
+    @Autowired
+    private ClassificationService service;
 
     @Autowired
     private ClassificationRepository repository;
@@ -27,7 +31,7 @@ public class ClassificationRepositoryTest extends CommonTest {
     public void findAll_noOneHasBeenFound() {
         int noOneHasBeenFound = 0;
 
-        List<Classification> found = repository.findAll();
+        List<Classification> found = service.findAll();
 
         assertEquals(noOneHasBeenFound, found.size());
     }
@@ -37,7 +41,7 @@ public class ClassificationRepositoryTest extends CommonTest {
         int foundOne = 1;
         repository.save(createRandomClassification());
 
-        List<Classification> found = repository.findAll();
+        List<Classification> found = service.findAll();
 
         assertEquals(foundOne, found.size());
     }
@@ -48,7 +52,7 @@ public class ClassificationRepositoryTest extends CommonTest {
         repository.save(createRandomClassification());
         repository.save(createRandomClassification());
 
-        List<Classification> found = repository.findAll();
+        List<Classification> found = service.findAll();
 
         assertEquals(foundALot, found.size());
     }
@@ -57,7 +61,7 @@ public class ClassificationRepositoryTest extends CommonTest {
     public void findById_notFound() {
         long fakeId = generateId();
 
-        Optional<Classification> found = repository.findById(fakeId);
+        Optional<Classification> found = service.findById(fakeId);
 
         assertTrue(found.isEmpty());
     }
@@ -66,7 +70,7 @@ public class ClassificationRepositoryTest extends CommonTest {
     public void findById_found() {
         Classification saved = repository.save(createRandomClassification());
 
-        Optional<Classification> found = repository.findById(saved.getEntityId());
+        Optional<Classification> found = service.findById(saved.getEntityId());
 
         assertTrue(found.isPresent());
         assertEquals(saved.getEntityId(), found.get().getEntityId());
@@ -77,7 +81,7 @@ public class ClassificationRepositoryTest extends CommonTest {
     public void findByName_notFound() {
         String fakeName = randomString();
 
-        Optional<Classification> found = repository.findByName(fakeName);
+        Optional<Classification> found = service.findByName(fakeName);
 
         assertTrue(found.isEmpty());
     }
@@ -86,7 +90,7 @@ public class ClassificationRepositoryTest extends CommonTest {
     public void findByName_found() {
         Classification saved = repository.save(createRandomClassification());
 
-        Optional<Classification> found = repository.findByName(saved.getName());
+        Optional<Classification> found = service.findByName(saved.getName());
 
         assertTrue(found.isPresent());
         assertEquals(saved.getEntityId(), found.get().getEntityId());
@@ -95,11 +99,21 @@ public class ClassificationRepositoryTest extends CommonTest {
 
     @Test
     public void save() {
+        Classification saved = service.save(createRandomClassification());
+
+        Optional<Classification> found = repository.findById(saved.getEntityId());
+
+        assertTrue(found.isPresent());
+        assertEquals(saved.getEntityId(), found.get().getEntityId());
+        assertEquals(saved.getName(), found.get().getName());
+    }
+
+    @Test
+    public void save_nameAlreadyExists() {
         Classification created = createRandomClassification();
+        repository.save(created);
 
-        Classification saved = repository.save(created);
-
-        assertEquals(created.getName(), saved.getName());
+        assertThrows(ViolatesConstraintException.class, () -> service.save(created), "Classification by name already exist.");
     }
 
     @Test
@@ -110,16 +124,23 @@ public class ClassificationRepositoryTest extends CommonTest {
                 .name(randomString())
                 .build();
 
-        Classification updated = repository.update(newObj);
+        Classification updatedClassification = service.update(newObj);
 
-        assertEquals(newObj.getEntityId(), updated.getEntityId());
-        assertEquals(newObj.getName(), updated.getName());
+        assertEquals(newObj.getEntityId(), updatedClassification.getEntityId());
+        assertEquals(newObj.getName(), updatedClassification.getName());
+    }
+
+    @Test
+    public void deleteById_notFound() {
+        Long fakeId = generateId();
+
+        assertThrows(EntityNotFoundException.class, () -> service.deleteById(fakeId), "The classification by id not found.");
     }
 
     @Test
     public void deleteById() {
         Classification saved = repository.save(createRandomClassification());
-        repository.deleteById(saved.getEntityId());
+        service.deleteById(saved.getEntityId());
 
         Optional<Classification> found = repository.findById(saved.getEntityId());
 
