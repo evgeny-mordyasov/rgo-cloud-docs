@@ -3,6 +3,7 @@ package rgo.cloud.docs.boot.api.decorator;
 import rgo.cloud.common.api.rest.EmptySuccessfulResponse;
 import rgo.cloud.common.api.rest.Response;
 import rgo.cloud.docs.boot.service.LanguageService;
+import rgo.cloud.docs.internal.api.annotation.Validate;
 import rgo.cloud.docs.internal.api.rest.language.request.LanguageGetByIdRequest;
 import rgo.cloud.docs.internal.api.rest.language.request.LanguageGetByNameRequest;
 import rgo.cloud.docs.internal.api.rest.language.request.LanguageSaveRequest;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 import static rgo.cloud.docs.boot.api.decorator.converter.LanguageConverter.convert;
 
+@Validate
 public class LanguageServiceDecorator {
     private final LanguageService service;
 
