@@ -47,10 +47,9 @@ public class DocumentLanguageServiceTest extends CommonTest {
 
     private Document savedDocument;
 
-    @Override
     @BeforeEach
-    public void truncateTables() {
-        super.truncateTables();
+    public void setUp() {
+        truncateTables();
         initInternalEntities();
     }
 

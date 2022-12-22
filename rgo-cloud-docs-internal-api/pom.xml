@@ -13,6 +13,13 @@
     <artifactId>rgo-cloud-docs-internal-api</artifactId>
 
     <dependencies>
+        <!-- rgo-cloud -->
+        <dependency>
+            <groupId>ru.gold.ordance</groupId>
+            <artifactId>rgo-cloud-common-api</artifactId>
+        </dependency>
+        <!-- rgo-cloud -->
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

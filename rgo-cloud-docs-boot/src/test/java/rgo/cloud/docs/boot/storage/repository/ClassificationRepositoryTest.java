@@ -1,5 +1,6 @@
 package rgo.cloud.docs.boot.storage.repository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,11 @@ public class ClassificationRepositoryTest extends CommonTest {
 
     @Autowired
     private ClassificationRepository repository;
+
+    @BeforeEach
+    public void setUp() {
+        truncateTables();
+    }
 
     @Test
     public void findAll_noOneHasBeenFound() {

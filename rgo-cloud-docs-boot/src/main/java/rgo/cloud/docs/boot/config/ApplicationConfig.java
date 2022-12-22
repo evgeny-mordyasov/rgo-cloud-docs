@@ -3,6 +3,8 @@ package rgo.cloud.docs.boot.config;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import rgo.cloud.docs.boot.api.decorator.ClassificationServiceDecorator;
+import rgo.cloud.docs.boot.api.decorator.LanguageServiceDecorator;
 import rgo.cloud.docs.boot.service.ClassificationService;
 import rgo.cloud.docs.boot.service.DocumentLanguageService;
 import rgo.cloud.docs.boot.service.DocumentService;
@@ -34,5 +36,15 @@ public class ApplicationConfig {
     @Bean
     public DocumentLanguageService documentLanguageService(DocumentLanguageRepository repository) {
         return new DocumentLanguageService(repository);
+    }
+
+    @Bean
+    public LanguageServiceDecorator languageDecorator(LanguageService service) {
+        return new LanguageServiceDecorator(service);
+    }
+
+    @Bean
+    public ClassificationServiceDecorator classificationDecorator(ClassificationService service) {
+        return new ClassificationServiceDecorator(service);
     }
 }

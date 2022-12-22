@@ -27,10 +27,6 @@
         <!-- rgo-cloud -->
         <dependency>
             <groupId>ru.gold.ordance</groupId>
-            <artifactId>rgo-cloud-common-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ru.gold.ordance</groupId>
             <artifactId>rgo-cloud-common-spring</artifactId>
         </dependency>
         <!-- rgo-cloud -->

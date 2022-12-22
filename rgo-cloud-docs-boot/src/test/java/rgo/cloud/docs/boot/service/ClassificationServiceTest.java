@@ -1,9 +1,11 @@
 package rgo.cloud.docs.boot.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.common.api.exception.ViolatesConstraintException;
 import rgo.cloud.docs.boot.CommonTest;
@@ -26,6 +28,11 @@ public class ClassificationServiceTest extends CommonTest {
 
     @Autowired
     private ClassificationRepository repository;
+
+    @BeforeEach
+    public void setUp() {
+        truncateTables();
+    }
 
     @Test
     public void findAll_noOneHasBeenFound() {

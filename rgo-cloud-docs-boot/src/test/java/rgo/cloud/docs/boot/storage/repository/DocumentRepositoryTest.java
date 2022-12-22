@@ -29,10 +29,9 @@ public class DocumentRepositoryTest extends CommonTest {
 
     private Classification savedClassification;
 
-    @Override
     @BeforeEach
-    public void truncateTables() {
-        super.truncateTables();
+    public void setUp() {
+        truncateTables();
         savedClassification = classificationRepository.save(createRandomClassification());
     }
 
