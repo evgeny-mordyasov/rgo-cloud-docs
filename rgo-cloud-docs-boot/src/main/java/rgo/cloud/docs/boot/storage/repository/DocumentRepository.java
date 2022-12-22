@@ -1,7 +1,6 @@
 package rgo.cloud.docs.boot.storage.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -9,12 +8,13 @@ import org.springframework.jdbc.support.KeyHolder;
 import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.DocumentQuery;
-import rgo.cloud.docs.internal.api.storage.Classification;
 import rgo.cloud.docs.internal.api.storage.Document;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static rgo.cloud.docs.boot.storage.repository.mapper.DocumentMapper.mapper;
 
 @Slf4j
 public class DocumentRepository {
@@ -87,15 +87,4 @@ public class DocumentRepository {
             }
         });
     }
-
-    private static final RowMapper<Document> mapper = (rs, num) -> Document.builder()
-            .entityId(rs.getLong("ENTITY_ID"))
-            .fullName(rs.getString("FULL_NAME"))
-            .name(rs.getString("NAME"))
-            .extension(rs.getString("EXTENSION"))
-            .classification(Classification.builder()
-                    .entityId(rs.getLong("CLASSIFICATION_ID"))
-                    .name(rs.getString("CLASSIFICATION_NAME"))
-                    .build())
-            .build();
 }

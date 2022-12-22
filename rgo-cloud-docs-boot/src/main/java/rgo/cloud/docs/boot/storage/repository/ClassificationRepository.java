@@ -1,7 +1,6 @@
 package rgo.cloud.docs.boot.storage.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import rgo.cloud.common.api.exception.UnpredictableException;
@@ -12,6 +11,8 @@ import rgo.cloud.docs.internal.api.storage.Classification;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static rgo.cloud.docs.boot.storage.repository.mapper.ClassificationMapper.mapper;
 
 @Slf4j
 public class ClassificationRepository {
@@ -104,9 +105,4 @@ public class ClassificationRepository {
             }
         });
     }
-
-    private static final RowMapper<Classification> mapper = (rs, num) -> Classification.builder()
-            .entityId(rs.getLong("ENTITY_ID"))
-            .name(rs.getString("NAME"))
-            .build();
 }

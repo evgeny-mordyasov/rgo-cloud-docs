@@ -1,24 +1,20 @@
 package rgo.cloud.docs.boot.storage.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.DocumentLanguageQuery;
-import rgo.cloud.docs.internal.api.storage.Classification;
-import rgo.cloud.docs.internal.api.storage.Document;
 import rgo.cloud.docs.internal.api.storage.DocumentLanguage;
-import rgo.cloud.docs.internal.api.storage.Language;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-// TODO: refactoring *withData
+import static rgo.cloud.docs.boot.storage.repository.mapper.DocumentLanguageMapper.emptyMapper;
+import static rgo.cloud.docs.boot.storage.repository.mapper.DocumentLanguageMapper.lazyMapper;
+import static rgo.cloud.docs.boot.storage.repository.mapper.DocumentLanguageMapper.fullMapper;
 
 @Slf4j
 public class DocumentLanguageRepository {
@@ -31,7 +27,8 @@ public class DocumentLanguageRepository {
     }
 
     public List<DocumentLanguage> findAll() {
-        List<DocumentLanguage> documentLanguages = tx.tx(() -> jdbc.query(DocumentLanguageQuery.findAll(), lazyMapper));
+        List<DocumentLanguage> documentLanguages = tx.tx(() ->
+                jdbc.query(DocumentLanguageQuery.findAll(), lazyMapper));
         log.info("Size of documentLanguages: {}", documentLanguages.size());
 
         return documentLanguages;
@@ -39,7 +36,8 @@ public class DocumentLanguageRepository {
 
     public List<DocumentLanguage> findByDocumentId(Long documentId) {
         MapSqlParameterSource params = new MapSqlParameterSource("document_id", documentId);
-        List<DocumentLanguage> documentLanguages = tx.tx(() -> jdbc.query(DocumentLanguageQuery.findByDocumentId(), params, lazyMapper));
+        List<DocumentLanguage> documentLanguages = tx.tx(() ->
+                jdbc.query(DocumentLanguageQuery.findByDocumentId(), params, lazyMapper));
         log.info("Size of documentLanguages by documentId='{}': {}", documentId, documentLanguages.size());
 
         return documentLanguages;
@@ -47,7 +45,8 @@ public class DocumentLanguageRepository {
 
     public List<DocumentLanguage> findByClassificationId(Long classificationId) {
         MapSqlParameterSource params = new MapSqlParameterSource("classification_id", classificationId);
-        List<DocumentLanguage> documentLanguages = tx.tx(() -> jdbc.query(DocumentLanguageQuery.findByClassificationId(), params, lazyMapper));
+        List<DocumentLanguage> documentLanguages = tx.tx(() ->
+                jdbc.query(DocumentLanguageQuery.findByClassificationId(), params, lazyMapper));
         log.info("Size of documentLanguages by classificationId='{}': {}", classificationId, documentLanguages.size());
 
         return documentLanguages;
@@ -74,7 +73,7 @@ public class DocumentLanguageRepository {
                 "language_id", languageId));
 
         return first(tx.tx(() ->
-                jdbc.query(DocumentLanguageQuery.findByDocumentIdAndLanguageIdWithData(), params, mapper)));
+                jdbc.query(DocumentLanguageQuery.findByDocumentIdAndLanguageIdWithData(), params, fullMapper)));
     }
 
     private Optional<DocumentLanguage> first(List<DocumentLanguage> list) {
@@ -127,34 +126,5 @@ public class DocumentLanguageRepository {
                 throw new UnpredictableException(errorMsg);
             }
         });
-    }
-
-    private static final RowMapper<DocumentLanguage> lazyMapper = (rs, num) -> map(rs).build();
-
-    private static final RowMapper<DocumentLanguage> emptyMapper = (rs, num) -> DocumentLanguage.builder()
-            .entityId(rs.getLong("ENTITY_ID"))
-            .build();
-
-    private static final RowMapper<DocumentLanguage> mapper = (rs, num) -> map(rs)
-            .data(rs.getBytes("DATA"))
-            .build();
-
-    private static DocumentLanguage.DocumentLanguageBuilder map(ResultSet rs) throws SQLException {
-        return DocumentLanguage.builder()
-                .entityId(rs.getLong("ENTITY_ID"))
-                .document(Document.builder()
-                        .entityId(rs.getLong("DOCUMENT_ID"))
-                        .fullName(rs.getString("DOCUMENT_FULL_NAME"))
-                        .name(rs.getString("DOCUMENT_NAME"))
-                        .extension(rs.getString("DOCUMENT_EXTENSION"))
-                        .classification(Classification.builder()
-                                .entityId(rs.getLong("DOCUMENT_CLASSIFICATION_ID"))
-                                .name(rs.getString("DOCUMENT_CLASSIFICATION_NAME"))
-                                .build())
-                        .build())
-                .language(Language.builder()
-                        .entityId(rs.getLong("LANGUAGE_ID"))
-                        .name(rs.getString("LANGUAGE_NAME"))
-                        .build());
     }
 }

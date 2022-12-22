@@ -1,7 +1,6 @@
 package rgo.cloud.docs.boot.storage.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import rgo.cloud.common.api.exception.UnpredictableException;
@@ -12,6 +11,8 @@ import rgo.cloud.docs.internal.api.storage.Language;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static rgo.cloud.docs.boot.storage.repository.mapper.LanguageMapper.mapper;
 
 @Slf4j
 public class LanguageRepository {
@@ -90,9 +91,4 @@ public class LanguageRepository {
             return opt.get();
         });
     }
-
-    private static final RowMapper<Language> mapper = (rs, num) -> Language.builder()
-            .entityId(rs.getLong("ENTITY_ID"))
-            .name(rs.getString("NAME"))
-            .build();
 }
