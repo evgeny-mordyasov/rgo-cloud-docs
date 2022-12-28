@@ -15,7 +15,7 @@ public final class LanguageQuery {
     }
 
     public static String findByName() {
-        return "SELECT * FROM " + TABLE_NAME + " WHERE name = :name";
+        return "SELECT * FROM " + TABLE_NAME + " WHERE LOWER(name) = LOWER(:name)";
     }
 
     public static String save() {
