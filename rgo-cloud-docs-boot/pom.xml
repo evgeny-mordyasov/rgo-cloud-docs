@@ -64,6 +64,11 @@
             <artifactId>h2</artifactId>
         </dependency>
         <!-- db -->
+
+        <dependency>
+            <groupId>one.util</groupId>
+            <artifactId>streamex</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

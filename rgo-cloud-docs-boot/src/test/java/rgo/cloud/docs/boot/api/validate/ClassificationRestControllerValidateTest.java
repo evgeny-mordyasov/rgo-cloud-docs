@@ -40,7 +40,7 @@ public class ClassificationRestControllerValidateTest {
     }
 
     @Test
-    public void findById_idIsNotPositive_invalidRq() throws Exception {
+    public void findById_idIsNotPositive() throws Exception {
         long entityId = -1L;
         String errorMessage = "The entityId is not positive.";
 
@@ -51,7 +51,7 @@ public class ClassificationRestControllerValidateTest {
     }
 
     @Test
-    public void findByName_nameIsEmpty_invalidRq() throws Exception {
+    public void findByName_nameIsEmpty() throws Exception {
         String name = " ";
         String errorMessage = "The name is empty.";
 
@@ -62,7 +62,7 @@ public class ClassificationRestControllerValidateTest {
     }
 
     @Test
-    public void save_nameIsNull_invalidRq() throws Exception {
+    public void save_nameIsNull() throws Exception {
         String errorMessage = "The name is null.";
 
         ClassificationSaveRequest rq = new ClassificationSaveRequest(null);
@@ -76,7 +76,7 @@ public class ClassificationRestControllerValidateTest {
     }
 
     @Test
-    public void save_nameIsEmpty_invalidRq() throws Exception {
+    public void save_nameIsEmpty() throws Exception {
         String name = "";
         String errorMessage = "The name is empty.";
 
@@ -91,7 +91,7 @@ public class ClassificationRestControllerValidateTest {
     }
 
     @Test
-    public void update_entityIdIsNull_invalidRq() throws Exception {
+    public void update_entityIdIsNull() throws Exception {
         final String errorMessage = "The entityId is null.";
 
         ClassificationUpdateRequest rq = ClassificationUpdateRequest.builder()
@@ -108,7 +108,7 @@ public class ClassificationRestControllerValidateTest {
     }
 
     @Test
-    public void update_entityIdIsNotPositive_invalidRq() throws Exception {
+    public void update_entityIdIsNotPositive() throws Exception {
         final Long entityId = -generateId();
         final String errorMessage = "The entityId is not positive.";
 
@@ -126,7 +126,7 @@ public class ClassificationRestControllerValidateTest {
     }
 
     @Test
-    public void update_nameIsNull_invalidRq() throws Exception {
+    public void update_nameIsNull() throws Exception {
         final String errorMessage = "The name is null.";
 
         ClassificationUpdateRequest rq = ClassificationUpdateRequest.builder()
@@ -143,7 +143,7 @@ public class ClassificationRestControllerValidateTest {
     }
 
     @Test
-    public void update_nameIsEmpty_invalidRq() throws Exception {
+    public void update_nameIsEmpty() throws Exception {
         final String name = "";
         final String errorMessage = "The name is empty.";
 
@@ -161,7 +161,7 @@ public class ClassificationRestControllerValidateTest {
     }
 
     @Test
-    public void deleteById_idIsNotPositive_invalidRq() throws Exception {
+    public void deleteById_idIsNotPositive() throws Exception {
         final long entityId = -1L;
         final String errorMessage = "The entityId is not positive.";
 

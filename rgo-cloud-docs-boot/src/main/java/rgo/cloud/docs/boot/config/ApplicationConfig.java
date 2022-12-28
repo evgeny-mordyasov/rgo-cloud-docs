@@ -4,11 +4,10 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import rgo.cloud.docs.boot.api.decorator.ClassificationServiceDecorator;
+import rgo.cloud.docs.boot.api.decorator.FileFacadeDecorator;
 import rgo.cloud.docs.boot.api.decorator.LanguageServiceDecorator;
-import rgo.cloud.docs.boot.service.ClassificationService;
-import rgo.cloud.docs.boot.service.DocumentLanguageService;
-import rgo.cloud.docs.boot.service.DocumentService;
-import rgo.cloud.docs.boot.service.LanguageService;
+import rgo.cloud.docs.boot.facade.FileFacade;
+import rgo.cloud.docs.boot.service.*;
 import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
 import rgo.cloud.docs.boot.storage.repository.DocumentLanguageRepository;
 import rgo.cloud.docs.boot.storage.repository.DocumentRepository;
@@ -39,6 +38,11 @@ public class ApplicationConfig {
     }
 
     @Bean
+    public FileFacade fileFacade(DocumentService documentService, DocumentLanguageService dlService) {
+        return new FileFacade(documentService, dlService);
+    }
+
+    @Bean
     public LanguageServiceDecorator languageDecorator(LanguageService service) {
         return new LanguageServiceDecorator(service);
     }
@@ -46,5 +50,10 @@ public class ApplicationConfig {
     @Bean
     public ClassificationServiceDecorator classificationDecorator(ClassificationService service) {
         return new ClassificationServiceDecorator(service);
+    }
+
+    @Bean
+    public FileFacadeDecorator fileFacadeDecorator(FileFacade facade) {
+        return new FileFacadeDecorator(facade);
     }
 }

@@ -36,7 +36,7 @@ public final class EntityGenerator {
                 .build();
     }
 
-    private static String generateExtension() {
+    public static String generateExtension() {
         return FileExtension.values()[ThreadLocalRandom.current().nextInt(FileExtension.values().length)]
                 .name();
     }

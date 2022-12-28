@@ -210,13 +210,6 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
     }
 
     @Test
-    public void save_documentNotFound() {
-        DocumentLanguage created = createRandomDocumentLanguage(createRandomDocument(createRandomClassification()), savedLanguage);
-
-        assertThrows(EntityNotFoundException.class, () -> documentLanguageRepository.save(created), "Document by id not found.");
-    }
-
-    @Test
     public void deleteById() {
         DocumentLanguage saved = documentLanguageRepository.save(createRandomDocumentLanguage(savedDocument, savedLanguage));
         documentLanguageRepository.deleteById(saved.getEntityId());

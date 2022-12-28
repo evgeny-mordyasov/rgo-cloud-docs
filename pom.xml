@@ -35,6 +35,7 @@
         <!-- db -->
 
         <lombok.version>1.18.22</lombok.version>
+        <streamex.version>0.8.1</streamex.version>
     </properties>
 
     <dependencyManagement>
@@ -106,6 +107,11 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>one.util</groupId>
+                <artifactId>streamex</artifactId>
+                <version>${streamex.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
