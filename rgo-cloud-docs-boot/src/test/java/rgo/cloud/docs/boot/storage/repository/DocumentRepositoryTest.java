@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.docs.boot.CommonTest;
 import rgo.cloud.docs.internal.api.storage.Classification;
 import rgo.cloud.docs.internal.api.storage.Document;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
 import static rgo.cloud.docs.boot.EntityGenerator.createRandomClassification;
 import static rgo.cloud.docs.boot.EntityGenerator.createRandomDocument;
@@ -70,6 +70,13 @@ public class DocumentRepositoryTest extends CommonTest {
         assertEquals(created.getExtension(), saved.getExtension());
         assertEquals(created.getClassification().getEntityId(), saved.getClassification().getEntityId());
         assertEquals(created.getClassification().getName(), saved.getClassification().getName());
+    }
+
+    @Test
+    public void save_classificationNotFound() {
+        Document created = createRandomDocument(createRandomClassification());
+
+        assertThrows(EntityNotFoundException.class, () -> documentRepository.save(created), "Classification by id not found.");
     }
 
     @Test

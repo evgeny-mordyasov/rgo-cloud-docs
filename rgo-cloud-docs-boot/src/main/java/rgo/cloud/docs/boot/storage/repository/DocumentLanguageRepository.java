@@ -3,10 +3,17 @@ package rgo.cloud.docs.boot.storage.repository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.DocumentLanguageQuery;
+import rgo.cloud.docs.boot.storage.query.DocumentQuery;
+import rgo.cloud.docs.boot.storage.query.LanguageQuery;
+import rgo.cloud.docs.boot.storage.repository.mapper.DocumentMapper;
+import rgo.cloud.docs.boot.storage.repository.mapper.LanguageMapper;
+import rgo.cloud.docs.internal.api.storage.Document;
 import rgo.cloud.docs.internal.api.storage.DocumentLanguage;
+import rgo.cloud.docs.internal.api.storage.Language;
 
 import java.util.List;
 import java.util.Map;
@@ -94,6 +101,8 @@ public class DocumentLanguageRepository {
     }
 
     public DocumentLanguage save(DocumentLanguage documentLanguage) {
+        checkInternalEntities(documentLanguage);
+
         MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
                 "document_id", documentLanguage.getDocument().getEntityId(),
                 "language_id", documentLanguage.getLanguage().getEntityId(),
@@ -112,6 +121,33 @@ public class DocumentLanguageRepository {
 
             return opt.get();
         });
+    }
+
+    private void checkInternalEntities(DocumentLanguage dl) {
+        checkLanguage(dl.getLanguage().getEntityId());
+        checkDocument(dl.getDocument().getEntityId());
+    }
+
+    private void checkLanguage(Long languageId) {
+        List<Language> rs = tx.tx(() ->
+                jdbc.query(LanguageQuery.findById(),
+                        new MapSqlParameterSource("entity_id", languageId),
+                        LanguageMapper.mapper));
+
+        if (rs.isEmpty()) {
+            throw new EntityNotFoundException("Language by id not found.");
+        }
+    }
+
+    private void checkDocument(Long documentId) {
+        List<Document> rs = tx.tx(() ->
+                jdbc.query(DocumentQuery.findByIdAndFetchClassification(),
+                        new MapSqlParameterSource("entity_id", documentId),
+                        DocumentMapper.mapper));
+
+        if (rs.isEmpty()) {
+            throw new EntityNotFoundException("Document by id not found.");
+        }
     }
 
     public void deleteById(Long entityId) {

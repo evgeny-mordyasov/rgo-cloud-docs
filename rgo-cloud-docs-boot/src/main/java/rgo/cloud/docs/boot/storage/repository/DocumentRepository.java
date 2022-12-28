@@ -5,9 +5,13 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.spring.storage.DbTxManager;
+import rgo.cloud.docs.boot.storage.query.ClassificationQuery;
 import rgo.cloud.docs.boot.storage.query.DocumentQuery;
+import rgo.cloud.docs.boot.storage.repository.mapper.ClassificationMapper;
+import rgo.cloud.docs.internal.api.storage.Classification;
 import rgo.cloud.docs.internal.api.storage.Document;
 
 import java.util.List;
@@ -46,6 +50,8 @@ public class DocumentRepository {
     }
 
     public Document save(Document document) {
+        checkInternalEntity(document.getClassification().getEntityId());
+
         MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
                 "full_name", document.getFullName(),
                 "name", document.getName(),
@@ -72,6 +78,17 @@ public class DocumentRepository {
 
             return opt.get();
         });
+    }
+
+    private void checkInternalEntity(Long classificationId) {
+        List<Classification> rs = tx.tx(() ->
+                jdbc.query(ClassificationQuery.findById(),
+                        new MapSqlParameterSource("entity_id", classificationId),
+                        ClassificationMapper.mapper));
+
+        if (rs.isEmpty()) {
+            throw new EntityNotFoundException("Classification by id not found.");
+        }
     }
 
     public void deleteById(Long entityId) {

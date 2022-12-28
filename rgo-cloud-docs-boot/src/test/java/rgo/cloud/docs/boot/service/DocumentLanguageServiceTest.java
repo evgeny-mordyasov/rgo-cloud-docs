@@ -211,7 +211,7 @@ public class DocumentLanguageServiceTest extends CommonTest {
     }
 
     @Test
-    public void save_nameAlreadyExists() {
+    public void save_alreadyExists() {
         DocumentLanguage created = createRandomDocumentLanguage(savedDocument, savedLanguage);
         documentLanguageRepository.save(created);
 

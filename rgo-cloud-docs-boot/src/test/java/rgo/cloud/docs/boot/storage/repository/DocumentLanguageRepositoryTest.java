@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.docs.boot.CommonTest;
 import rgo.cloud.docs.internal.api.storage.Classification;
 import rgo.cloud.docs.internal.api.storage.Document;
@@ -199,6 +200,20 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
         assertEquals(created.getDocument().toString(), saved.getDocument().toString());
         assertEquals(created.getLanguage().toString(), saved.getLanguage().toString());
         assertNull(saved.getData());
+    }
+
+    @Test
+    public void save_languageNotFound() {
+        DocumentLanguage created = createRandomDocumentLanguage(savedDocument, createRandomLanguage());
+
+        assertThrows(EntityNotFoundException.class, () -> documentLanguageRepository.save(created), "Language by id not found.");
+    }
+
+    @Test
+    public void save_documentNotFound() {
+        DocumentLanguage created = createRandomDocumentLanguage(createRandomDocument(createRandomClassification()), savedLanguage);
+
+        assertThrows(EntityNotFoundException.class, () -> documentLanguageRepository.save(created), "Document by id not found.");
     }
 
     @Test
