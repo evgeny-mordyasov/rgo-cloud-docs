@@ -2,9 +2,9 @@ package rgo.cloud.docs.boot.api.decorator;
 
 import rgo.cloud.common.api.rest.EmptySuccessfulResponse;
 import rgo.cloud.common.api.rest.Response;
+import rgo.cloud.common.spring.aspect.Validate;
 import rgo.cloud.docs.boot.facade.FileFacade;
 import rgo.cloud.docs.boot.facade.FileResource;
-import rgo.cloud.docs.internal.api.annotation.Validate;
 import rgo.cloud.docs.internal.api.facade.FileDto;
 import rgo.cloud.docs.internal.api.rest.file.request.*;
 import rgo.cloud.docs.internal.api.rest.file.response.FileDeleteResponse;
