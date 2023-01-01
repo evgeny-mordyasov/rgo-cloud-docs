@@ -92,7 +92,7 @@ public class ClassificationRestControllerValidateTest {
 
     @Test
     public void update_entityIdIsNull() throws Exception {
-        final String errorMessage = "The entityId is null.";
+        String errorMessage = "The entityId is null.";
 
         ClassificationUpdateRequest rq = ClassificationUpdateRequest.builder()
                 .entityId(null)
@@ -109,8 +109,8 @@ public class ClassificationRestControllerValidateTest {
 
     @Test
     public void update_entityIdIsNotPositive() throws Exception {
-        final Long entityId = -generateId();
-        final String errorMessage = "The entityId is not positive.";
+        Long entityId = -generateId();
+        String errorMessage = "The entityId is not positive.";
 
         ClassificationUpdateRequest rq = ClassificationUpdateRequest.builder()
                 .entityId(entityId)
@@ -127,7 +127,7 @@ public class ClassificationRestControllerValidateTest {
 
     @Test
     public void update_nameIsNull() throws Exception {
-        final String errorMessage = "The name is null.";
+        String errorMessage = "The name is null.";
 
         ClassificationUpdateRequest rq = ClassificationUpdateRequest.builder()
                 .entityId(generateId())
@@ -144,8 +144,8 @@ public class ClassificationRestControllerValidateTest {
 
     @Test
     public void update_nameIsEmpty() throws Exception {
-        final String name = "";
-        final String errorMessage = "The name is empty.";
+        String name = "";
+        String errorMessage = "The name is empty.";
 
         ClassificationUpdateRequest rq = ClassificationUpdateRequest.builder()
                 .entityId(generateId())
@@ -162,8 +162,8 @@ public class ClassificationRestControllerValidateTest {
 
     @Test
     public void deleteById_idIsNotPositive() throws Exception {
-        final long entityId = -1L;
-        final String errorMessage = "The entityId is not positive.";
+        long entityId = -1L;
+        String errorMessage = "The entityId is not positive.";
 
         mvc.perform(delete(Endpoint.Classification.BASE_URL + "/" + entityId))
                 .andExpect(content().contentType(JSON))

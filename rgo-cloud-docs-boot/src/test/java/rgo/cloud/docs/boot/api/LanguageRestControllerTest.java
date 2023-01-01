@@ -147,7 +147,7 @@ public class LanguageRestControllerTest extends CommonTest {
 
     @Test
     public void save() throws Exception {
-        final String name = randomString();
+        String name = randomString();
         LanguageSaveRequest rq = new LanguageSaveRequest(name);
 
         mvc.perform(post(Endpoint.Language.BASE_URL)

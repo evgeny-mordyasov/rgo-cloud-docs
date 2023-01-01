@@ -147,7 +147,7 @@ public class ClassificationRestControllerTest extends CommonTest {
 
     @Test
     public void save() throws Exception {
-        final String name = randomString();
+        String name = randomString();
         ClassificationSaveRequest rq = new ClassificationSaveRequest(name);
 
         mvc.perform(post(Endpoint.Classification.BASE_URL)

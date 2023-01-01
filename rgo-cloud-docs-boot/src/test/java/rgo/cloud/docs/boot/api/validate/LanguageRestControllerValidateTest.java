@@ -92,7 +92,7 @@ public class LanguageRestControllerValidateTest {
 
     @Test
     public void update_entityIdIsNull() throws Exception {
-        final String errorMessage = "The entityId is null.";
+        String errorMessage = "The entityId is null.";
 
         LanguageUpdateRequest rq = LanguageUpdateRequest.builder()
                 .entityId(null)
@@ -109,8 +109,8 @@ public class LanguageRestControllerValidateTest {
 
     @Test
     public void update_entityIdIsNotPositive() throws Exception {
-        final Long entityId = -generateId();
-        final String errorMessage = "The entityId is not positive.";
+        Long entityId = -generateId();
+        String errorMessage = "The entityId is not positive.";
 
         LanguageUpdateRequest rq = LanguageUpdateRequest.builder()
                 .entityId(entityId)
@@ -127,7 +127,7 @@ public class LanguageRestControllerValidateTest {
 
     @Test
     public void update_nameIsNull() throws Exception {
-        final String errorMessage = "The name is null.";
+        String errorMessage = "The name is null.";
 
         LanguageUpdateRequest rq = LanguageUpdateRequest.builder()
                 .entityId(generateId())
@@ -144,8 +144,8 @@ public class LanguageRestControllerValidateTest {
 
     @Test
     public void update_nameIsEmpty() throws Exception {
-        final String name = "";
-        final String errorMessage = "The name is empty.";
+        String name = "";
+        String errorMessage = "The name is empty.";
 
         LanguageUpdateRequest rq = LanguageUpdateRequest.builder()
                 .entityId(generateId())
