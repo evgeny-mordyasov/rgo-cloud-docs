@@ -29,6 +29,7 @@ public class PersistenceConfig {
     }
 
     @Bean
+    @Profile("!test")
     public DataSource pg(DbProperties dbProp) {
         HikariDataSource ds = new HikariDataSource();
         ds.setJdbcUrl(dbProp.getUrl());
