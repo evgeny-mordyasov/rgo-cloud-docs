@@ -9,6 +9,6 @@ module-properties:
   persistence:
     url: jdbc:postgresql://localhost:5433/docs
     scheme: docs
-    username: docs
+    username: docs_appl
     password: qwe123
     maxPoolSize: 5
