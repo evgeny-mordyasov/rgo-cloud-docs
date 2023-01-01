@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.common.api.exception.ViolatesConstraintException;
-import rgo.cloud.docs.boot.CommonTest;
+import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
 import rgo.cloud.docs.boot.storage.repository.DocumentLanguageRepository;
 import rgo.cloud.docs.boot.storage.repository.DocumentRepository;

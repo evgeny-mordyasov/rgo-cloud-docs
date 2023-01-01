@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.common.api.exception.ViolatesConstraintException;
-import rgo.cloud.docs.boot.CommonTest;
+import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
 import rgo.cloud.docs.internal.api.storage.Classification;
 

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import rgo.cloud.docs.boot.CommonTest;
+import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.internal.api.storage.Language;
 
 import java.util.List;

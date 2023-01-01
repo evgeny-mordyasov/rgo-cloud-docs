@@ -6,16 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 import rgo.cloud.common.api.rest.StatusCode;
-import rgo.cloud.security.config.util.Endpoint;
-import rgo.cloud.docs.boot.CommonTest;
+import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
 import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationSaveRequest;
 import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationUpdateRequest;
 import rgo.cloud.docs.internal.api.storage.Classification;
+import rgo.cloud.security.config.util.Endpoint;
 
 import java.util.Optional;
 
@@ -37,17 +34,12 @@ import static rgo.cloud.docs.boot.EntityGenerator.createRandomClassification;
 public class ClassificationRestControllerTest extends CommonTest {
 
     @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @Autowired
     private ClassificationRepository repository;
-
-    private MockMvc mvc;
 
     @BeforeEach
     public void setUp() {
         truncateTables();
-        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        initMvc();
     }
 
     @Test

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
-import rgo.cloud.docs.boot.CommonTest;
+import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.internal.api.storage.Classification;
 import rgo.cloud.docs.internal.api.storage.Document;
 import rgo.cloud.docs.internal.api.storage.DocumentLanguage;
