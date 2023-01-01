@@ -60,7 +60,7 @@ public class DocumentRepository {
 
         return tx.tx(() -> {
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            int result = jdbc.update(DocumentQuery.save(), params, keyHolder);
+            int result = jdbc.update(DocumentQuery.save(), params, keyHolder, new String[]{"entity_id"});
             Number key = keyHolder.getKey();
 
             if (result == 0 || key == null) {

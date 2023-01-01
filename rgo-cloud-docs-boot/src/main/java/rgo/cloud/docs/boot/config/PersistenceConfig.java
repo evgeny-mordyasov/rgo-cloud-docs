@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 public class PersistenceConfig {
 
     @Bean
-    @Profile("dev | test")
+    @Profile("test")
     public DataSource h2() {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
@@ -29,7 +29,6 @@ public class PersistenceConfig {
     }
 
     @Bean
-    @Profile("!dev & !test")
     public DataSource pg(DbProperties dbProp) {
         HikariDataSource ds = new HikariDataSource();
         ds.setJdbcUrl(dbProp.getUrl());

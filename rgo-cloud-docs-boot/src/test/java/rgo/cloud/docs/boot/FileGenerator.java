@@ -5,7 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import rgo.cloud.common.api.rest.rule.Endpoint;
+import rgo.cloud.security.config.util.Endpoint;
 
 import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
 import static rgo.cloud.docs.boot.EntityGenerator.generateExtension;

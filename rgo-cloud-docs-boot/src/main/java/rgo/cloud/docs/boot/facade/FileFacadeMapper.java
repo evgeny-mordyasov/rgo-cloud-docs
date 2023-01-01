@@ -1,6 +1,6 @@
 package rgo.cloud.docs.boot.facade;
 
-import rgo.cloud.common.api.rest.rule.Endpoint;
+import rgo.cloud.security.config.util.Endpoint;
 import rgo.cloud.docs.internal.api.facade.FileDto;
 import rgo.cloud.docs.internal.api.facade.ResourceDto;
 import rgo.cloud.docs.internal.api.storage.Classification;

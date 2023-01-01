@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import rgo.cloud.common.api.rest.Response;
-import rgo.cloud.common.api.rest.rule.Endpoint;
+import rgo.cloud.security.config.util.Endpoint;
 import rgo.cloud.docs.boot.api.decorator.FileFacadeDecorator;
 import rgo.cloud.docs.boot.facade.FileResource;
 import rgo.cloud.docs.boot.util.FileUtil;

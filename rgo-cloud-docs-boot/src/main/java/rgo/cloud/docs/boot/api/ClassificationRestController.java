@@ -2,7 +2,7 @@ package rgo.cloud.docs.boot.api;
 
 import org.springframework.web.bind.annotation.*;
 import rgo.cloud.common.api.rest.Response;
-import rgo.cloud.common.api.rest.rule.Endpoint;
+import rgo.cloud.security.config.util.Endpoint;
 import rgo.cloud.docs.boot.api.decorator.ClassificationServiceDecorator;
 import rgo.cloud.docs.internal.api.rest.classification.request.*;
 

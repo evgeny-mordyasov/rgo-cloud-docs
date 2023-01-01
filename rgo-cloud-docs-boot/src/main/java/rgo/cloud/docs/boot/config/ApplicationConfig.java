@@ -14,10 +14,11 @@ import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
 import rgo.cloud.docs.boot.storage.repository.DocumentLanguageRepository;
 import rgo.cloud.docs.boot.storage.repository.DocumentRepository;
 import rgo.cloud.docs.boot.storage.repository.LanguageRepository;
+import rgo.cloud.security.config.SecurityConfig;
 
 @Configuration
 @ConfigurationPropertiesScan
-@Import(ValidateAspect.class)
+@Import(value = { SecurityConfig.class, ValidateAspect.class })
 public class ApplicationConfig {
 
     @Bean

@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import rgo.cloud.common.api.rest.StatusCode;
-import rgo.cloud.common.api.rest.rule.Endpoint;
+import rgo.cloud.security.config.util.Endpoint;
 import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationSaveRequest;
 import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationUpdateRequest;
 

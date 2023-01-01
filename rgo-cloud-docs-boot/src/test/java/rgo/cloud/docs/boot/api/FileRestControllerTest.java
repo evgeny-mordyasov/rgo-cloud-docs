@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import rgo.cloud.common.api.rest.StatusCode;
-import rgo.cloud.common.api.rest.rule.Endpoint;
+import rgo.cloud.security.config.util.Endpoint;
 import rgo.cloud.docs.boot.CommonTest;
 import rgo.cloud.docs.boot.facade.FileFacade;
 import rgo.cloud.docs.boot.service.DocumentLanguageService;

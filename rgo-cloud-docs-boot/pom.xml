@@ -29,6 +29,10 @@
             <groupId>ru.gold.ordance</groupId>
             <artifactId>rgo-cloud-common-spring</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ru.gold.ordance</groupId>
+            <artifactId>rgo-cloud-security-config</artifactId>
+        </dependency>
         <!-- rgo-cloud -->
 
         <!-- spring -->
@@ -64,6 +68,10 @@
         <dependency>
             <groupId>one.util</groupId>
             <artifactId>streamex</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
         </dependency>
     </dependencies>
 
