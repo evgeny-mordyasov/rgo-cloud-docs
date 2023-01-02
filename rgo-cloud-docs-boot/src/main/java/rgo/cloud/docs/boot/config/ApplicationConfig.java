@@ -42,8 +42,12 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public FileFacade fileFacade(DocumentService documentService, DocumentLanguageService dlService) {
-        return new FileFacade(documentService, dlService);
+    public FileFacade fileFacade(
+            DocumentService documentService,
+            DocumentLanguageService dlService,
+            LanguageService languageService
+    ) {
+        return new FileFacade(documentService, dlService, languageService);
     }
 
     @Bean

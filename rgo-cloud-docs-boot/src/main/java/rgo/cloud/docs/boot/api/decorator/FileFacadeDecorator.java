@@ -7,10 +7,8 @@ import rgo.cloud.docs.boot.facade.FileFacade;
 import rgo.cloud.docs.boot.facade.FileResource;
 import rgo.cloud.docs.internal.api.facade.FileDto;
 import rgo.cloud.docs.internal.api.rest.file.request.*;
-import rgo.cloud.docs.internal.api.rest.file.response.FileDeleteResponse;
-import rgo.cloud.docs.internal.api.rest.file.response.FileGetEntityResponse;
-import rgo.cloud.docs.internal.api.rest.file.response.FileGetListResponse;
-import rgo.cloud.docs.internal.api.rest.file.response.FileModifyResponse;
+import rgo.cloud.docs.internal.api.rest.file.response.*;
+import rgo.cloud.docs.internal.api.storage.Language;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,6 +40,11 @@ public class FileFacadeDecorator {
         return opt.isPresent()
                 ? FileGetEntityResponse.success(opt.get())
                 : new EmptySuccessfulResponse();
+    }
+
+    public FileGetFreeLanguagesByDocumentIdResponse getFreeLanguages(FileGetFreeLanguagesByDocumentIdRequest rq) {
+        List<Language> languages = facade.getFreeLanguages(rq.getDocumentId());
+        return FileGetFreeLanguagesByDocumentIdResponse.success(languages);
     }
 
     public FileResource load(FileGetResourceRequest rq) {

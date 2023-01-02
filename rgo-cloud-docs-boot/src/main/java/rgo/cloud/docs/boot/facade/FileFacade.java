@@ -7,11 +7,14 @@ import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.docs.boot.service.DocumentLanguageService;
 import rgo.cloud.docs.boot.service.DocumentService;
+import rgo.cloud.docs.boot.service.LanguageService;
 import rgo.cloud.docs.internal.api.facade.FileDto;
 import rgo.cloud.docs.internal.api.storage.Document;
 import rgo.cloud.docs.internal.api.storage.DocumentLanguage;
+import rgo.cloud.docs.internal.api.storage.Language;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static rgo.cloud.docs.boot.facade.FileFacadeMapper.convert;
 
@@ -19,10 +22,14 @@ import static rgo.cloud.docs.boot.facade.FileFacadeMapper.convert;
 public class FileFacade {
     private final DocumentService documentService;
     private final DocumentLanguageService dlService;
+    private final LanguageService languageService;
 
-    public FileFacade(DocumentService documentService, DocumentLanguageService dlService) {
+    public FileFacade(DocumentService documentService,
+                      DocumentLanguageService dlService,
+                      LanguageService languageService) {
         this.documentService = documentService;
         this.dlService = dlService;
+        this.languageService = languageService;
     }
 
     public List<FileDto> findAll() {
@@ -52,6 +59,24 @@ public class FileFacade {
 
         return Optional.of(
                 convert(document.get(), languages));
+    }
+
+    public List<Language> getFreeLanguages(Long documentId) {
+        List<Language> list = dlService.findByDocumentId(documentId)
+                .stream()
+                .map(DocumentLanguage::getLanguage)
+                .collect(Collectors.toList());
+
+        if (list.isEmpty()) {
+            String errorMsg = "The document not found by documentId.";
+            log.error(errorMsg);
+            throw new EntityNotFoundException(errorMsg);
+        }
+
+        List<Language> allLanguages = languageService.findAll();
+        allLanguages.removeAll(list);
+
+        return allLanguages;
     }
 
     public FileResource load(Long documentId, Long languageId) {

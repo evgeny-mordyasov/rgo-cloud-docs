@@ -51,6 +51,17 @@ public class FileRestControllerValidateTest extends CommonTest {
     }
 
     @Test
+    public void getFreeLanguages_idIsNotPositive() throws Exception {
+        long documentId = -1L;
+        String errorMessage = "The documentId is not positive.";
+
+        mvc.perform(get(Endpoint.File.BASE_URL + "/free-languages/" + documentId))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.INVALID_RQ.name())))
+                .andExpect(jsonPath("$.status.description", equalTo(errorMessage)));
+    }
+
+    @Test
     public void findResource_documentIdIsNotPositive() throws Exception {
         long documentId = -1L;
         long languageId = 1L;

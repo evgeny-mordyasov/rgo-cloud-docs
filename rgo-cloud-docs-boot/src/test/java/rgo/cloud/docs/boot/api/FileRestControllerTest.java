@@ -319,6 +319,51 @@ public class FileRestControllerTest extends CommonTest {
     }
 
     @Test
+    public void getFreeLanguages_documentIdIsFake() throws Exception {
+        long fakeDocumentId = generateId();
+        String errorMessage = "The document not found by documentId.";
+
+        mvc.perform(get(Endpoint.File.BASE_URL + "/free-languages/" + fakeDocumentId))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.status.description", is(errorMessage)));
+    }
+
+    @Test
+    public void getFreeLanguages_allLanguagesUsed() throws Exception {
+        int foundOne = 0;
+
+        Language savedLanguage = languageRepository.save(createRandomLanguage());
+        Classification savedClassification = classificationRepository.save(createRandomClassification());
+        FileDto file = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage));
+
+        mvc.perform(get(Endpoint.File.BASE_URL + "/free-languages/" + file.getDocument().getEntityId()))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
+                .andExpect(jsonPath("$.status.description", nullValue()))
+                .andExpect(jsonPath("$.list", hasSize(foundOne)));
+    }
+
+    @Test
+    public void getFreeLanguages_oneOfTwoLanguagesUsed() throws Exception {
+        int foundOne = 1;
+
+        Language lang1 = languageRepository.save(createRandomLanguage());
+        Language lang2 = languageRepository.save(createRandomLanguage());
+
+        Classification savedClassification = classificationRepository.save(createRandomClassification());
+        FileDto file = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), lang1));
+
+        mvc.perform(get(Endpoint.File.BASE_URL + "/free-languages/" + file.getDocument().getEntityId()))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
+                .andExpect(jsonPath("$.status.description", nullValue()))
+                .andExpect(jsonPath("$.list", hasSize(foundOne)))
+                .andExpect(jsonPath("$.list[0].entityId", is(lang2.getEntityId().intValue())))
+                .andExpect(jsonPath("$.list[0].name", is(lang2.getName())));
+    }
+
+    @Test
     public void save() throws Exception {
         Language savedLanguage = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
