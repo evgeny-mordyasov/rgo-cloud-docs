@@ -6,17 +6,25 @@ public final class DocumentQuery {
     private DocumentQuery() {
     }
 
+    public static String findAll() {
+        return select() + "JOIN CLASSIFICATION as c ON d.classification_id = c.entity_id";
+    }
+
     public static String findByIdAndFetchClassification() {
+        return select() +
+                "JOIN CLASSIFICATION as c " +
+                "ON d.entity_id = :entity_id " +
+                "   AND d.classification_id = c.entity_id";
+    }
+
+    private static String select() {
         return "SELECT d.entity_id, " +
                 "      d.full_name, " +
                 "      d.name, " +
                 "      d.extension, " +
                 "      d.classification_id, " +
                 "      c.name as classification_name " +
-                "FROM " + TABLE_NAME + " as d " +
-                "JOIN CLASSIFICATION as c " +
-                "ON d.entity_id = :entity_id " +
-                "   AND d.classification_id = c.entity_id";
+                "FROM " + TABLE_NAME + " as d ";
     }
 
     public static String save() {

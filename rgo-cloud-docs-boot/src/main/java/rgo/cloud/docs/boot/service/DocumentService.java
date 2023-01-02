@@ -5,6 +5,7 @@ import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.docs.boot.storage.repository.DocumentRepository;
 import rgo.cloud.docs.internal.api.storage.Document;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -13,6 +14,10 @@ public class DocumentService {
 
     public DocumentService(DocumentRepository repository) {
         this.repository = repository;
+    }
+
+    public List<Document> findAll() {
+        return repository.findAll();
     }
 
     public Optional<Document> findById(Long entityId) {

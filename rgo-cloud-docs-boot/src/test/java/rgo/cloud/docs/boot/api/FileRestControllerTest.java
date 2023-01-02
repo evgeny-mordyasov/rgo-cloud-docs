@@ -395,6 +395,25 @@ public class FileRestControllerTest extends CommonTest {
     }
 
     @Test
+    public void save_rollbackTransactional() throws Exception {
+        long fakeLanguageId = generateId();
+        Classification savedClassification = classificationRepository.save(createRandomClassification());
+
+        MockMultipartFile file = createFile();
+
+        mvc.perform(multipart(Endpoint.File.BASE_URL)
+                .file(file)
+                .param("languageId", String.valueOf(fakeLanguageId))
+                .param("classificationId", savedClassification.getEntityId().toString()))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.status.description", notNullValue()));
+
+        List<Document> list = documentService.findAll();
+        assertTrue(list.isEmpty());
+    }
+
+    @Test
     public void patch() throws Exception {
         int twoResources = 2;
 

@@ -2,7 +2,7 @@ package rgo.cloud.docs.boot.api.decorator;
 
 import rgo.cloud.common.api.rest.EmptySuccessfulResponse;
 import rgo.cloud.common.api.rest.Response;
-import rgo.cloud.common.spring.aspect.Validate;
+import rgo.cloud.common.spring.annotation.Validate;
 import rgo.cloud.docs.boot.service.LanguageService;
 import rgo.cloud.docs.internal.api.rest.language.request.LanguageGetByIdRequest;
 import rgo.cloud.docs.internal.api.rest.language.request.LanguageGetByNameRequest;

@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import rgo.cloud.common.spring.aspect.ValidateAspect;
+import rgo.cloud.common.spring.config.AspectConfig;
 import rgo.cloud.docs.boot.api.decorator.ClassificationServiceDecorator;
 import rgo.cloud.docs.boot.api.decorator.FileFacadeDecorator;
 import rgo.cloud.docs.boot.api.decorator.LanguageServiceDecorator;
@@ -18,7 +18,7 @@ import rgo.cloud.security.config.SecurityConfig;
 
 @Configuration
 @ConfigurationPropertiesScan
-@Import(value = { SecurityConfig.class, ValidateAspect.class })
+@Import(value = { SecurityConfig.class, AspectConfig.class })
 public class ApplicationConfig {
 
     @Bean

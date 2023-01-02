@@ -10,6 +10,7 @@ import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.internal.api.storage.Classification;
 import rgo.cloud.docs.internal.api.storage.Document;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,6 +34,36 @@ public class DocumentRepositoryTest extends CommonTest {
     public void setUp() {
         truncateTables();
         savedClassification = classificationRepository.save(createRandomClassification());
+    }
+
+    @Test
+    public void findAll_noOneHasBeenFound() {
+        int noOneHasBeenFound = 0;
+
+        List<Document> found = documentRepository.findAll();
+
+        assertEquals(noOneHasBeenFound, found.size());
+    }
+
+    @Test
+    public void findAll_foundOne() {
+        int foundOne = 1;
+        documentRepository.save(createRandomDocument(savedClassification));
+
+        List<Document> found = documentRepository.findAll();
+
+        assertEquals(foundOne, found.size());
+    }
+
+    @Test
+    public void findAll_foundALot() {
+        int foundALot = 2;
+        documentRepository.save(createRandomDocument(savedClassification));
+        documentRepository.save(createRandomDocument(savedClassification));
+
+        List<Document> found = documentRepository.findAll();
+
+        assertEquals(foundALot, found.size());
     }
 
     @Test

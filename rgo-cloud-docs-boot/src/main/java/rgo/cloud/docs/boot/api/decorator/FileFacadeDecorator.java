@@ -2,7 +2,8 @@ package rgo.cloud.docs.boot.api.decorator;
 
 import rgo.cloud.common.api.rest.EmptySuccessfulResponse;
 import rgo.cloud.common.api.rest.Response;
-import rgo.cloud.common.spring.aspect.Validate;
+import rgo.cloud.common.spring.annotation.Transactional;
+import rgo.cloud.common.spring.annotation.Validate;
 import rgo.cloud.docs.boot.facade.FileFacade;
 import rgo.cloud.docs.boot.facade.FileResource;
 import rgo.cloud.docs.internal.api.facade.FileDto;
@@ -34,6 +35,7 @@ public class FileFacadeDecorator {
         return FileGetListResponse.success(list);
     }
 
+    @Transactional
     public Response findByDocumentId(FileGetByDocumentIdRequest rq) {
         Optional<FileDto> opt = facade.findByDocumentId(rq.getDocumentId());
 
@@ -42,7 +44,8 @@ public class FileFacadeDecorator {
                 : new EmptySuccessfulResponse();
     }
 
-    public FileGetFreeLanguagesByDocumentIdResponse getFreeLanguages(FileGetFreeLanguagesByDocumentIdRequest rq) {
+    @Transactional
+    public Response getFreeLanguages(FileGetFreeLanguagesByDocumentIdRequest rq) {
         List<Language> languages = facade.getFreeLanguages(rq.getDocumentId());
         return FileGetFreeLanguagesByDocumentIdResponse.success(languages);
     }
@@ -51,12 +54,14 @@ public class FileFacadeDecorator {
         return facade.load(rq.getDocumentId(), rq.getLanguageId());
     }
 
-    public FileModifyResponse save(FileSaveRequest rq) throws IOException {
+    @Transactional
+    public Response save(FileSaveRequest rq) throws IOException {
         FileDto saved = facade.save(convert(rq));
         return FileModifyResponse.success(saved);
     }
 
-    public FileModifyResponse patch(FilePatchRequest rq) throws IOException {
+    @Transactional
+    public Response patch(FilePatchRequest rq) throws IOException {
         FileDto updated = facade.patch(convert(rq));
         return FileModifyResponse.success(updated);
     }
@@ -66,7 +71,8 @@ public class FileFacadeDecorator {
         return FileDeleteResponse.success();
     }
 
-    public FileDeleteResponse deleteByDocumentIdAndLanguageId(FileDeleteByDocumentIdAndLanguageIdRequest rq) {
+    @Transactional
+    public Response deleteByDocumentIdAndLanguageId(FileDeleteByDocumentIdAndLanguageIdRequest rq) {
         facade.deleteByDocumentIdAndLanguageId(rq.getDocumentId(), rq.getLanguageId());
         return FileDeleteResponse.success();
     }

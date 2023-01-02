@@ -30,6 +30,13 @@ public class DocumentRepository {
         this.jdbc = tx.jdbc();
     }
 
+    public List<Document> findAll() {
+        List<Document> documents = tx.tx(() -> jdbc.query(DocumentQuery.findAll(), mapper));
+        log.info("Size of documents: {}", documents.size());
+
+        return documents;
+    }
+
     public Optional<Document> findById(Long entityId) {
         MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
         return first(tx.tx(() ->
