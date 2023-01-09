@@ -49,7 +49,7 @@ public class FileRestController {
         return execute(() -> service.getFreeLanguages(new FileGetFreeLanguagesByDocumentIdRequest(documentId)));
     }
 
-    @GetMapping(value = Endpoint.File.RESOURCE)
+    @GetMapping(value = Endpoint.File.RESOURCE, produces = JSON)
     public ResponseEntity<?> findResource(@RequestParam(name = "documentId") Long documentId,
                                           @RequestParam(name = "languageId") Long languageId) {
         try {
