@@ -91,7 +91,7 @@ public class ClassificationRestControllerTest extends CommonTest {
 
     @Test
     public void findById_notFound() throws Exception {
-        Long fakeId = generateId();
+        long fakeId = generateId();
 
         mvc.perform(get(Endpoint.Classification.BASE_URL + "/" + fakeId))
                 .andExpect(content().contentType(JSON))
@@ -193,7 +193,7 @@ public class ClassificationRestControllerTest extends CommonTest {
 
     @Test
     public void update_classificationDoesNotExistByCurrentId() throws Exception {
-        Long currentId = generateId();
+        long currentId = generateId();
 
         ClassificationUpdateRequest rq = ClassificationUpdateRequest.builder()
                 .entityId(currentId)
@@ -225,7 +225,7 @@ public class ClassificationRestControllerTest extends CommonTest {
 
     @Test
     public void deleteById_notFound() throws Exception {
-        Long fakeId = generateId();
+        long fakeId = generateId();
 
         mvc.perform(delete(Endpoint.Classification.BASE_URL + "/" + fakeId)
                 .contentType(JSON))

@@ -220,7 +220,7 @@ public class DocumentLanguageServiceTest extends CommonTest {
 
     @Test
     public void deleteById_notFound() {
-        Long fakeId = generateId();
+        long fakeId = generateId();
 
         assertThrows(EntityNotFoundException.class, () -> service.deleteById(fakeId), "The documentLanguage by id not found.");
     }

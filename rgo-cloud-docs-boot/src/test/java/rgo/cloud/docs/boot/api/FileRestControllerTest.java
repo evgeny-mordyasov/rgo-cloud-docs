@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -371,6 +372,17 @@ public class FileRestControllerTest extends CommonTest {
     }
 
     @Test
+    public void findResource() throws Exception {
+        Language savedLanguage = languageRepository.save(createRandomLanguage());
+        Classification savedClassification = classificationRepository.save(createRandomClassification());
+
+        FileDto savedFile = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage));
+
+        mvc.perform(get(Endpoint.File.BASE_URL + Endpoint.File.RESOURCE + "?documentId=" + savedFile.getDocument().getEntityId() + "&languageId=" + savedLanguage.getEntityId()))
+                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE));
+    }
+
+    @Test
     public void save() throws Exception {
         Language savedLanguage = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
@@ -403,7 +415,7 @@ public class FileRestControllerTest extends CommonTest {
 
         mvc.perform(multipart(Endpoint.File.BASE_URL)
                 .file(file)
-                .param("languageId", String.valueOf(fakeLanguageId))
+                .param("languageId", Long.toString(fakeLanguageId))
                 .param("classificationId", savedClassification.getEntityId().toString()))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())))
@@ -446,6 +458,19 @@ public class FileRestControllerTest extends CommonTest {
                         containsInAnyOrder(savedLanguage1.getEntityId().intValue(), savedLanguage2.getEntityId().intValue())))
                 .andExpect(jsonPath("$.object.resources[*].language.name",
                         containsInAnyOrder(savedLanguage1.getName(), savedLanguage2.getName())));
+    }
+
+    @Test
+    public void deleteByDocumentIdAndLanguageId_notFound() throws Exception {
+        long fakeDocumentId = generateId();
+        long fakeLanguageId = generateId();
+
+        mvc.perform(delete(Endpoint.File.BASE_URL)
+                .param("documentId", Long.toString(fakeDocumentId))
+                .param("languageId", Long.toString(fakeLanguageId)))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.status.description", notNullValue()));
     }
 
     @Test

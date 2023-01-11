@@ -91,7 +91,7 @@ public class LanguageRestControllerTest extends CommonTest {
 
     @Test
     public void findById_notFound() throws Exception {
-        Long fakeId = generateId();
+        long fakeId = generateId();
 
         mvc.perform(get(Endpoint.Language.BASE_URL + "/" + fakeId))
                 .andExpect(content().contentType(JSON))
@@ -193,7 +193,7 @@ public class LanguageRestControllerTest extends CommonTest {
 
     @Test
     public void update_languageDoesNotExistByCurrentId() throws Exception {
-        Long currentId = generateId();
+        long currentId = generateId();
 
         LanguageUpdateRequest rq = LanguageUpdateRequest.builder()
                 .entityId(currentId)

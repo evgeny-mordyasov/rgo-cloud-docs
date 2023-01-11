@@ -101,7 +101,7 @@ public class LanguageRestControllerValidateTest extends CommonTest {
 
     @Test
     public void update_entityIdIsNotPositive() throws Exception {
-        Long entityId = -generateId();
+        long entityId = -generateId();
         String errorMessage = "The entityId is not positive.";
 
         LanguageUpdateRequest rq = LanguageUpdateRequest.builder()

@@ -127,6 +127,12 @@ public class FileFacade {
    public void deleteByDocumentIdAndLanguageId(Long documentId, Long languageId) {
         List<DocumentLanguage> dls = dlService.findByDocumentId(documentId);
 
+        if (dls.isEmpty()) {
+            String errorMsg = "The documentLanguage by documentId not found.";
+            log.error(errorMsg);
+            throw new EntityNotFoundException(errorMsg);
+        }
+
         if (dls.size() == 1) {
             documentService.deleteById(documentId);
         } else {

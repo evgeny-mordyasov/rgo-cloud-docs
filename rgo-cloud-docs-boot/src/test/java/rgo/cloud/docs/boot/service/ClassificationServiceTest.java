@@ -139,7 +139,7 @@ public class ClassificationServiceTest extends CommonTest {
 
     @Test
     public void deleteById_notFound() {
-        Long fakeId = generateId();
+        long fakeId = generateId();
 
         assertThrows(EntityNotFoundException.class, () -> service.deleteById(fakeId), "The classification by id not found.");
     }

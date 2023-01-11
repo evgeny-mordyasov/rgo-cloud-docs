@@ -101,7 +101,7 @@ public class ClassificationRestControllerValidateTest extends CommonTest {
 
     @Test
     public void update_entityIdIsNotPositive() throws Exception {
-        Long entityId = -generateId();
+        long entityId = -generateId();
         String errorMessage = "The entityId is not positive.";
 
         ClassificationUpdateRequest rq = ClassificationUpdateRequest.builder()
