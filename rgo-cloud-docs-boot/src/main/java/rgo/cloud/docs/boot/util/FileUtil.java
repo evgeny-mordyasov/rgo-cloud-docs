@@ -9,7 +9,7 @@ public final class FileUtil {
             return "";
         }
 
-        return fullFileName.substring(fullFileName.indexOf(".") + 1);
+        return fullFileName.substring(fullFileName.lastIndexOf(".") + 1);
     }
 
     public static String getFileName(String fullFileName) {
@@ -17,6 +17,6 @@ public final class FileUtil {
             return "";
         }
 
-        return fullFileName.substring(0, fullFileName.indexOf("."));
+        return fullFileName.substring(0, fullFileName.lastIndexOf("."));
     }
 }
