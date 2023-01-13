@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ActiveProfiles;
@@ -183,7 +184,7 @@ public class FileRestControllerPermitTest extends CommonTest {
 
         mvc.perform(get(Endpoint.File.BASE_URL + Endpoint.File.RESOURCE + "?documentId=" + documentId + "&languageId=" + languageId)
                 .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
-                .andExpect(content().contentType(JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())));
     }
 
@@ -195,7 +196,7 @@ public class FileRestControllerPermitTest extends CommonTest {
 
         mvc.perform(get(Endpoint.File.BASE_URL + Endpoint.File.RESOURCE + "?documentId=" + documentId + "&languageId=" + languageId)
                 .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
-                .andExpect(content().contentType(JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())));
     }
 

@@ -49,14 +49,14 @@ public class FileRestController {
         return execute(() -> service.getFreeLanguages(new FileGetFreeLanguagesByDocumentIdRequest(documentId)));
     }
 
-    @GetMapping(value = Endpoint.File.RESOURCE, produces = JSON)
+    @GetMapping(value = Endpoint.File.RESOURCE)
     public ResponseEntity<?> findResource(@RequestParam(name = "documentId") Long documentId,
                                           @RequestParam(name = "languageId") Long languageId) {
         try {
             FileResource resource = service.load(new FileGetResourceRequest(documentId, languageId));
 
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + resource.getFullFileName())
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFullFileName() + "\"")
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(resource.getData());
         } catch (Exception e) {

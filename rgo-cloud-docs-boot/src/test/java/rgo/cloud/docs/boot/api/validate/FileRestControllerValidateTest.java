@@ -3,6 +3,7 @@ package rgo.cloud.docs.boot.api.validate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -68,7 +69,7 @@ public class FileRestControllerValidateTest extends CommonTest {
         String errorMessage = "The documentId is not positive.";
 
         mvc.perform(get(Endpoint.File.BASE_URL + Endpoint.File.RESOURCE + "?documentId=" + documentId + "&languageId=" + languageId))
-                .andExpect(content().contentType(JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.INVALID_RQ.name())))
                 .andExpect(jsonPath("$.status.description", equalTo(errorMessage)));
     }
@@ -80,7 +81,7 @@ public class FileRestControllerValidateTest extends CommonTest {
         String errorMessage = "The languageId is not positive.";
 
         mvc.perform(get(Endpoint.File.BASE_URL + Endpoint.File.RESOURCE + "?documentId=" + documentId + "&languageId=" + languageId))
-                .andExpect(content().contentType(JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.INVALID_RQ.name())))
                 .andExpect(jsonPath("$.status.description", equalTo(errorMessage)));
     }
