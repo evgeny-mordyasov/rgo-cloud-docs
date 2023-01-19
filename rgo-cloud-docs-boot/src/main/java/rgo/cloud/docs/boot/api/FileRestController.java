@@ -6,19 +6,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import rgo.cloud.common.api.rest.Response;
-import rgo.cloud.security.config.util.Endpoint;
 import rgo.cloud.docs.boot.api.decorator.FileFacadeDecorator;
 import rgo.cloud.docs.boot.facade.FileResource;
-import rgo.cloud.docs.boot.util.FileUtil;
-import rgo.cloud.docs.internal.api.facade.MultipartFileDto;
 import rgo.cloud.docs.internal.api.rest.file.request.*;
+import rgo.cloud.security.config.util.Endpoint;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import static rgo.cloud.common.api.rest.BaseErrorResponse.handleException;
 import static rgo.cloud.common.api.util.RequestUtil.JSON;
 import static rgo.cloud.common.api.util.RequestUtil.execute;
+import static rgo.cloud.docs.boot.api.decorator.converter.FileFacadeConverter.convert;
 
 @RestController
 @RequestMapping(Endpoint.File.BASE_URL)
@@ -112,16 +110,5 @@ public class FileRestController {
     @DeleteMapping(value = Endpoint.ENTITY_ID_VARIABLE, produces = JSON)
     public Response deleteByDocumentId(@PathVariable Long entityId) {
         return execute(() -> service.deleteByDocumentId(new FileDeleteByDocumentIdRequest(entityId)));
-    }
-
-    private MultipartFileDto convert(MultipartFile file) throws IOException {
-        return MultipartFileDto.builder()
-                .withFullFileName(file.getOriginalFilename())
-                .withFileName(FileUtil.getFileName(file.getOriginalFilename()))
-                .withExtension(FileUtil.getFileExtension(file.getOriginalFilename()))
-                .withInputStream(file.getInputStream())
-                .withIsEmpty(file.isEmpty())
-                .withSize(file.getSize())
-                .build();
     }
 }

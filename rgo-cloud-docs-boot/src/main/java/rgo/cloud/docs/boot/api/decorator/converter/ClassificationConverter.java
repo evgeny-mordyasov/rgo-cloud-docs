@@ -4,7 +4,7 @@ import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationSav
 import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationUpdateRequest;
 import rgo.cloud.docs.internal.api.storage.Classification;
 
-public class ClassificationConverter {
+public final class ClassificationConverter {
     private ClassificationConverter() {
     }
 

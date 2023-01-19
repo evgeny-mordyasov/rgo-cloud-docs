@@ -4,7 +4,7 @@ import rgo.cloud.docs.internal.api.rest.language.request.LanguageSaveRequest;
 import rgo.cloud.docs.internal.api.rest.language.request.LanguageUpdateRequest;
 import rgo.cloud.docs.internal.api.storage.Language;
 
-public class LanguageConverter {
+public final class LanguageConverter {
     private LanguageConverter() {
     }
 

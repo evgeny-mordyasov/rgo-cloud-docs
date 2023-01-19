@@ -1,5 +1,8 @@
 package rgo.cloud.docs.boot.api.decorator.converter;
 
+import org.springframework.web.multipart.MultipartFile;
+import rgo.cloud.docs.boot.util.FileUtil;
+import rgo.cloud.docs.internal.api.facade.MultipartFileDto;
 import rgo.cloud.docs.internal.api.rest.file.request.FilePatchRequest;
 import rgo.cloud.docs.internal.api.rest.file.request.FileSaveRequest;
 import rgo.cloud.docs.internal.api.storage.Classification;
@@ -9,7 +12,7 @@ import rgo.cloud.docs.internal.api.storage.Language;
 
 import java.io.IOException;
 
-public class FileFacadeConverter {
+public final class FileFacadeConverter {
     private FileFacadeConverter() {
     }
 
@@ -39,6 +42,17 @@ public class FileFacadeConverter {
                         .entityId(rq.getLanguageId())
                         .build())
                 .data(rq.getFile().getInputStream().readAllBytes())
+                .build();
+    }
+
+    public static MultipartFileDto convert(MultipartFile file) throws IOException {
+        return MultipartFileDto.builder()
+                .withFullFileName(file.getOriginalFilename())
+                .withFileName(FileUtil.getFileName(file.getOriginalFilename()))
+                .withExtension(FileUtil.getFileExtension(file.getOriginalFilename()))
+                .withInputStream(file.getInputStream())
+                .withIsEmpty(file.isEmpty())
+                .withSize(file.getSize())
                 .build();
     }
 }
