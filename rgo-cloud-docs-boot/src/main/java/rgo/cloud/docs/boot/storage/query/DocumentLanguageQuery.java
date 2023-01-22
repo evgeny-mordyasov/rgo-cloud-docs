@@ -7,7 +7,8 @@ public final class DocumentLanguageQuery {
     }
 
     public static String findById() {
-        return "SELECT * FROM " + TABLE_NAME + " WHERE entity_id = :entity_id";
+        return  "SELECT * FROM " + TABLE_NAME + " " +
+                "WHERE entity_id = :entity_id";
     }
 
     public static String findAll() {
@@ -15,11 +16,14 @@ public final class DocumentLanguageQuery {
     }
 
     public static String findByDocumentId() {
-        return select() + " WHERE d.entity_id = :document_id";
+        return select() + " " +
+                "WHERE d.entity_id = :document_id";
     }
 
     public static String findByDocumentIdAndLanguageId() {
-        return select() + " WHERE d.entity_id = :document_id AND l.entity_id = :language_id";
+        return select() + " " +
+                "WHERE d.entity_id = :document_id " +
+                "      AND l.entity_id = :language_id";
     }
 
     public static String findByDocumentIdAndLanguageIdWithData() {
@@ -34,13 +38,17 @@ public final class DocumentLanguageQuery {
                 "      d.classification_id as document_classification_id, " +
                 "      c.name as document_classification_name " +
                 "FROM " + TABLE_NAME + " as dl " +
-                "JOIN LANGUAGE l ON dl.language_id = :language_id " +
-                "JOIN DOCUMENT d ON dl.document_id = :document_id " +
-                "JOIN CLASSIFICATION c ON d.classification_id = c.entity_id";
+                "   JOIN LANGUAGE l " +
+                "       ON dl.language_id = :language_id " +
+                "   JOIN DOCUMENT d " +
+                "       ON dl.document_id = :document_id " +
+                "   JOIN CLASSIFICATION c " +
+                "       ON d.classification_id = c.entity_id";
     }
 
     public static String findByClassificationId() {
-        return select() + " WHERE d.classification_id = :classification_id";
+        return select() + " " +
+                "WHERE d.classification_id = :classification_id";
     }
 
     private static String select() {
@@ -54,16 +62,21 @@ public final class DocumentLanguageQuery {
                 "      d.classification_id as document_classification_id, " +
                 "      c.name as document_classification_name " +
                 "FROM " + TABLE_NAME + " as dl " +
-                "JOIN LANGUAGE l ON dl.language_id = l.entity_id " +
-                "JOIN DOCUMENT d ON dl.document_id = d.entity_id " +
-                "JOIN CLASSIFICATION c ON d.classification_id = c.entity_id";
+                "   JOIN LANGUAGE l " +
+                "       ON dl.language_id = l.entity_id " +
+                "   JOIN DOCUMENT d " +
+                "       ON dl.document_id = d.entity_id " +
+                "   JOIN CLASSIFICATION c " +
+                "       ON d.classification_id = c.entity_id";
     }
 
     public static String save() {
-        return "INSERT INTO " + TABLE_NAME + "(document_id, language_id, data) VALUES (:document_id, :language_id, :data)";
+        return  "INSERT INTO " + TABLE_NAME + "(document_id, language_id, data) " +
+                "VALUES (:document_id, :language_id, :data)";
     }
 
     public static String deleteById() {
-        return "DELETE FROM " + TABLE_NAME + " WHERE entity_id = :entity_id";
+        return  "DELETE FROM " + TABLE_NAME + " " +
+                "WHERE entity_id = :entity_id";
     }
 }

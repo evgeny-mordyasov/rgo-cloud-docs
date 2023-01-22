@@ -40,7 +40,7 @@ public class DocumentRepository {
     public Optional<Document> findById(Long entityId) {
         MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
         return first(tx.tx(() ->
-                jdbc.query(DocumentQuery.findByIdAndFetchClassification(), params, mapper)));
+                jdbc.query(DocumentQuery.findById(), params, mapper)));
     }
 
     private Optional<Document> first(List<Document> list) {
@@ -78,7 +78,7 @@ public class DocumentRepository {
 
             Optional<Document> opt = findById(key.longValue());
             if (opt.isEmpty()) {
-                String errorMsg = "Error saving document during classification selection.";
+                String errorMsg = "Error saving the document when selecting by ID.";
                 log.error(errorMsg);
                 throw new UnpredictableException(errorMsg);
             }

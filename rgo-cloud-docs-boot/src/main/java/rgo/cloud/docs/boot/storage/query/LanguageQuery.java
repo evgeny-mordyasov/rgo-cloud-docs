@@ -11,18 +11,23 @@ public final class LanguageQuery {
     }
 
     public static String findById() {
-        return "SELECT * FROM " + TABLE_NAME + " WHERE entity_id = :entity_id";
+        return  "SELECT * FROM " + TABLE_NAME + " " +
+                "WHERE entity_id = :entity_id";
     }
 
     public static String findByName() {
-        return "SELECT * FROM " + TABLE_NAME + " WHERE LOWER(name) = LOWER(:name)";
+        return  "SELECT * FROM " + TABLE_NAME + " " +
+                "WHERE LOWER(name) = LOWER(:name)";
     }
 
     public static String save() {
-        return "INSERT INTO " + TABLE_NAME + "(name) VALUES (:name)";
+        return  "INSERT INTO " + TABLE_NAME + "(name) " +
+                "VALUES (:name)";
     }
 
     public static String update() {
-        return  "UPDATE " + TABLE_NAME + " SET name = :name WHERE entity_id = :entity_id";
+        return  "UPDATE " + TABLE_NAME + " " +
+                "SET name = :name " +
+                "WHERE entity_id = :entity_id";
     }
 }
