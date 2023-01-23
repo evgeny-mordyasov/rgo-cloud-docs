@@ -7,14 +7,14 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConfigurationProperties(prefix = "module-properties.persistence")
 public class DbProperties {
     private final String url;
-    private final String scheme;
+    private final String schema;
     private final String username;
     private final String password;
     private final int maxPoolSize;
 
-    public DbProperties(String url, String scheme, String username, String password, int maxPoolSize) {
+    public DbProperties(String url, String schema, String username, String password, int maxPoolSize) {
         this.url = url;
-        this.scheme = scheme;
+        this.schema = schema;
         this.username = username;
         this.password = password;
         this.maxPoolSize = maxPoolSize;
@@ -24,8 +24,8 @@ public class DbProperties {
         return url;
     }
 
-    public String getScheme() {
-        return scheme;
+    public String getSchema() {
+        return schema;
     }
 
     public String getUsername() {

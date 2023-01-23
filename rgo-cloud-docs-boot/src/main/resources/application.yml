@@ -1,14 +1,10 @@
 server:
   port: 8091
 
-spring:
-  profiles:
-    active: dev
-
 module-properties:
   persistence:
     url: jdbc:postgresql://common-db:5432/docs
-    scheme: docs
+    schema: docs
     username: docs_appl
     password: qwe123
     maxPoolSize: 5

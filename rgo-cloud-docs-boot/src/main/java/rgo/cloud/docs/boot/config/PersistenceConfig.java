@@ -33,11 +33,10 @@ public class PersistenceConfig {
     public DataSource pg(DbProperties dbProp) {
         HikariDataSource ds = new HikariDataSource();
         ds.setJdbcUrl(dbProp.getUrl());
-        ds.setSchema(dbProp.getScheme());
+        ds.setSchema(dbProp.getSchema());
         ds.setUsername(dbProp.getUsername());
         ds.setPassword(dbProp.getPassword());
         ds.setMaximumPoolSize(dbProp.getMaxPoolSize());
-        ds.setAutoCommit(false);
 
         return ds;
     }
