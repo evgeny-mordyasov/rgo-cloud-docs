@@ -24,8 +24,9 @@ public class FileSaveRequest implements Request {
         errorObjectId(classificationId, "classificationId");
         errorObjectId(languageId, "languageId");
         errorTrue(file.isEmpty(), "The file is missing.");
-        errorString(file.getFullFileName(), "fileName");
+        errorString(file.getFileName(), "fileName");
         errorFalse(isFromWhitelist(file.getExtension()), "The file extension not supported.");
         errorFalse(file.getSize() <= 1024 * 1024 * 5, "The file size exceeds 5 MB.");
+        finish();
     }
 }

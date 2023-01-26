@@ -7,6 +7,7 @@ import lombok.ToString;
 import rgo.cloud.common.api.rest.Request;
 
 import static rgo.cloud.common.api.util.ValidatorUtil.errorEntityId;
+import static rgo.cloud.common.api.util.ValidatorUtil.finish;
 
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
@@ -18,5 +19,6 @@ public class ClassificationGetByIdRequest implements Request {
     @Override
     public void validate() {
         errorEntityId(entityId);
+        finish();
     }
 }

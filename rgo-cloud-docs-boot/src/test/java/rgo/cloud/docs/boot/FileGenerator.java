@@ -35,7 +35,7 @@ public final class FileGenerator {
     public static MockMultipartFile createFileWithEmptyName() {
         return new MockMultipartFile(
                 "file",
-                "",
+                "." + generateExtension(),
                 MediaType.TEXT_PLAIN_VALUE,
                 randomString().getBytes()
         );

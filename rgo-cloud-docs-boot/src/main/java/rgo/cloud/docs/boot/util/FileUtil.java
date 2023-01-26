@@ -14,7 +14,7 @@ public final class FileUtil {
 
     public static String getFileName(String fullFileName) {
         if (!fullFileName.contains(".")) {
-            return "";
+            return fullFileName;
         }
 
         return fullFileName.substring(0, fullFileName.lastIndexOf("."));

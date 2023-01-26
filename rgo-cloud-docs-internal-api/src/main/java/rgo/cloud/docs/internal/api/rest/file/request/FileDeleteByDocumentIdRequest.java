@@ -7,6 +7,7 @@ import lombok.ToString;
 import rgo.cloud.common.api.rest.Request;
 
 import static rgo.cloud.common.api.util.ValidatorUtil.errorObjectId;
+import static rgo.cloud.common.api.util.ValidatorUtil.finish;
 
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
@@ -18,5 +19,6 @@ public class FileDeleteByDocumentIdRequest implements Request {
     @Override
     public void validate() {
         errorObjectId(documentId, "documentId");
+        finish();
     }
 }

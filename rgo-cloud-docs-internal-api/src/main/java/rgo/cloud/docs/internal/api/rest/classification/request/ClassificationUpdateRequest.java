@@ -3,8 +3,7 @@ package rgo.cloud.docs.internal.api.rest.classification.request;
 import lombok.*;
 import rgo.cloud.common.api.rest.Request;
 
-import static rgo.cloud.common.api.util.ValidatorUtil.errorEntityId;
-import static rgo.cloud.common.api.util.ValidatorUtil.errorString;
+import static rgo.cloud.common.api.util.ValidatorUtil.*;
 
 @Builder
 @AllArgsConstructor
@@ -19,5 +18,6 @@ public class ClassificationUpdateRequest implements Request {
     public void validate() {
         errorEntityId(entityId);
         errorString(name, "name");
+        finish();
     }
 }
