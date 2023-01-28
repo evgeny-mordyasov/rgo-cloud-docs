@@ -1,7 +1,7 @@
 package rgo.cloud.docs.boot.storage.query;
 
 public final class LanguageQuery {
-    private static final String TABLE_NAME = "LANGUAGE";
+    private static final String TABLE_NAME = "language";
 
     private LanguageQuery() {
     }

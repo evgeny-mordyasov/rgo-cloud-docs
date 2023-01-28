@@ -1,7 +1,7 @@
 package rgo.cloud.docs.boot.storage.query;
 
 public final class ClassificationQuery {
-    private static final String TABLE_NAME = "CLASSIFICATION";
+    private static final String TABLE_NAME = "classification";
 
     private ClassificationQuery() {
     }
@@ -11,17 +11,17 @@ public final class ClassificationQuery {
     }
 
     public static String findById() {
-        return "SELECT * FROM " + TABLE_NAME + " " +
+        return  "SELECT * FROM " + TABLE_NAME + " " +
                 "WHERE entity_id = :entity_id";
     }
 
     public static String findByName() {
-        return "SELECT * FROM " + TABLE_NAME + " " +
+        return  "SELECT * FROM " + TABLE_NAME + " " +
                 "WHERE LOWER(name) = LOWER(:name)";
     }
 
     public static String save() {
-        return "INSERT INTO " + TABLE_NAME + "(name) " +
+        return  "INSERT INTO " + TABLE_NAME + "(name) " +
                 "VALUES (:name)";
     }
 

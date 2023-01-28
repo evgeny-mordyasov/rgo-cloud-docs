@@ -1,7 +1,7 @@
 package rgo.cloud.docs.boot.storage.query;
 
 public final class DocumentLanguageQuery {
-    private static final String TABLE_NAME = "DOCUMENT_LANGUAGE";
+    private static final String TABLE_NAME = "document_language";
 
     private DocumentLanguageQuery() {
     }
@@ -27,22 +27,22 @@ public final class DocumentLanguageQuery {
     }
 
     public static String findByDocumentIdAndLanguageIdWithData() {
-        return "SELECT dl.entity_id, " +
-                "      dl.data, " +
-                "      l.entity_id as language_id, " +
-                "      l.name as language_name, " +
-                "      d.entity_id as document_id, " +
-                "      d.full_name as document_full_name, " +
-                "      d.name as document_name, " +
-                "      d.extension as document_extension, " +
-                "      d.classification_id as document_classification_id, " +
-                "      c.name as document_classification_name " +
-                "FROM " + TABLE_NAME + " as dl " +
-                "   JOIN LANGUAGE l " +
+        return  "SELECT dl.entity_id, " +
+                "       dl.data, " +
+                "       l.entity_id AS language_id, " +
+                "       l.name AS language_name, " +
+                "       d.entity_id AS document_id, " +
+                "       d.full_name AS document_full_name, " +
+                "       d.name AS document_name, " +
+                "       d.extension AS document_extension, " +
+                "       d.classification_id AS document_classification_id, " +
+                "       c.name AS document_classification_name " +
+                "FROM " + TABLE_NAME + " AS dl " +
+                "   JOIN language AS l " +
                 "       ON dl.language_id = :language_id " +
-                "   JOIN DOCUMENT d " +
+                "   JOIN document AS d " +
                 "       ON dl.document_id = :document_id " +
-                "   JOIN CLASSIFICATION c " +
+                "   JOIN classification AS c " +
                 "       ON d.classification_id = c.entity_id";
     }
 
@@ -52,21 +52,21 @@ public final class DocumentLanguageQuery {
     }
 
     private static String select() {
-        return "SELECT dl.entity_id, " +
-                "      l.entity_id as language_id, " +
-                "      l.name as language_name, " +
-                "      d.entity_id as document_id, " +
-                "      d.full_name as document_full_name, " +
-                "      d.name as document_name, " +
-                "      d.extension as document_extension, " +
-                "      d.classification_id as document_classification_id, " +
-                "      c.name as document_classification_name " +
-                "FROM " + TABLE_NAME + " as dl " +
-                "   JOIN LANGUAGE l " +
+        return  "SELECT dl.entity_id, " +
+                "       l.entity_id AS language_id, " +
+                "       l.name AS language_name, " +
+                "       d.entity_id AS document_id, " +
+                "       d.full_name AS document_full_name, " +
+                "       d.name AS document_name, " +
+                "       d.extension AS document_extension, " +
+                "       d.classification_id AS document_classification_id, " +
+                "       c.name AS document_classification_name " +
+                "FROM " + TABLE_NAME + " AS dl " +
+                "   JOIN language AS l " +
                 "       ON dl.language_id = l.entity_id " +
-                "   JOIN DOCUMENT d " +
+                "   JOIN document AS d " +
                 "       ON dl.document_id = d.entity_id " +
-                "   JOIN CLASSIFICATION c " +
+                "   JOIN classification AS c " +
                 "       ON d.classification_id = c.entity_id";
     }
 
