@@ -2,6 +2,10 @@ server:
   port: 8091
 
 module-properties:
+  auth:
+    cookie:
+      authCookieName: AUTH_TOKEN
+      secret: ru.gold.ordance
   persistence:
     url: jdbc:postgresql://common-db:5432/docs
     schema: docs

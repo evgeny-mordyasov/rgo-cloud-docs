@@ -15,7 +15,10 @@ import rgo.cloud.common.api.rest.StatusCode;
 import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.security.config.domain.ClientDetails;
 import rgo.cloud.security.config.jwt.JwtProvider;
+import rgo.cloud.security.config.jwt.properties.JwtProperties;
 import rgo.cloud.security.config.util.Endpoint;
+
+import javax.servlet.http.Cookie;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,6 +39,9 @@ public class FileRestControllerPermitTest extends CommonTest {
 
     @Autowired
     private JwtProvider jwtProvider;
+
+    @Autowired
+    private JwtProperties config;
 
     @MockBean
     private UserDetailsService userDetailsService;
@@ -58,7 +64,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         String jwt = createJwt(Role.USER);
 
         mvc.perform(get(Endpoint.File.BASE_URL)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
     }
@@ -68,7 +74,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         String jwt = createJwt(Role.ADMIN);
 
         mvc.perform(get(Endpoint.File.BASE_URL)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
     }
@@ -88,7 +94,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         long fakeDocumentId = generateId();
 
         mvc.perform(get(Endpoint.File.BASE_URL + "/" + fakeDocumentId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
     }
@@ -99,7 +105,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         long fakeDocumentId = generateId();
 
         mvc.perform(get(Endpoint.File.BASE_URL + "/" + fakeDocumentId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
     }
@@ -119,7 +125,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         long fakeClassificationId = generateId();
 
         mvc.perform(get(Endpoint.File.BASE_URL + "?classificationId=" + fakeClassificationId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
     }
@@ -130,7 +136,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         long fakeClassificationId = generateId();
 
         mvc.perform(get(Endpoint.File.BASE_URL + "?classificationId=" + fakeClassificationId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
     }
@@ -150,7 +156,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         long fakeDocumentId = generateId();
 
         mvc.perform(get(Endpoint.File.BASE_URL + "/free-languages/" + fakeDocumentId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())));
     }
@@ -161,7 +167,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         long fakeDocumentId = generateId();
 
         mvc.perform(get(Endpoint.File.BASE_URL + "/free-languages/" + fakeDocumentId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())));
     }
@@ -183,7 +189,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         long languageId = generateId();
 
         mvc.perform(get(Endpoint.File.BASE_URL + Endpoint.File.RESOURCE + "?documentId=" + documentId + "&languageId=" + languageId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())));
     }
@@ -195,7 +201,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         long languageId = generateId();
 
         mvc.perform(get(Endpoint.File.BASE_URL + Endpoint.File.RESOURCE + "?documentId=" + documentId + "&languageId=" + languageId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())));
     }
@@ -225,7 +231,7 @@ public class FileRestControllerPermitTest extends CommonTest {
                 .file(file)
                 .param("languageId", Long.toString(languageId))
                 .param("classificationId", Long.toString(classificationId))
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
     }
@@ -241,7 +247,7 @@ public class FileRestControllerPermitTest extends CommonTest {
                 .file(file)
                 .param("languageId", Long.toString(languageId))
                 .param("classificationId", Long.toString(classificationId))
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())));
     }
@@ -271,7 +277,7 @@ public class FileRestControllerPermitTest extends CommonTest {
                 .file(file)
                 .param("languageId", Long.toString(languageId))
                 .param("documentId", Long.toString(documentId))
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
     }
@@ -287,7 +293,7 @@ public class FileRestControllerPermitTest extends CommonTest {
                 .file(file)
                 .param("languageId", Long.toString(languageId))
                 .param("documentId", Long.toString(documentId))
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())));
     }
@@ -309,7 +315,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         long languageId = generateId();
 
         mvc.perform(delete(Endpoint.File.BASE_URL + "?documentId=" + documentId + "&languageId=" + languageId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
     }
@@ -321,7 +327,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         long languageId = generateId();
 
         mvc.perform(delete(Endpoint.File.BASE_URL + "?documentId=" + documentId + "&languageId=" + languageId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())));
     }
@@ -341,7 +347,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         long documentId = generateId();
 
         mvc.perform(delete(Endpoint.File.BASE_URL + "/" + documentId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
     }
@@ -352,7 +358,7 @@ public class FileRestControllerPermitTest extends CommonTest {
         long documentId = generateId();
 
         mvc.perform(delete(Endpoint.File.BASE_URL + "/" + documentId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())));
     }

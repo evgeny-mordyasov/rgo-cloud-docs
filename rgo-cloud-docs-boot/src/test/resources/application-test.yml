@@ -1,3 +1,11 @@
 spring:
   main:
     banner-mode: off
+
+module-properties:
+  auth:
+    cookie:
+      authCookieName: TEST_TOKEN
+      path: /
+      expirationHours: 1
+      secret: test

@@ -15,7 +15,10 @@ import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationSav
 import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationUpdateRequest;
 import rgo.cloud.security.config.domain.ClientDetails;
 import rgo.cloud.security.config.jwt.JwtProvider;
+import rgo.cloud.security.config.jwt.properties.JwtProperties;
 import rgo.cloud.security.config.util.Endpoint;
+
+import javax.servlet.http.Cookie;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.any;
@@ -35,6 +38,9 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
 
     @Autowired
     private JwtProvider jwtProvider;
+
+    @Autowired
+    private JwtProperties config;
 
     @MockBean
     private UserDetailsService userDetailsService;
@@ -57,7 +63,7 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
         String jwt = createJwt(Role.USER);
 
         mvc.perform(get(Endpoint.Classification.BASE_URL)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
     }
@@ -67,7 +73,7 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
         String jwt = createJwt(Role.ADMIN);
 
         mvc.perform(get(Endpoint.Classification.BASE_URL)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
     }
@@ -87,7 +93,7 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
         long fakeId = generateId();
 
         mvc.perform(get(Endpoint.Classification.BASE_URL + "/" + fakeId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
     }
@@ -98,7 +104,7 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
         long fakeId = generateId();
 
         mvc.perform(get(Endpoint.Classification.BASE_URL + "/" + fakeId)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
     }
@@ -118,7 +124,7 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
         String fakeName = randomString();
 
         mvc.perform(get(Endpoint.Classification.BASE_URL + "?name=" + fakeName)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
     }
@@ -129,7 +135,7 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
         String fakeName = randomString();
 
         mvc.perform(get(Endpoint.Classification.BASE_URL + "?name=" + fakeName)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
     }
@@ -153,7 +159,7 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
         mvc.perform(post(Endpoint.Classification.BASE_URL)
                 .content(toJson(rq))
                 .contentType(JSON)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
     }
@@ -166,7 +172,7 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
         mvc.perform(post(Endpoint.Classification.BASE_URL)
                 .content(toJson(rq))
                 .contentType(JSON)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
     }
@@ -190,7 +196,7 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
         mvc.perform(put(Endpoint.Classification.BASE_URL)
                 .content(toJson(rq))
                 .contentType(JSON)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
     }
@@ -203,7 +209,7 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
         mvc.perform(put(Endpoint.Classification.BASE_URL)
                 .content(toJson(rq))
                 .contentType(JSON)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())));
     }
@@ -225,7 +231,7 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
 
         mvc.perform(delete(Endpoint.Classification.BASE_URL + "/" + fakeId)
                 .contentType(JSON)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
     }
@@ -237,7 +243,7 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
 
         mvc.perform(delete(Endpoint.Classification.BASE_URL + "/" + fakeId)
                 .contentType(JSON)
-                .header("Authorization", JwtProvider.TOKEN_PREFIX + jwt))
+                 .cookie(new Cookie(config.getAuthCookieName(), jwt)))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())));
     }
