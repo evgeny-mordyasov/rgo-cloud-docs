@@ -1,5 +1,6 @@
 package rgo.cloud.docs.boot.config;
 
+import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,14 +32,14 @@ public class PersistenceConfig {
     @Bean
     @Profile("!test")
     public DataSource pg(DbProperties dbProp) {
-        HikariDataSource ds = new HikariDataSource();
-        ds.setJdbcUrl(dbProp.getUrl());
-        ds.setSchema(dbProp.getSchema());
-        ds.setUsername(dbProp.getUsername());
-        ds.setPassword(dbProp.getPassword());
-        ds.setMaximumPoolSize(dbProp.getMaxPoolSize());
+        HikariConfig hk = new HikariConfig();
+        hk.setJdbcUrl(dbProp.getUrl());
+        hk.setSchema(dbProp.getSchema());
+        hk.setUsername(dbProp.getUsername());
+        hk.setPassword(dbProp.getPassword());
+        hk.setMaximumPoolSize(dbProp.getMaxPoolSize());
 
-        return ds;
+        return new HikariDataSource(hk);
     }
 
     @Bean
