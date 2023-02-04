@@ -113,7 +113,7 @@
                 <executions>
                     <execution>
                         <id>docker_release</id>
-                        <phase>install</phase>
+                        <phase>deploy</phase>
                         <goals>
                             <goal>build</goal>
                         </goals>

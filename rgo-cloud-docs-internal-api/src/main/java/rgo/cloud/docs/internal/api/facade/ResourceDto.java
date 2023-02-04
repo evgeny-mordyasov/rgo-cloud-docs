@@ -11,4 +11,5 @@ import rgo.cloud.docs.internal.api.storage.Language;
 public class ResourceDto {
     private final Language language;
     private final String resource;
+    private final long downloads;
 }

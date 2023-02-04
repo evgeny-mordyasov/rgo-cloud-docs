@@ -47,7 +47,7 @@ public final class DocumentLanguageQuery {
     }
     
     private static String select() {
-        return "WITH document_cnt AS (" +
+        return  "WITH document_cnt AS (" +
                 "    SELECT dl.entity_id        AS dl_entity_id," +
                 "           l.entity_id         AS language_id," +
                 "           l.name              AS language_name," +
