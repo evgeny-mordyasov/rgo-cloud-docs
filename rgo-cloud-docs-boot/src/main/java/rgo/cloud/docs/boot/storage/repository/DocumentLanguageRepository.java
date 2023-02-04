@@ -18,7 +18,7 @@ import java.util.Optional;
 
 import static rgo.cloud.docs.boot.storage.repository.mapper.DocumentLanguageMapper.emptyMapper;
 import static rgo.cloud.docs.boot.storage.repository.mapper.DocumentLanguageMapper.lazyMapper;
-import static rgo.cloud.docs.boot.storage.repository.mapper.DocumentLanguageMapper.fullMapper;
+import static rgo.cloud.docs.boot.storage.repository.mapper.DocumentLanguageMapper.dataMapper;
 
 @Slf4j
 public class DocumentLanguageRepository {
@@ -77,7 +77,7 @@ public class DocumentLanguageRepository {
                 "language_id", languageId));
 
         return first(tx.tx(() ->
-                jdbc.query(DocumentLanguageQuery.findByDocumentIdAndLanguageIdWithData(), params, fullMapper)));
+                jdbc.query(DocumentLanguageQuery.findByDocumentIdAndLanguageIdWithData(), params, dataMapper)));
     }
 
     private Optional<DocumentLanguage> first(List<DocumentLanguage> list) {

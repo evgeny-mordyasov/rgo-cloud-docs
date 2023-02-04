@@ -27,23 +27,12 @@ public final class DocumentLanguageQuery {
     }
 
     public static String findByDocumentIdAndLanguageIdWithData() {
-        return  "SELECT dl.entity_id, " +
-                "       dl.data, " +
-                "       l.entity_id AS language_id, " +
-                "       l.name AS language_name, " +
-                "       d.entity_id AS document_id, " +
-                "       d.full_name AS document_full_name, " +
-                "       d.name AS document_name, " +
-                "       d.extension AS document_extension, " +
-                "       d.classification_id AS document_classification_id, " +
-                "       c.name AS document_classification_name " +
+        return  "SELECT dl.data, " +
+                "       d.full_name AS document_full_name " +
                 "FROM " + TABLE_NAME + " AS dl " +
-                "   JOIN language AS l " +
-                "       ON dl.language_id = :language_id " +
-                "   JOIN document AS d " +
-                "       ON dl.document_id = :document_id " +
-                "   JOIN classification AS c " +
-                "       ON d.classification_id = c.entity_id";
+                "    JOIN document AS d " +
+                "        ON dl.document_id = :document_id " +
+                "WHERE language_id = :language_id";
     }
 
     public static String findByClassificationId() {

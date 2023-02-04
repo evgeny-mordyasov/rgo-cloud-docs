@@ -185,9 +185,7 @@ public class DocumentLanguageRepositoryTest extends CommonTest {
                 documentLanguageRepository.findByDocumentIdAndLanguageIdWithData(saved.getDocument().getEntityId(), saved.getLanguage().getEntityId());
 
         assertTrue(found.isPresent());
-        assertEquals(saved.getEntityId(), found.get().getEntityId());
-        assertEquals(saved.getDocument().toString(), found.get().getDocument().toString());
-        assertEquals(saved.getLanguage().toString(), found.get().getLanguage().toString());
+        assertEquals(saved.getDocument().getFullName(), found.get().getDocument().getFullName());
         assertNotNull(found.get().getData());
     }
 
