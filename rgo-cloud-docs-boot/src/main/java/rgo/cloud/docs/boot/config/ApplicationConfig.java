@@ -14,6 +14,7 @@ import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
 import rgo.cloud.docs.boot.storage.repository.DocumentLanguageRepository;
 import rgo.cloud.docs.boot.storage.repository.DocumentRepository;
 import rgo.cloud.docs.boot.storage.repository.LanguageRepository;
+import rgo.cloud.docs.boot.storage.repository.ReadingDocumentRepository;
 import rgo.cloud.security.config.SecurityConfig;
 
 @Configuration
@@ -42,12 +43,18 @@ public class ApplicationConfig {
     }
 
     @Bean
+    public ReadingDocumentService readingDocumentService(ReadingDocumentRepository repository) {
+        return new ReadingDocumentService(repository);
+    }
+
+    @Bean
     public FileFacade fileFacade(
             DocumentService documentService,
             DocumentLanguageService dlService,
-            LanguageService languageService
+            LanguageService languageService,
+            ReadingDocumentService readingDocumentService
     ) {
-        return new FileFacade(documentService, dlService, languageService);
+        return new FileFacade(documentService, dlService, languageService, readingDocumentService);
     }
 
     @Bean

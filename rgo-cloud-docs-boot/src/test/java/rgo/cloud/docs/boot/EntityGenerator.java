@@ -2,10 +2,7 @@ package rgo.cloud.docs.boot;
 
 import org.apache.commons.lang3.RandomUtils;
 import rgo.cloud.docs.internal.api.constant.FileExtension;
-import rgo.cloud.docs.internal.api.storage.Classification;
-import rgo.cloud.docs.internal.api.storage.Document;
-import rgo.cloud.docs.internal.api.storage.DocumentLanguage;
-import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.internal.api.storage.*;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -46,6 +43,13 @@ public final class EntityGenerator {
                 .document(document)
                 .language(language)
                 .data(RandomUtils.nextBytes(256))
+                .build();
+    }
+
+    public static ReadingDocument createRandomReadingDocument(Long documentId, Long languageId) {
+        return ReadingDocument.builder()
+                .documentId(documentId)
+                .languageId(languageId)
                 .build();
     }
 }

@@ -47,6 +47,9 @@ public final class FileFacadeMapper {
                                 .resource(resource(dl.getDocument().getEntityId(), dl.getLanguage().getEntityId()))
                                 .build())
                         .collect(Collectors.toList()))
+                .downloads(languages.stream()
+                        .map(DocumentLanguage::getDownloads)
+                        .reduce(0L, Long::sum))
                 .build();
     }
 

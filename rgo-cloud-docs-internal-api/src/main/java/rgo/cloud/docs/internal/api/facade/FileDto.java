@@ -13,4 +13,5 @@ import java.util.List;
 public class FileDto {
     private final Document document;
     private final List<ResourceDto> resources;
+    private final long downloads;
 }

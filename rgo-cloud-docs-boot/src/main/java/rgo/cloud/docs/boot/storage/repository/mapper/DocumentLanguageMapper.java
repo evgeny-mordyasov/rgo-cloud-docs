@@ -12,7 +12,7 @@ public final class DocumentLanguageMapper {
 
     public static final RowMapper<DocumentLanguage> lazyMapper =
             (rs, num) -> DocumentLanguage.builder()
-                    .entityId(rs.getLong("ENTITY_ID"))
+                    .entityId(rs.getLong("DL_ENTITY_ID"))
                     .document(Document.builder()
                             .entityId(rs.getLong("DOCUMENT_ID"))
                             .fullName(rs.getString("DOCUMENT_FULL_NAME"))
@@ -27,6 +27,7 @@ public final class DocumentLanguageMapper {
                             .entityId(rs.getLong("LANGUAGE_ID"))
                             .name(rs.getString("LANGUAGE_NAME"))
                             .build())
+                    .downloads(rs.getLong("DOWNLOADS"))
                     .build();
 
     public static final RowMapper<DocumentLanguage> emptyMapper =

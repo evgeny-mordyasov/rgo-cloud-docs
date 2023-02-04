@@ -8,10 +8,12 @@ import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.docs.boot.service.DocumentLanguageService;
 import rgo.cloud.docs.boot.service.DocumentService;
 import rgo.cloud.docs.boot.service.LanguageService;
+import rgo.cloud.docs.boot.service.ReadingDocumentService;
 import rgo.cloud.docs.internal.api.facade.FileDto;
 import rgo.cloud.docs.internal.api.storage.Document;
 import rgo.cloud.docs.internal.api.storage.DocumentLanguage;
 import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.internal.api.storage.ReadingDocument;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,13 +25,16 @@ public class FileFacade {
     private final DocumentService documentService;
     private final DocumentLanguageService dlService;
     private final LanguageService languageService;
+    private final ReadingDocumentService readingDocumentService;
 
     public FileFacade(DocumentService documentService,
                       DocumentLanguageService dlService,
-                      LanguageService languageService) {
+                      LanguageService languageService,
+                      ReadingDocumentService readingDocumentService) {
         this.documentService = documentService;
         this.dlService = dlService;
         this.languageService = languageService;
+        this.readingDocumentService = readingDocumentService;
     }
 
     public List<FileDto> findAll() {
@@ -87,6 +92,11 @@ public class FileFacade {
             log.error(errorMsg);
             throw new EntityNotFoundException(errorMsg);
         }
+
+        readingDocumentService.save(ReadingDocument.builder()
+                .documentId(documentId)
+                .languageId(languageId)
+                .build());
 
         return FileResource.builder()
                 .withData(new ByteArrayResource(opt.get().getData()))

@@ -13,6 +13,7 @@ import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
 import rgo.cloud.docs.boot.storage.repository.DocumentLanguageRepository;
 import rgo.cloud.docs.boot.storage.repository.DocumentRepository;
 import rgo.cloud.docs.boot.storage.repository.LanguageRepository;
+import rgo.cloud.docs.boot.storage.repository.ReadingDocumentRepository;
 
 import javax.sql.DataSource;
 
@@ -65,5 +66,10 @@ public class PersistenceConfig {
     @Bean
     public DocumentLanguageRepository documentLanguageRepository(DbTxManager dbTxManager) {
         return new DocumentLanguageRepository(dbTxManager);
+    }
+
+    @Bean
+    public ReadingDocumentRepository readingDocumentRepository(DbTxManager dbTxManager) {
+        return new ReadingDocumentRepository(dbTxManager);
     }
 }

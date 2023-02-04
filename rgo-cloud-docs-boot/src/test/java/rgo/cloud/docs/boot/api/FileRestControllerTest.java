@@ -22,12 +22,13 @@ import rgo.cloud.docs.internal.api.storage.DocumentLanguage;
 import rgo.cloud.docs.internal.api.storage.Language;
 import rgo.cloud.security.config.util.Endpoint;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.*;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -253,7 +254,6 @@ public class FileRestControllerTest extends CommonTest {
                 .andExpect(jsonPath("$.total", is(foundOne)));
     }
 
-
     @Test
     public void findByDocumentId_notFound() throws Exception {
         long fakeDocumentId = generateId();
@@ -378,8 +378,163 @@ public class FileRestControllerTest extends CommonTest {
 
         FileDto savedFile = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage));
 
-        mvc.perform(get(Endpoint.File.BASE_URL + Endpoint.File.RESOURCE + "?documentId=" + savedFile.getDocument().getEntityId() + "&languageId=" + savedLanguage.getEntityId()))
+        downloadDocument(savedFile.getDocument().getEntityId(), savedLanguage.getEntityId());
+    }
+
+    @Test
+    public void checkNumberOfDocumentDownloads_oneLanguage_oneFile() {
+        int clients = ThreadLocalRandom.current().nextInt(100);
+
+        Language savedLanguage = languageRepository.save(createRandomLanguage());
+        Classification savedClassification = classificationRepository.save(createRandomClassification());
+        FileDto file = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage));
+
+        ExecutorService executor = Executors.newFixedThreadPool(clients);
+        List<Future<?>> futures = new ArrayList<>();
+        for (int i = 0; i < clients; i++) {
+            futures.add(executor.submit(() -> {
+                try {
+                    downloadDocument(file.getDocument().getEntityId(), savedLanguage.getEntityId());
+                } catch (Exception ignored) {}
+            }));
+        }
+
+        wait(futures);
+
+        Optional<FileDto> opt = facade.findByDocumentId(file.getDocument().getEntityId());
+        assertTrue(opt.isPresent());
+        assertEquals(clients, opt.get().getDownloads());
+    }
+
+    @Test
+    public void checkNumberOfDocumentDownloads_manyLanguages_oneFile() {
+        int clients = ThreadLocalRandom.current().nextInt(100);
+        int numberOfLanguages = ThreadLocalRandom.current().nextInt(2,10);
+
+        List<Language> languages = new ArrayList<>();
+        for (int i = 0; i < numberOfLanguages; i++) {
+            languages.add(languageRepository.save(createRandomLanguage()));
+        }
+
+        Classification savedClassification = classificationRepository.save(createRandomClassification());
+
+        FileDto file = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), languages.get(0)));
+        for (int i = 1; i <= numberOfLanguages - 1; i++) {
+            facade.patch(createRandomDocumentLanguage(file.getDocument(), languages.get(i)));
+        }
+
+        ExecutorService executor = Executors.newFixedThreadPool(clients);
+        List<Future<?>> futures = new ArrayList<>();
+        for (int i = 0; i < clients; i++) {
+            futures.add(executor.submit(() -> {
+                try {
+                    int languageIndex = ThreadLocalRandom.current().nextInt(numberOfLanguages);
+                    downloadDocument(file.getDocument().getEntityId(), languages.get(languageIndex).getEntityId());
+                } catch (Exception ignored) {}
+            }));
+        }
+
+        wait(futures);
+
+        Optional<FileDto> opt = facade.findByDocumentId(file.getDocument().getEntityId());
+        assertTrue(opt.isPresent());
+        assertEquals(clients, opt.get().getDownloads());
+    }
+
+    @Test
+    public void checkNumberOfDocumentDownloads_oneLanguage_manyFiles() {
+        int clients = ThreadLocalRandom.current().nextInt(100);
+        int numberOfFiles = ThreadLocalRandom.current().nextInt(25);
+
+        Language savedLanguage = languageRepository.save(createRandomLanguage());
+        Classification savedClassification = classificationRepository.save(createRandomClassification());
+
+        List<FileDto> files = new ArrayList<>();
+        for (int i = 0; i < numberOfFiles; i++) {
+            files.add(facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage)));
+        }
+
+        ExecutorService executor = Executors.newFixedThreadPool(clients);
+        List<Future<?>> futures = new ArrayList<>();
+        for (int i = 0; i < clients; i++) {
+            futures.add(executor.submit(() -> {
+                try {
+                    int fileIndex = ThreadLocalRandom.current().nextInt(numberOfFiles);
+                    downloadDocument(files.get(fileIndex).getDocument().getEntityId(), savedLanguage.getEntityId());
+                } catch (Exception ignored) {}
+            }));
+        }
+
+        wait(futures);
+
+        List<FileDto> list = facade.findByClassificationId(savedClassification.getEntityId());
+        assertFalse(list.isEmpty());
+
+        long downloads = list.stream()
+                .map(FileDto::getDownloads)
+                .reduce(0L, Long::sum);
+        assertEquals(clients, downloads);
+    }
+
+    @Test
+    public void checkNumberOfDocumentDownloads_manyLanguages_manyFiles() {
+        int clients = ThreadLocalRandom.current().nextInt(100);
+        int numberOfFiles = ThreadLocalRandom.current().nextInt(25);
+        int numberOfLanguages = ThreadLocalRandom.current().nextInt(2,10);
+
+        List<Language> languages = new ArrayList<>();
+        for (int i = 0; i < numberOfLanguages; i++) {
+            languages.add(languageRepository.save(createRandomLanguage()));
+        }
+
+        Classification savedClassification = classificationRepository.save(createRandomClassification());
+
+        for (int i = 0; i < numberOfFiles; i++) {
+            var currentFile = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), languages.get(0)));
+
+            for (int j = 1; j <= numberOfLanguages - 1; j++) {
+                facade.patch(createRandomDocumentLanguage(currentFile.getDocument(), languages.get(j)));
+            }
+        }
+
+        List<FileDto> filesWithLanguages = facade.findAll();
+
+        ExecutorService executor = Executors.newFixedThreadPool(clients);
+        List<Future<?>> futures = new ArrayList<>();
+        for (int i = 0; i < clients; i++) {
+            futures.add(executor.submit(() -> {
+                try {
+                    int fileIndex = ThreadLocalRandom.current().nextInt(numberOfFiles);
+                    int fileLanguages = filesWithLanguages.get(fileIndex).getResources().size();
+                    int languageIndex = ThreadLocalRandom.current().nextInt(fileLanguages);
+                    downloadDocument(filesWithLanguages.get(fileIndex).getDocument().getEntityId(),
+                            filesWithLanguages.get(fileIndex).getResources().get(languageIndex).getLanguage().getEntityId());
+                } catch (Exception ignored) {}
+            }));
+        }
+
+        wait(futures);
+
+        List<FileDto> list = facade.findByClassificationId(savedClassification.getEntityId());
+        assertFalse(list.isEmpty());
+
+        long downloads = list.stream()
+                .map(FileDto::getDownloads)
+                .reduce(0L, Long::sum);
+        assertEquals(clients, downloads);
+    }
+
+    private void downloadDocument(Long documentId, Long languageId) throws Exception {
+        mvc.perform(get(Endpoint.File.BASE_URL + Endpoint.File.RESOURCE + "?documentId=" + documentId + "&languageId=" + languageId))
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE));
+    }
+
+    private void wait(List<Future<?>> futures) {
+        futures.forEach(v -> {
+            try {
+                v.get();
+            } catch (Exception ignored) {}
+        });
     }
 
     @Test
