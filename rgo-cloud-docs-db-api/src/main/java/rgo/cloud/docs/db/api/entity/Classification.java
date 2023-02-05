@@ -1,4 +1,4 @@
-package rgo.cloud.docs.internal.api.storage;
+package rgo.cloud.docs.db.api.entity;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -9,10 +9,7 @@ import lombok.ToString;
 @Builder(toBuilder = true)
 @ToString
 @EqualsAndHashCode
-public class Document {
+public class Classification {
     private final Long entityId;
-    private final String fullName;
     private final String name;
-    private final String extension;
-    private final Classification classification;
 }

@@ -1,7 +1,7 @@
 package rgo.cloud.docs.boot.storage.repository;
 
 import rgo.cloud.common.spring.storage.DbTxManager;
-import rgo.cloud.docs.internal.api.storage.Classification;
+import rgo.cloud.docs.db.api.entity.Classification;
 import rgo.cloud.docs.db.api.repository.ClassificationRepository;
 
 import java.util.List;

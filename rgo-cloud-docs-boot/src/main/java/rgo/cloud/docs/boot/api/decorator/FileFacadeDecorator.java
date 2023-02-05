@@ -9,7 +9,7 @@ import rgo.cloud.docs.boot.facade.FileResource;
 import rgo.cloud.docs.internal.api.facade.FileDto;
 import rgo.cloud.docs.internal.api.rest.file.request.*;
 import rgo.cloud.docs.internal.api.rest.file.response.*;
-import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.db.api.entity.Language;
 
 import java.io.IOException;
 import java.util.List;

@@ -2,7 +2,7 @@ package rgo.cloud.docs.boot.api.decorator.converter;
 
 import rgo.cloud.docs.internal.api.rest.language.request.LanguageSaveRequest;
 import rgo.cloud.docs.internal.api.rest.language.request.LanguageUpdateRequest;
-import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.db.api.entity.Language;
 
 public final class LanguageConverter {
     private LanguageConverter() {

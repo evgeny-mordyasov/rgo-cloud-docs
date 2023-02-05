@@ -11,8 +11,8 @@ import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.ClassificationQuery;
 import rgo.cloud.docs.boot.storage.query.DocumentQuery;
 import rgo.cloud.docs.boot.storage.repository.natural.mapper.ClassificationMapper;
-import rgo.cloud.docs.internal.api.storage.Classification;
-import rgo.cloud.docs.internal.api.storage.Document;
+import rgo.cloud.docs.db.api.entity.Classification;
+import rgo.cloud.docs.db.api.entity.Document;
 import rgo.cloud.docs.db.api.repository.DocumentRepository;
 
 import java.util.List;

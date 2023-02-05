@@ -3,7 +3,7 @@ package rgo.cloud.docs.internal.api.facade;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.db.api.entity.Language;
 
 @Getter
 @Builder(toBuilder = true)

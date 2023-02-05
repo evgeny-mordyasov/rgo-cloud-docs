@@ -1,7 +1,7 @@
 package rgo.cloud.docs.boot.service;
 
 import rgo.cloud.docs.db.api.repository.ReadingDocumentRepository;
-import rgo.cloud.docs.internal.api.storage.ReadingDocument;
+import rgo.cloud.docs.db.api.entity.ReadingDocument;
 
 public class ReadingDocumentService {
     private final ReadingDocumentRepository repository;

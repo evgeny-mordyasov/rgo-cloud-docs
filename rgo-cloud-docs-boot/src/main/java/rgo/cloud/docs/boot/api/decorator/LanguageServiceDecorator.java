@@ -11,7 +11,7 @@ import rgo.cloud.docs.internal.api.rest.language.request.LanguageUpdateRequest;
 import rgo.cloud.docs.internal.api.rest.language.response.LanguageGetEntityResponse;
 import rgo.cloud.docs.internal.api.rest.language.response.LanguageGetListResponse;
 import rgo.cloud.docs.internal.api.rest.language.response.LanguageModifyResponse;
-import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.db.api.entity.Language;
 
 import java.util.List;
 import java.util.Optional;

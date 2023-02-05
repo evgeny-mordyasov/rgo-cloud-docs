@@ -9,8 +9,8 @@ import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.TranslationQuery;
 import rgo.cloud.docs.boot.storage.query.LanguageQuery;
 import rgo.cloud.docs.boot.storage.repository.natural.mapper.LanguageMapper;
-import rgo.cloud.docs.internal.api.storage.Translation;
-import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.db.api.entity.Translation;
+import rgo.cloud.docs.db.api.entity.Language;
 import rgo.cloud.docs.db.api.repository.TranslationRepository;
 
 import java.util.List;

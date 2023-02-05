@@ -8,7 +8,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.ReadingDocumentQuery;
-import rgo.cloud.docs.internal.api.storage.ReadingDocument;
+import rgo.cloud.docs.db.api.entity.ReadingDocument;
 import rgo.cloud.docs.db.api.repository.ReadingDocumentRepository;
 
 import java.util.List;

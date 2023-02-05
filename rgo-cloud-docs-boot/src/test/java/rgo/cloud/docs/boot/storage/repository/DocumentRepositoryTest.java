@@ -7,8 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.common.spring.test.CommonTest;
-import rgo.cloud.docs.internal.api.storage.Classification;
-import rgo.cloud.docs.internal.api.storage.Document;
+import rgo.cloud.docs.db.api.entity.Classification;
+import rgo.cloud.docs.db.api.entity.Document;
 import rgo.cloud.docs.db.api.repository.ClassificationRepository;
 import rgo.cloud.docs.db.api.repository.DocumentRepository;
 

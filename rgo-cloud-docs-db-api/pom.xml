@@ -14,8 +14,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>ru.gold.ordance</groupId>
-            <artifactId>rgo-cloud-docs-internal-api</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 </project>

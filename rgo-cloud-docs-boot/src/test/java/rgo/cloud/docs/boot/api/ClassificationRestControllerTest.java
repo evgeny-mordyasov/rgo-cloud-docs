@@ -11,7 +11,7 @@ import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.db.api.repository.ClassificationRepository;
 import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationSaveRequest;
 import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationUpdateRequest;
-import rgo.cloud.docs.internal.api.storage.Classification;
+import rgo.cloud.docs.db.api.entity.Classification;
 import rgo.cloud.security.config.util.Endpoint;
 
 import java.util.Optional;

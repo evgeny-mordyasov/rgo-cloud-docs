@@ -1,7 +1,7 @@
 package rgo.cloud.docs.boot.storage.repository.natural.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
-import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.db.api.entity.Language;
 
 public final class LanguageMapper {
     private LanguageMapper() {

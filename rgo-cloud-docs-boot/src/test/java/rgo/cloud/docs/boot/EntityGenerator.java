@@ -1,8 +1,8 @@
 package rgo.cloud.docs.boot;
 
 import org.apache.commons.lang3.RandomUtils;
+import rgo.cloud.docs.db.api.entity.*;
 import rgo.cloud.docs.internal.api.constant.FileExtension;
-import rgo.cloud.docs.internal.api.storage.*;
 
 import java.util.concurrent.ThreadLocalRandom;
 

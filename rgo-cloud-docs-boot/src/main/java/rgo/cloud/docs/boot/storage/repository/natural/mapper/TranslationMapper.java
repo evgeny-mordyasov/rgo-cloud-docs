@@ -1,10 +1,10 @@
 package rgo.cloud.docs.boot.storage.repository.natural.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
-import rgo.cloud.docs.internal.api.storage.Classification;
-import rgo.cloud.docs.internal.api.storage.Document;
-import rgo.cloud.docs.internal.api.storage.Translation;
-import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.db.api.entity.Classification;
+import rgo.cloud.docs.db.api.entity.Document;
+import rgo.cloud.docs.db.api.entity.Translation;
+import rgo.cloud.docs.db.api.entity.Language;
 
 public final class TranslationMapper {
     private TranslationMapper() {

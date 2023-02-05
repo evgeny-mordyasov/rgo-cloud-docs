@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.common.api.exception.ViolatesConstraintException;
 import rgo.cloud.docs.db.api.repository.TranslationRepository;
-import rgo.cloud.docs.internal.api.storage.Translation;
+import rgo.cloud.docs.db.api.entity.Translation;
 
 import java.util.List;
 import java.util.Optional;

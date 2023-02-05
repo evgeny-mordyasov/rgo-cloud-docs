@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 import rgo.cloud.common.api.rest.Response;
 import rgo.cloud.common.api.rest.Status;
-import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.db.api.entity.Language;
 
 import java.util.List;
 

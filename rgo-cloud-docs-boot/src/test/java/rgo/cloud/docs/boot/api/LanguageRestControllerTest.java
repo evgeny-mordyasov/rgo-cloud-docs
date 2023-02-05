@@ -11,7 +11,7 @@ import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.db.api.repository.LanguageRepository;
 import rgo.cloud.docs.internal.api.rest.language.request.LanguageSaveRequest;
 import rgo.cloud.docs.internal.api.rest.language.request.LanguageUpdateRequest;
-import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.db.api.entity.Language;
 import rgo.cloud.security.config.util.Endpoint;
 
 import java.util.Optional;

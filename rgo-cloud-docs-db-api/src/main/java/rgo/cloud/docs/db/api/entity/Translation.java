@@ -1,4 +1,4 @@
-package rgo.cloud.docs.internal.api.storage;
+package rgo.cloud.docs.db.api.entity;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

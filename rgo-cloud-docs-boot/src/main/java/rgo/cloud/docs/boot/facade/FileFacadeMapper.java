@@ -3,10 +3,10 @@ package rgo.cloud.docs.boot.facade;
 import rgo.cloud.security.config.util.Endpoint;
 import rgo.cloud.docs.internal.api.facade.FileDto;
 import rgo.cloud.docs.internal.api.facade.ResourceDto;
-import rgo.cloud.docs.internal.api.storage.Classification;
-import rgo.cloud.docs.internal.api.storage.Document;
-import rgo.cloud.docs.internal.api.storage.Translation;
-import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.db.api.entity.Classification;
+import rgo.cloud.docs.db.api.entity.Document;
+import rgo.cloud.docs.db.api.entity.Translation;
+import rgo.cloud.docs.db.api.entity.Language;
 
 import java.util.List;
 import java.util.Map;

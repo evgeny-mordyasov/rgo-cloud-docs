@@ -1,7 +1,7 @@
 package rgo.cloud.docs.boot.storage.repository.natural.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
-import rgo.cloud.docs.internal.api.storage.ReadingDocument;
+import rgo.cloud.docs.db.api.entity.ReadingDocument;
 
 public final class ReadingDocumentMapper {
     private ReadingDocumentMapper() {

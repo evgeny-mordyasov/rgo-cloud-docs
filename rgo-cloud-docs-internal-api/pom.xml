@@ -18,11 +18,10 @@
             <groupId>ru.gold.ordance</groupId>
             <artifactId>rgo-cloud-common-api</artifactId>
         </dependency>
-        <!-- rgo-cloud -->
-
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>ru.gold.ordance</groupId>
+            <artifactId>rgo-cloud-docs-db-api</artifactId>
         </dependency>
+        <!-- rgo-cloud -->
     </dependencies>
 </project>

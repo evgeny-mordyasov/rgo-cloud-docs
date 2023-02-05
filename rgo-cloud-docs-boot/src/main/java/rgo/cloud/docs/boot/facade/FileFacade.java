@@ -10,10 +10,10 @@ import rgo.cloud.docs.boot.service.DocumentService;
 import rgo.cloud.docs.boot.service.LanguageService;
 import rgo.cloud.docs.boot.service.ReadingDocumentService;
 import rgo.cloud.docs.internal.api.facade.FileDto;
-import rgo.cloud.docs.internal.api.storage.Document;
-import rgo.cloud.docs.internal.api.storage.Translation;
-import rgo.cloud.docs.internal.api.storage.Language;
-import rgo.cloud.docs.internal.api.storage.ReadingDocument;
+import rgo.cloud.docs.db.api.entity.Document;
+import rgo.cloud.docs.db.api.entity.Translation;
+import rgo.cloud.docs.db.api.entity.Language;
+import rgo.cloud.docs.db.api.entity.ReadingDocument;
 
 import java.util.*;
 import java.util.stream.Collectors;

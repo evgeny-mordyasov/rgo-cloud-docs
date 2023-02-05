@@ -1,6 +1,6 @@
 package rgo.cloud.docs.db.api.repository;
 
-import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.db.api.entity.Language;
 
 import java.util.List;
 import java.util.Optional;

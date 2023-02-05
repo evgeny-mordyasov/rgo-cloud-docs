@@ -1,6 +1,6 @@
 package rgo.cloud.docs.db.api.repository;
 
-import rgo.cloud.docs.internal.api.storage.Translation;
+import rgo.cloud.docs.db.api.entity.Translation;
 
 import java.util.List;
 import java.util.Optional;
