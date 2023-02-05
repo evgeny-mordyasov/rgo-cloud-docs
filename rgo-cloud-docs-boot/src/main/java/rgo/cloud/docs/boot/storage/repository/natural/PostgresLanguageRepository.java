@@ -1,4 +1,4 @@
-package rgo.cloud.docs.boot.storage.repository;
+package rgo.cloud.docs.boot.storage.repository.natural;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -7,40 +7,42 @@ import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.LanguageQuery;
 import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.db.api.repository.LanguageRepository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static rgo.cloud.docs.boot.storage.repository.mapper.LanguageMapper.mapper;
+import static rgo.cloud.docs.boot.storage.repository.natural.mapper.LanguageMapper.mapper;
 
 @Slf4j
-public class LanguageRepository {
-    private final DbTxManager tx;
+public class PostgresLanguageRepository implements LanguageRepository {
     private final NamedParameterJdbcTemplate jdbc;
 
-    public LanguageRepository(DbTxManager tx) {
-        this.tx = tx;
+    public PostgresLanguageRepository(DbTxManager tx) {
         this.jdbc = tx.jdbc();
     }
 
+    @Override
     public List<Language> findAll() {
-        List<Language> languages = tx.tx(() -> jdbc.query(LanguageQuery.findAll(), mapper));
+        List<Language> languages = jdbc.query(LanguageQuery.findAll(), mapper);
         log.info("Size of languages: {}", languages.size());
 
         return languages;
     }
 
+    @Override
     public Optional<Language> findById(Long entityId) {
         MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
-        return first(tx.tx(() ->
-                jdbc.query(LanguageQuery.findById(), params, mapper)));
+        return first(
+                jdbc.query(LanguageQuery.findById(), params, mapper));
     }
 
+    @Override
     public Optional<Language> findByName(String name) {
         MapSqlParameterSource params = new MapSqlParameterSource("name", name);
-        return first(tx.tx(() ->
-                jdbc.query(LanguageQuery.findByName(), params, mapper)));
+        return first(
+                jdbc.query(LanguageQuery.findByName(), params, mapper));
     }
 
     private Optional<Language> first(List<Language> list) {
@@ -52,43 +54,42 @@ public class LanguageRepository {
         return Optional.of(list.get(0));
     }
 
+    @Override
     public boolean exists(Long entityId) {
         return findById(entityId).isPresent();
     }
 
+    @Override
     public Language save(Language language) {
         MapSqlParameterSource params = new MapSqlParameterSource("name", language.getName());
 
-        return tx.tx(() -> {
-            jdbc.update(LanguageQuery.save(), params);
-            Optional<Language> opt = findByName(language.getName());
+        jdbc.update(LanguageQuery.save(), params);
+        Optional<Language> opt = findByName(language.getName());
 
-            if (opt.isEmpty()) {
-                String errorMsg = "Language save error.";
-                log.error(errorMsg);
-                throw new UnpredictableException(errorMsg);
-            }
+        if (opt.isEmpty()) {
+            String errorMsg = "Language save error.";
+            log.error(errorMsg);
+            throw new UnpredictableException(errorMsg);
+        }
 
-            return opt.get();
-        });
+        return opt.get();
     }
 
+    @Override
     public Language update(Language language) {
         MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
                 "entity_id", language.getEntityId(),
                 "name", language.getName()));
 
-        return tx.tx(() -> {
-            jdbc.update(LanguageQuery.update(), params);
-            Optional<Language> opt = findByName(language.getName());
+        jdbc.update(LanguageQuery.update(), params);
+        Optional<Language> opt = findByName(language.getName());
 
-            if (opt.isEmpty()) {
-                String errorMsg = "Language update error.";
-                log.error(errorMsg);
-                throw new UnpredictableException(errorMsg);
-            }
+        if (opt.isEmpty()) {
+            String errorMsg = "Language update error.";
+            log.error(errorMsg);
+            throw new UnpredictableException(errorMsg);
+        }
 
-            return opt.get();
-        });
+        return opt.get();
     }
 }

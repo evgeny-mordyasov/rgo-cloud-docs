@@ -1,4 +1,4 @@
-package rgo.cloud.docs.boot.storage.repository.mapper;
+package rgo.cloud.docs.boot.storage.repository.natural.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import rgo.cloud.docs.internal.api.storage.ReadingDocument;

@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.internal.api.storage.Classification;
+import rgo.cloud.docs.db.api.repository.ClassificationRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,7 @@ import static rgo.cloud.docs.boot.EntityGenerator.createRandomClassification;
 public class ClassificationRepositoryTest extends CommonTest {
 
     @Autowired
-    private ClassificationRepository repository;
+    private ClassificationRepository classificationRepository;
 
     @BeforeEach
     public void setUp() {
@@ -33,7 +34,7 @@ public class ClassificationRepositoryTest extends CommonTest {
     public void findAll_noOneHasBeenFound() {
         int noOneHasBeenFound = 0;
 
-        List<Classification> found = repository.findAll();
+        List<Classification> found = classificationRepository.findAll();
 
         assertEquals(noOneHasBeenFound, found.size());
     }
@@ -41,9 +42,9 @@ public class ClassificationRepositoryTest extends CommonTest {
     @Test
     public void findAll_foundOne() {
         int foundOne = 1;
-        repository.save(createRandomClassification());
+        classificationRepository.save(createRandomClassification());
 
-        List<Classification> found = repository.findAll();
+        List<Classification> found = classificationRepository.findAll();
 
         assertEquals(foundOne, found.size());
     }
@@ -51,10 +52,10 @@ public class ClassificationRepositoryTest extends CommonTest {
     @Test
     public void findAll_foundALot() {
         int foundALot = 2;
-        repository.save(createRandomClassification());
-        repository.save(createRandomClassification());
+        classificationRepository.save(createRandomClassification());
+        classificationRepository.save(createRandomClassification());
 
-        List<Classification> found = repository.findAll();
+        List<Classification> found = classificationRepository.findAll();
 
         assertEquals(foundALot, found.size());
     }
@@ -63,16 +64,16 @@ public class ClassificationRepositoryTest extends CommonTest {
     public void findById_notFound() {
         long fakeId = generateId();
 
-        Optional<Classification> found = repository.findById(fakeId);
+        Optional<Classification> found = classificationRepository.findById(fakeId);
 
         assertTrue(found.isEmpty());
     }
 
     @Test
     public void findById_found() {
-        Classification saved = repository.save(createRandomClassification());
+        Classification saved = classificationRepository.save(createRandomClassification());
 
-        Optional<Classification> found = repository.findById(saved.getEntityId());
+        Optional<Classification> found = classificationRepository.findById(saved.getEntityId());
 
         assertTrue(found.isPresent());
         assertEquals(saved.getEntityId(), found.get().getEntityId());
@@ -83,16 +84,16 @@ public class ClassificationRepositoryTest extends CommonTest {
     public void findByName_notFound() {
         String fakeName = randomString();
 
-        Optional<Classification> found = repository.findByName(fakeName);
+        Optional<Classification> found = classificationRepository.findByName(fakeName);
 
         assertTrue(found.isEmpty());
     }
 
     @Test
     public void findByName_found() {
-        Classification saved = repository.save(createRandomClassification());
+        Classification saved = classificationRepository.save(createRandomClassification());
 
-        Optional<Classification> found = repository.findByName(saved.getName());
+        Optional<Classification> found = classificationRepository.findByName(saved.getName());
 
         assertTrue(found.isPresent());
         assertEquals(saved.getEntityId(), found.get().getEntityId());
@@ -103,20 +104,20 @@ public class ClassificationRepositoryTest extends CommonTest {
     public void save() {
         Classification created = createRandomClassification();
 
-        Classification saved = repository.save(created);
+        Classification saved = classificationRepository.save(created);
 
         assertEquals(created.getName(), saved.getName());
     }
 
     @Test
     public void update() {
-        Classification saved = repository.save(createRandomClassification());
+        Classification saved = classificationRepository.save(createRandomClassification());
         Classification newObj = Classification.builder()
                 .entityId(saved.getEntityId())
                 .name(randomString())
                 .build();
 
-        Classification updated = repository.update(newObj);
+        Classification updated = classificationRepository.update(newObj);
 
         assertEquals(newObj.getEntityId(), updated.getEntityId());
         assertEquals(newObj.getName(), updated.getName());
@@ -124,10 +125,10 @@ public class ClassificationRepositoryTest extends CommonTest {
 
     @Test
     public void deleteById() {
-        Classification saved = repository.save(createRandomClassification());
-        repository.deleteById(saved.getEntityId());
+        Classification saved = classificationRepository.save(createRandomClassification());
+        classificationRepository.deleteById(saved.getEntityId());
 
-        Optional<Classification> found = repository.findById(saved.getEntityId());
+        Optional<Classification> found = classificationRepository.findById(saved.getEntityId());
 
         assertTrue(found.isEmpty());
     }

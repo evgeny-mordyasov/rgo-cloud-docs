@@ -13,8 +13,8 @@ import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.boot.facade.FileFacade;
 import rgo.cloud.docs.boot.service.TranslationService;
 import rgo.cloud.docs.boot.service.DocumentService;
-import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
-import rgo.cloud.docs.boot.storage.repository.LanguageRepository;
+import rgo.cloud.docs.db.api.repository.ClassificationRepository;
+import rgo.cloud.docs.db.api.repository.LanguageRepository;
 import rgo.cloud.docs.internal.api.facade.FileDto;
 import rgo.cloud.docs.internal.api.storage.Classification;
 import rgo.cloud.docs.internal.api.storage.Document;
@@ -383,7 +383,7 @@ public class FileRestControllerTest extends CommonTest {
 
     @Test
     public void checkNumberOfDocumentDownloads_oneLanguage_oneFile() {
-        int clients = ThreadLocalRandom.current().nextInt(100);
+        int clients = ThreadLocalRandom.current().nextInt(1, 100);
 
         Language savedLanguage = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
@@ -408,7 +408,7 @@ public class FileRestControllerTest extends CommonTest {
 
     @Test
     public void checkNumberOfDocumentDownloads_manyLanguages_oneFile() {
-        int clients = ThreadLocalRandom.current().nextInt(100);
+        int clients = ThreadLocalRandom.current().nextInt(1,100);
         int numberOfLanguages = ThreadLocalRandom.current().nextInt(2,10);
 
         List<Language> languages = new ArrayList<>();
@@ -443,7 +443,7 @@ public class FileRestControllerTest extends CommonTest {
 
     @Test
     public void checkNumberOfDocumentDownloads_oneLanguage_manyFiles() {
-        int clients = ThreadLocalRandom.current().nextInt(100);
+        int clients = ThreadLocalRandom.current().nextInt(1,100);
         int numberOfFiles = ThreadLocalRandom.current().nextInt(25);
 
         Language savedLanguage = languageRepository.save(createRandomLanguage());
@@ -467,7 +467,7 @@ public class FileRestControllerTest extends CommonTest {
 
         wait(futures);
 
-        List<FileDto> list = facade.findByClassificationId(savedClassification.getEntityId());
+        List<FileDto> list = facade.findAll();
         assertFalse(list.isEmpty());
 
         long downloads = list.stream()
@@ -478,7 +478,7 @@ public class FileRestControllerTest extends CommonTest {
 
     @Test
     public void checkNumberOfDocumentDownloads_manyLanguages_manyFiles() {
-        int clients = ThreadLocalRandom.current().nextInt(100);
+        int clients = ThreadLocalRandom.current().nextInt(1,100);
         int numberOfFiles = ThreadLocalRandom.current().nextInt(25);
         int numberOfLanguages = ThreadLocalRandom.current().nextInt(2,10);
 

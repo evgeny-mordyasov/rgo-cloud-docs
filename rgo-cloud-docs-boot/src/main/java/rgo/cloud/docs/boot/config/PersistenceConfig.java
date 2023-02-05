@@ -2,18 +2,11 @@ package rgo.cloud.docs.boot.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.config.properties.DbProperties;
-import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
-import rgo.cloud.docs.boot.storage.repository.TranslationRepository;
-import rgo.cloud.docs.boot.storage.repository.DocumentRepository;
-import rgo.cloud.docs.boot.storage.repository.LanguageRepository;
-import rgo.cloud.docs.boot.storage.repository.ReadingDocumentRepository;
 
 import javax.sql.DataSource;
 
@@ -46,30 +39,5 @@ public class PersistenceConfig {
     @Bean
     public DbTxManager dbTxManager(DataSource ds) {
         return new DbTxManager(ds);
-    }
-
-    @Bean
-    public LanguageRepository languageRepository(DbTxManager dbTxManager) {
-        return new LanguageRepository(dbTxManager);
-    }
-
-    @Bean
-    public ClassificationRepository classificationRepository(DbTxManager dbTxManager) {
-        return new ClassificationRepository(dbTxManager);
-    }
-
-    @Bean
-    public DocumentRepository documentRepository(DbTxManager dbTxManager) {
-        return new DocumentRepository(dbTxManager);
-    }
-
-    @Bean
-    public TranslationRepository translationRepository(DbTxManager dbTxManager) {
-        return new TranslationRepository(dbTxManager);
-    }
-
-    @Bean
-    public ReadingDocumentRepository readingDocumentRepository(DbTxManager dbTxManager) {
-        return new ReadingDocumentRepository(dbTxManager);
     }
 }

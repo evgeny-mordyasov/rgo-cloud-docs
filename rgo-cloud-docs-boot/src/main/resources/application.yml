@@ -11,4 +11,4 @@ module-properties:
     schema: docs
     username: docs_appl
     password: qwe123
-    maxPoolSize: 5
+    maxPoolSize: 10

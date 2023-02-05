@@ -10,11 +10,11 @@ import rgo.cloud.docs.boot.api.decorator.FileFacadeDecorator;
 import rgo.cloud.docs.boot.api.decorator.LanguageServiceDecorator;
 import rgo.cloud.docs.boot.facade.FileFacade;
 import rgo.cloud.docs.boot.service.*;
-import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
-import rgo.cloud.docs.boot.storage.repository.TranslationRepository;
-import rgo.cloud.docs.boot.storage.repository.DocumentRepository;
-import rgo.cloud.docs.boot.storage.repository.LanguageRepository;
-import rgo.cloud.docs.boot.storage.repository.ReadingDocumentRepository;
+import rgo.cloud.docs.db.api.repository.ClassificationRepository;
+import rgo.cloud.docs.db.api.repository.TranslationRepository;
+import rgo.cloud.docs.db.api.repository.DocumentRepository;
+import rgo.cloud.docs.db.api.repository.LanguageRepository;
+import rgo.cloud.docs.db.api.repository.ReadingDocumentRepository;
 import rgo.cloud.security.config.SecurityConfig;
 
 @Configuration
@@ -23,28 +23,28 @@ import rgo.cloud.security.config.SecurityConfig;
 public class ApplicationConfig {
 
     @Bean
-    public LanguageService languageService(LanguageRepository repository) {
-        return new LanguageService(repository);
+    public LanguageService languageService(LanguageRepository languageRepository) {
+        return new LanguageService(languageRepository);
     }
 
     @Bean
-    public ClassificationService classificationService(ClassificationRepository repository) {
-        return new ClassificationService(repository);
+    public ClassificationService classificationService(ClassificationRepository classificationRepository) {
+        return new ClassificationService(classificationRepository);
     }
 
     @Bean
-    public DocumentService documentService(DocumentRepository repository) {
-        return new DocumentService(repository);
+    public DocumentService documentService(DocumentRepository documentRepository) {
+        return new DocumentService(documentRepository);
     }
 
     @Bean
-    public TranslationService translationService(TranslationRepository repository) {
-        return new TranslationService(repository);
+    public TranslationService translationService(TranslationRepository translationRepository) {
+        return new TranslationService(translationRepository);
     }
 
     @Bean
-    public ReadingDocumentService readingDocumentService(ReadingDocumentRepository repository) {
-        return new ReadingDocumentService(repository);
+    public ReadingDocumentService readingDocumentService(ReadingDocumentRepository readingDocumentRepository) {
+        return new ReadingDocumentService(readingDocumentRepository);
     }
 
     @Bean

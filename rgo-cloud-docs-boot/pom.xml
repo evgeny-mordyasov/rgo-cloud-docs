@@ -26,6 +26,10 @@
             <groupId>ru.gold.ordance</groupId>
             <artifactId>rgo-cloud-docs-internal-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ru.gold.ordance</groupId>
+            <artifactId>rgo-cloud-docs-db-api</artifactId>
+        </dependency>
         <!-- self module -->
 
         <!-- rgo-cloud -->

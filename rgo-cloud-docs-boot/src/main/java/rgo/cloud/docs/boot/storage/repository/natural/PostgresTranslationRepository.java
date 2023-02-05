@@ -1,4 +1,4 @@
-package rgo.cloud.docs.boot.storage.repository;
+package rgo.cloud.docs.boot.storage.repository.natural;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -8,49 +8,50 @@ import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.TranslationQuery;
 import rgo.cloud.docs.boot.storage.query.LanguageQuery;
-import rgo.cloud.docs.boot.storage.repository.mapper.LanguageMapper;
+import rgo.cloud.docs.boot.storage.repository.natural.mapper.LanguageMapper;
 import rgo.cloud.docs.internal.api.storage.Translation;
 import rgo.cloud.docs.internal.api.storage.Language;
+import rgo.cloud.docs.db.api.repository.TranslationRepository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static rgo.cloud.docs.boot.storage.repository.mapper.TranslationMapper.emptyMapper;
-import static rgo.cloud.docs.boot.storage.repository.mapper.TranslationMapper.lazyMapper;
-import static rgo.cloud.docs.boot.storage.repository.mapper.TranslationMapper.dataMapper;
+import static rgo.cloud.docs.boot.storage.repository.natural.mapper.TranslationMapper.emptyMapper;
+import static rgo.cloud.docs.boot.storage.repository.natural.mapper.TranslationMapper.lazyMapper;
+import static rgo.cloud.docs.boot.storage.repository.natural.mapper.TranslationMapper.dataMapper;
 
 @Slf4j
-public class TranslationRepository {
-    private final DbTxManager tx;
+public class PostgresTranslationRepository implements TranslationRepository {
     private final NamedParameterJdbcTemplate jdbc;
 
-    public TranslationRepository(DbTxManager tx) {
-        this.tx = tx;
+    public PostgresTranslationRepository(DbTxManager tx) {
         this.jdbc = tx.jdbc();
     }
 
+    @Override
     public List<Translation> findAll() {
-        List<Translation> translations = tx.tx(() ->
-                jdbc.query(TranslationQuery.findAll(), lazyMapper));
+        List<Translation> translations = jdbc.query(TranslationQuery.findAll(), lazyMapper);
         log.info("Size of translations: {}", translations.size());
 
         return translations;
     }
 
+    @Override
     public List<Translation> findByDocumentId(Long documentId) {
         MapSqlParameterSource params = new MapSqlParameterSource("document_id", documentId);
-        List<Translation> translations = tx.tx(() ->
-                jdbc.query(TranslationQuery.findByDocumentId(), params, lazyMapper));
+        List<Translation> translations = jdbc.query(
+                TranslationQuery.findByDocumentId(), params, lazyMapper);
         log.info("Size of translations by documentId='{}': {}", documentId, translations.size());
 
         return translations;
     }
 
+    @Override
     public List<Translation> findByClassificationId(Long classificationId) {
         MapSqlParameterSource params = new MapSqlParameterSource("classification_id", classificationId);
-        List<Translation> translations = tx.tx(() ->
-                jdbc.query(TranslationQuery.findByClassificationId(), params, lazyMapper));
+        List<Translation> translations = jdbc.query(
+                TranslationQuery.findByClassificationId(), params, lazyMapper);
         log.info("Size of translations by classificationId='{}': {}", classificationId, translations.size());
 
         return translations;
@@ -58,26 +59,28 @@ public class TranslationRepository {
 
     private Optional<Translation> findById(Long entityId) {
         MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
-        return first(tx.tx(() ->
-                jdbc.query(TranslationQuery.findById(), params, emptyMapper)));
+        return first(
+                jdbc.query(TranslationQuery.findById(), params, emptyMapper));
     }
 
+    @Override
     public Optional<Translation> findByDocumentIdAndLanguageId(Long documentId, Long languageId) {
         MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
                 "document_id", documentId,
                 "language_id", languageId));
 
-        return first(tx.tx(() ->
-                jdbc.query(TranslationQuery.findByDocumentIdAndLanguageId(), params, lazyMapper)));
+        return first(
+                jdbc.query(TranslationQuery.findByDocumentIdAndLanguageId(), params, lazyMapper));
     }
 
+    @Override
     public Optional<Translation> findByDocumentIdAndLanguageIdWithData(Long documentId, Long languageId) {
         MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
                 "document_id", documentId,
                 "language_id", languageId));
 
-        return first(tx.tx(() ->
-                jdbc.query(TranslationQuery.findByDocumentIdAndLanguageIdWithData(), params, dataMapper)));
+        return first(
+                jdbc.query(TranslationQuery.findByDocumentIdAndLanguageIdWithData(), params, dataMapper));
     }
 
     private Optional<Translation> first(List<Translation> list) {
@@ -89,14 +92,17 @@ public class TranslationRepository {
         return Optional.of(list.get(0));
     }
 
+    @Override
     public boolean exists(Long entityId) {
         return findById(entityId).isPresent();
     }
 
+    @Override
     public boolean exists(Long documentId, Long languageId) {
         return findByDocumentIdAndLanguageId(documentId, languageId).isPresent();
     }
 
+    @Override
     public Translation save(Translation translation) {
         checkInternalEntities(translation.getLanguage().getEntityId());
 
@@ -105,43 +111,40 @@ public class TranslationRepository {
                 "language_id", translation.getLanguage().getEntityId(),
                 "data", translation.getData()));
 
-        return tx.tx(() -> {
-            jdbc.update(TranslationQuery.save(), params);
-            Optional<Translation> opt =
-                    findByDocumentIdAndLanguageId(translation.getDocument().getEntityId(), translation.getLanguage().getEntityId());
 
-            if (opt.isEmpty()) {
-                String errorMsg = "Translation save error.";
-                log.error(errorMsg);
-                throw new UnpredictableException(errorMsg);
-            }
+        int result = jdbc.update(TranslationQuery.save(), params);
+        Optional<Translation> opt =
+                findByDocumentIdAndLanguageId(translation.getDocument().getEntityId(), translation.getLanguage().getEntityId());
 
-            return opt.get();
-        });
+        if (opt.isEmpty() || result != 1) {
+            String errorMsg = "Translation save error.";
+            log.error(errorMsg);
+            throw new UnpredictableException(errorMsg);
+        }
+
+        return opt.get();
     }
 
     private void checkInternalEntities(Long languageId) {
-        List<Language> rs = tx.tx(() ->
+        List<Language> rs =
                 jdbc.query(LanguageQuery.findById(),
                         new MapSqlParameterSource("entity_id", languageId),
-                        LanguageMapper.mapper));
+                        LanguageMapper.mapper);
 
         if (rs.isEmpty()) {
             throw new EntityNotFoundException("Language by id not found.");
         }
     }
 
+    @Override
     public void deleteById(Long entityId) {
         MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
 
-        tx.tx(() -> {
-            int result = jdbc.update(TranslationQuery.deleteById(), params);
-
-            if (result == 0) {
-                String errorMsg = "Translation delete error.";
-                log.error(errorMsg);
-                throw new UnpredictableException(errorMsg);
-            }
-        });
+        int result = jdbc.update(TranslationQuery.deleteById(), params);
+        if (result != 1) {
+            String errorMsg = "Translation delete error.";
+            log.error(errorMsg);
+            throw new UnpredictableException(errorMsg);
+        }
     }
 }

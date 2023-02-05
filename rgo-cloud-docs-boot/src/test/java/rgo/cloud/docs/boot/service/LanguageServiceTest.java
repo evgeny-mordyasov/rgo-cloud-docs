@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import rgo.cloud.common.api.exception.ViolatesConstraintException;
 import rgo.cloud.common.spring.test.CommonTest;
-import rgo.cloud.docs.boot.storage.repository.LanguageRepository;
+import rgo.cloud.docs.db.api.repository.LanguageRepository;
 import rgo.cloud.docs.internal.api.storage.Language;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class LanguageServiceTest extends CommonTest {
     private LanguageService service;
 
     @Autowired
-    private LanguageRepository repository;
+    private LanguageRepository languageRepository;
 
     @BeforeEach
     public void setUp() {
@@ -44,7 +44,7 @@ public class LanguageServiceTest extends CommonTest {
     @Test
     public void findAll_foundOne() {
         int foundOne = 1;
-        repository.save(createRandomLanguage());
+        languageRepository.save(createRandomLanguage());
 
         List<Language> found = service.findAll();
 
@@ -54,8 +54,8 @@ public class LanguageServiceTest extends CommonTest {
     @Test
     public void findAll_foundALot() {
         int foundALot = 2;
-        repository.save(createRandomLanguage());
-        repository.save(createRandomLanguage());
+        languageRepository.save(createRandomLanguage());
+        languageRepository.save(createRandomLanguage());
 
         List<Language> found = service.findAll();
 
@@ -73,7 +73,7 @@ public class LanguageServiceTest extends CommonTest {
 
     @Test
     public void findById_found() {
-        Language saved = repository.save(createRandomLanguage());
+        Language saved = languageRepository.save(createRandomLanguage());
 
         Optional<Language> found = service.findById(saved.getEntityId());
 
@@ -93,7 +93,7 @@ public class LanguageServiceTest extends CommonTest {
 
     @Test
     public void findByName_found() {
-        Language saved = repository.save(createRandomLanguage());
+        Language saved = languageRepository.save(createRandomLanguage());
 
         Optional<Language> found = service.findByName(saved.getName());
 
@@ -106,7 +106,7 @@ public class LanguageServiceTest extends CommonTest {
     public void save() {
         Language saved = service.save(createRandomLanguage());
 
-        Optional<Language> found = repository.findById(saved.getEntityId());
+        Optional<Language> found = languageRepository.findById(saved.getEntityId());
 
         assertTrue(found.isPresent());
         assertEquals(saved.getEntityId(), found.get().getEntityId());
@@ -116,14 +116,14 @@ public class LanguageServiceTest extends CommonTest {
     @Test
     public void save_nameAlreadyExists() {
         Language created = createRandomLanguage();
-        repository.save(created);
+        languageRepository.save(created);
 
         assertThrows(ViolatesConstraintException.class, () -> service.save(created), "Language by name already exist.");
     }
 
     @Test
     public void update() {
-        Language saved = repository.save(createRandomLanguage());
+        Language saved = languageRepository.save(createRandomLanguage());
         Language newObj = Language.builder()
                 .entityId(saved.getEntityId())
                 .name(randomString())

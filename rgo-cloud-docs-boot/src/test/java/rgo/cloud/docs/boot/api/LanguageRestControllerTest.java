@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import rgo.cloud.common.api.rest.StatusCode;
 import rgo.cloud.common.spring.test.CommonTest;
-import rgo.cloud.docs.boot.storage.repository.LanguageRepository;
+import rgo.cloud.docs.db.api.repository.LanguageRepository;
 import rgo.cloud.docs.internal.api.rest.language.request.LanguageSaveRequest;
 import rgo.cloud.docs.internal.api.rest.language.request.LanguageUpdateRequest;
 import rgo.cloud.docs.internal.api.storage.Language;
@@ -34,7 +34,7 @@ import static rgo.cloud.docs.boot.EntityGenerator.createRandomLanguage;
 public class LanguageRestControllerTest extends CommonTest {
 
     @Autowired
-    private LanguageRepository repository;
+    private LanguageRepository languageRepository;
 
     @BeforeEach
     public void setUp() {
@@ -57,7 +57,7 @@ public class LanguageRestControllerTest extends CommonTest {
     @Test
     public void findAll_foundOne() throws Exception {
         int foundOne = 1;
-        Language saved = repository.save(createRandomLanguage());
+        Language saved = languageRepository.save(createRandomLanguage());
 
         mvc.perform(get(Endpoint.Language.BASE_URL))
                 .andExpect(content().contentType(JSON))
@@ -73,8 +73,8 @@ public class LanguageRestControllerTest extends CommonTest {
     public void findAll_foundALot() throws Exception {
         int foundALot = 2;
 
-        Language saved1 = repository.save(createRandomLanguage());
-        Language saved2 = repository.save(createRandomLanguage());
+        Language saved1 = languageRepository.save(createRandomLanguage());
+        Language saved2 = languageRepository.save(createRandomLanguage());
 
         Integer[] identifiers = new Integer[]{ saved1.getEntityId().intValue(), saved2.getEntityId().intValue() };
         String[] names = new String[]{ saved1.getName(), saved2.getName() };
@@ -102,7 +102,7 @@ public class LanguageRestControllerTest extends CommonTest {
 
     @Test
     public void findById_found() throws Exception {
-        Language saved = repository.save(createRandomLanguage());
+        Language saved = languageRepository.save(createRandomLanguage());
 
         mvc.perform(get(Endpoint.Language.BASE_URL + "/" + saved.getEntityId()))
                 .andExpect(content().contentType(JSON))
@@ -126,7 +126,7 @@ public class LanguageRestControllerTest extends CommonTest {
 
     @Test
     public void findByName_found() throws Exception {
-        Language saved = repository.save(createRandomLanguage());
+        Language saved = languageRepository.save(createRandomLanguage());
 
         mvc.perform(get(Endpoint.Language.BASE_URL + "?name=" + saved.getName()))
                 .andExpect(content().contentType(JSON))
@@ -149,7 +149,7 @@ public class LanguageRestControllerTest extends CommonTest {
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.description", nullValue()));
 
-        Optional<Language> opt = repository.findByName(name);
+        Optional<Language> opt = languageRepository.findByName(name);
 
         assertTrue(opt.isPresent());
         assertEquals(name, opt.get().getName());
@@ -157,7 +157,7 @@ public class LanguageRestControllerTest extends CommonTest {
 
     @Test
     public void save_duplicate() throws Exception {
-        Language saved = repository.save(createRandomLanguage());
+        Language saved = languageRepository.save(createRandomLanguage());
         LanguageSaveRequest rq = new LanguageSaveRequest(saved.getName());
 
         mvc.perform(post(Endpoint.Language.BASE_URL)
@@ -170,7 +170,7 @@ public class LanguageRestControllerTest extends CommonTest {
 
     @Test
     public void update() throws Exception {
-        Language saved = repository.save(createRandomLanguage());
+        Language saved = languageRepository.save(createRandomLanguage());
 
         String newName = randomString();
         LanguageUpdateRequest rq = LanguageUpdateRequest.builder()
@@ -185,7 +185,7 @@ public class LanguageRestControllerTest extends CommonTest {
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.description", nullValue()));
 
-        Optional<Language> opt = repository.findById(saved.getEntityId());
+        Optional<Language> opt = languageRepository.findById(saved.getEntityId());
 
         assertTrue(opt.isPresent());
         assertEquals(newName, opt.get().getName());

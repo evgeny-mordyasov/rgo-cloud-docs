@@ -13,6 +13,7 @@
     <modules>
         <module>rgo-cloud-docs-internal-api</module>
         <module>rgo-cloud-docs-boot</module>
+        <module>rgo-cloud-docs-db-api</module>
     </modules>
 
     <properties>
@@ -46,6 +47,11 @@
             <dependency>
                 <groupId>ru.gold.ordance</groupId>
                 <artifactId>rgo-cloud-docs-internal-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-cloud-docs-db-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- self module -->

@@ -10,6 +10,10 @@ import rgo.cloud.docs.internal.api.storage.Classification;
 import rgo.cloud.docs.internal.api.storage.Document;
 import rgo.cloud.docs.internal.api.storage.Language;
 import rgo.cloud.docs.internal.api.storage.ReadingDocument;
+import rgo.cloud.docs.db.api.repository.ClassificationRepository;
+import rgo.cloud.docs.db.api.repository.DocumentRepository;
+import rgo.cloud.docs.db.api.repository.LanguageRepository;
+import rgo.cloud.docs.db.api.repository.ReadingDocumentRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static rgo.cloud.docs.boot.EntityGenerator.*;
@@ -20,7 +24,7 @@ import static rgo.cloud.docs.boot.EntityGenerator.createRandomDocument;
 public class ReadingDocumentRepositoryTest extends CommonTest {
 
     @Autowired
-    private ReadingDocumentRepository repository;
+    private ReadingDocumentRepository readingDocumentRepository;
 
     @Autowired
     private DocumentRepository documentRepository;
@@ -51,7 +55,7 @@ public class ReadingDocumentRepositoryTest extends CommonTest {
     public void save() {
         ReadingDocument created = createRandomReadingDocument(savedDocument.getEntityId(), savedLanguage.getEntityId());
 
-        ReadingDocument saved = repository.save(created);
+        ReadingDocument saved = readingDocumentRepository.save(created);
 
         assertEquals(created.getDocumentId(), saved.getDocumentId());
         assertEquals(created.getLanguageId(), saved.getLanguageId());

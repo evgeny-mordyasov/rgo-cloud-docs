@@ -1,4 +1,4 @@
-package rgo.cloud.docs.boot.storage.repository;
+package rgo.cloud.docs.boot.storage.repository.natural;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -10,37 +10,38 @@ import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.ClassificationQuery;
 import rgo.cloud.docs.boot.storage.query.DocumentQuery;
-import rgo.cloud.docs.boot.storage.repository.mapper.ClassificationMapper;
+import rgo.cloud.docs.boot.storage.repository.natural.mapper.ClassificationMapper;
 import rgo.cloud.docs.internal.api.storage.Classification;
 import rgo.cloud.docs.internal.api.storage.Document;
+import rgo.cloud.docs.db.api.repository.DocumentRepository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static rgo.cloud.docs.boot.storage.repository.mapper.DocumentMapper.mapper;
+import static rgo.cloud.docs.boot.storage.repository.natural.mapper.DocumentMapper.mapper;
 
 @Slf4j
-public class DocumentRepository {
-    private final DbTxManager tx;
+public class PostgresDocumentRepository implements DocumentRepository {
     private final NamedParameterJdbcTemplate jdbc;
 
-    public DocumentRepository(DbTxManager tx) {
-        this.tx = tx;
+    public PostgresDocumentRepository(DbTxManager tx) {
         this.jdbc = tx.jdbc();
     }
 
+    @Override
     public List<Document> findAll() {
-        List<Document> documents = tx.tx(() -> jdbc.query(DocumentQuery.findAll(), mapper));
+        List<Document> documents = jdbc.query(DocumentQuery.findAll(), mapper);
         log.info("Size of documents: {}", documents.size());
 
         return documents;
     }
 
+    @Override
     public Optional<Document> findById(Long entityId) {
         MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
-        return first(tx.tx(() ->
-                jdbc.query(DocumentQuery.findById(), params, mapper)));
+        return first(
+                jdbc.query(DocumentQuery.findById(), params, mapper));
     }
 
     private Optional<Document> first(List<Document> list) {
@@ -52,10 +53,12 @@ public class DocumentRepository {
         return Optional.of(list.get(0));
     }
 
+    @Override
     public boolean exists(Long entityId) {
         return findById(entityId).isPresent();
     }
 
+    @Override
     public Document save(Document document) {
         checkInternalEntity(document.getClassification().getEntityId());
 
@@ -65,50 +68,46 @@ public class DocumentRepository {
                 "extension", document.getExtension(),
                 "classification_id", document.getClassification().getEntityId()));
 
-        return tx.tx(() -> {
-            KeyHolder keyHolder = new GeneratedKeyHolder();
-            int result = jdbc.update(DocumentQuery.save(), params, keyHolder, new String[]{"entity_id"});
-            Number key = keyHolder.getKey();
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int result = jdbc.update(DocumentQuery.save(), params, keyHolder, new String[]{"entity_id"});
+        Number key = keyHolder.getKey();
 
-            if (result == 0 || key == null) {
-                String errorMsg = "Document save error.";
-                log.error(errorMsg);
-                throw new UnpredictableException(errorMsg);
-            }
+        if (result != 1 || key == null) {
+            String errorMsg = "Document save error.";
+            log.error(errorMsg);
+            throw new UnpredictableException(errorMsg);
+        }
 
-            Optional<Document> opt = findById(key.longValue());
-            if (opt.isEmpty()) {
-                String errorMsg = "Error saving the document when selecting by ID.";
-                log.error(errorMsg);
-                throw new UnpredictableException(errorMsg);
-            }
+        Optional<Document> opt = findById(key.longValue());
+        if (opt.isEmpty()) {
+            String errorMsg = "Error saving the document when selecting by ID.";
+            log.error(errorMsg);
+            throw new UnpredictableException(errorMsg);
+        }
 
-            return opt.get();
-        });
+        return opt.get();
     }
 
     private void checkInternalEntity(Long classificationId) {
-        List<Classification> rs = tx.tx(() ->
+        List<Classification> rs =
                 jdbc.query(ClassificationQuery.findById(),
                         new MapSqlParameterSource("entity_id", classificationId),
-                        ClassificationMapper.mapper));
+                        ClassificationMapper.mapper);
 
         if (rs.isEmpty()) {
             throw new EntityNotFoundException("Classification by id not found.");
         }
     }
 
+    @Override
     public void deleteById(Long entityId) {
         MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
 
-        tx.tx(() -> {
-            int result = jdbc.update(DocumentQuery.deleteById(), params);
-
-            if (result == 0) {
-                String errorMsg = "Document delete error.";
-                log.error(errorMsg);
-                throw new UnpredictableException(errorMsg);
-            }
-        });
+        int result = jdbc.update(DocumentQuery.deleteById(), params);
+        if (result != 1) {
+            String errorMsg = "Document delete error.";
+            log.error(errorMsg);
+            throw new UnpredictableException(errorMsg);
+        }
     }
 }

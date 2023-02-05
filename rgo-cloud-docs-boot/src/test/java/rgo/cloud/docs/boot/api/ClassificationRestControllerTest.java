@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import rgo.cloud.common.api.rest.StatusCode;
 import rgo.cloud.common.spring.test.CommonTest;
-import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
+import rgo.cloud.docs.db.api.repository.ClassificationRepository;
 import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationSaveRequest;
 import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationUpdateRequest;
 import rgo.cloud.docs.internal.api.storage.Classification;
@@ -34,7 +34,7 @@ import static rgo.cloud.docs.boot.EntityGenerator.createRandomClassification;
 public class ClassificationRestControllerTest extends CommonTest {
 
     @Autowired
-    private ClassificationRepository repository;
+    private ClassificationRepository classificationRepository;
 
     @BeforeEach
     public void setUp() {
@@ -57,7 +57,7 @@ public class ClassificationRestControllerTest extends CommonTest {
     @Test
     public void findAll_foundOne() throws Exception {
         int foundOne = 1;
-        Classification saved = repository.save(createRandomClassification());
+        Classification saved = classificationRepository.save(createRandomClassification());
 
         mvc.perform(get(Endpoint.Classification.BASE_URL))
                 .andExpect(content().contentType(JSON))
@@ -73,8 +73,8 @@ public class ClassificationRestControllerTest extends CommonTest {
     public void findAll_foundALot() throws Exception {
         int foundALot = 2;
 
-        Classification saved1 = repository.save(createRandomClassification());
-        Classification saved2 = repository.save(createRandomClassification());
+        Classification saved1 = classificationRepository.save(createRandomClassification());
+        Classification saved2 = classificationRepository.save(createRandomClassification());
 
         Integer[] identifiers = new Integer[]{ saved1.getEntityId().intValue(), saved2.getEntityId().intValue() };
         String[] names = new String[]{ saved1.getName(), saved2.getName() };
@@ -102,7 +102,7 @@ public class ClassificationRestControllerTest extends CommonTest {
 
     @Test
     public void findById_found() throws Exception {
-        Classification saved = repository.save(createRandomClassification());
+        Classification saved = classificationRepository.save(createRandomClassification());
 
         mvc.perform(get(Endpoint.Classification.BASE_URL + "/" + saved.getEntityId()))
                 .andExpect(content().contentType(JSON))
@@ -126,7 +126,7 @@ public class ClassificationRestControllerTest extends CommonTest {
 
     @Test
     public void findByName_found() throws Exception {
-        Classification saved = repository.save(createRandomClassification());
+        Classification saved = classificationRepository.save(createRandomClassification());
 
         mvc.perform(get(Endpoint.Classification.BASE_URL + "?name=" + saved.getName()))
                 .andExpect(content().contentType(JSON))
@@ -149,7 +149,7 @@ public class ClassificationRestControllerTest extends CommonTest {
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.description", nullValue()));
 
-        Optional<Classification> opt = repository.findByName(name);
+        Optional<Classification> opt = classificationRepository.findByName(name);
 
         assertTrue(opt.isPresent());
         assertEquals(name, opt.get().getName());
@@ -157,7 +157,7 @@ public class ClassificationRestControllerTest extends CommonTest {
 
     @Test
     public void save_duplicate() throws Exception {
-        Classification saved = repository.save(createRandomClassification());
+        Classification saved = classificationRepository.save(createRandomClassification());
         ClassificationSaveRequest rq = new ClassificationSaveRequest(saved.getName());
 
         mvc.perform(post(Endpoint.Classification.BASE_URL)
@@ -170,7 +170,7 @@ public class ClassificationRestControllerTest extends CommonTest {
 
     @Test
     public void update() throws Exception {
-        Classification saved = repository.save(createRandomClassification());
+        Classification saved = classificationRepository.save(createRandomClassification());
 
         String newName = randomString();
         ClassificationUpdateRequest rq = ClassificationUpdateRequest.builder()
@@ -185,7 +185,7 @@ public class ClassificationRestControllerTest extends CommonTest {
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.description", nullValue()));
 
-        Optional<Classification> opt = repository.findById(saved.getEntityId());
+        Optional<Classification> opt = classificationRepository.findById(saved.getEntityId());
 
         assertTrue(opt.isPresent());
         assertEquals(newName, opt.get().getName());
@@ -210,7 +210,7 @@ public class ClassificationRestControllerTest extends CommonTest {
 
     @Test
     public void deleteById() throws Exception {
-        Classification saved = repository.save(createRandomClassification());
+        Classification saved = classificationRepository.save(createRandomClassification());
 
         mvc.perform(delete(Endpoint.Classification.BASE_URL + "/" + saved.getEntityId())
                 .contentType(JSON))
@@ -218,7 +218,7 @@ public class ClassificationRestControllerTest extends CommonTest {
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.description", nullValue()));
 
-        Optional<Classification> opt = repository.findById(saved.getEntityId());
+        Optional<Classification> opt = classificationRepository.findById(saved.getEntityId());
 
         assertTrue(opt.isEmpty());
     }
