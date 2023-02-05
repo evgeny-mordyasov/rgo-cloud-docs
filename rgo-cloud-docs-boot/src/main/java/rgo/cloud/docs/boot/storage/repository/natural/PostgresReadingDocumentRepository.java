@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.ReadingDocumentQuery;
 import rgo.cloud.docs.db.api.entity.ReadingDocument;
@@ -15,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static rgo.cloud.common.api.util.ExceptionUtil.unpredictableError;
 import static rgo.cloud.docs.boot.storage.repository.natural.mapper.ReadingDocumentMapper.mapper;
 
 @Slf4j
@@ -36,16 +36,12 @@ public class PostgresReadingDocumentRepository implements ReadingDocumentReposit
         Number key = keyHolder.getKey();
 
         if (result != 1 || key == null) {
-            String errorMsg = "ReadingDocument save error.";
-            log.error(errorMsg);
-            throw new UnpredictableException(errorMsg);
+            unpredictableError("ReadingDocument save error.");
         }
 
         Optional<ReadingDocument> opt = findById(key.longValue());
         if (opt.isEmpty()) {
-            String errorMsg = "Error saving the readingDocument when selecting by ID.";
-            log.error(errorMsg);
-            throw new UnpredictableException(errorMsg);
+            unpredictableError("Error saving the readingDocument when selecting by ID.");
         }
 
         return opt.get();

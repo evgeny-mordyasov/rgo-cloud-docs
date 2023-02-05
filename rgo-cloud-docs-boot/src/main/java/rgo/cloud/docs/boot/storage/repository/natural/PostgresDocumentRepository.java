@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
-import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.ClassificationQuery;
 import rgo.cloud.docs.boot.storage.query.DocumentQuery;
@@ -19,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static rgo.cloud.common.api.util.ExceptionUtil.unpredictableError;
 import static rgo.cloud.docs.boot.storage.repository.natural.mapper.DocumentMapper.mapper;
 
 @Slf4j
@@ -73,16 +73,12 @@ public class PostgresDocumentRepository implements DocumentRepository {
         Number key = keyHolder.getKey();
 
         if (result != 1 || key == null) {
-            String errorMsg = "Document save error.";
-            log.error(errorMsg);
-            throw new UnpredictableException(errorMsg);
+            unpredictableError("Document save error.");
         }
 
         Optional<Document> opt = findById(key.longValue());
         if (opt.isEmpty()) {
-            String errorMsg = "Error saving the document when selecting by ID.";
-            log.error(errorMsg);
-            throw new UnpredictableException(errorMsg);
+            unpredictableError("Error saving the document when selecting by ID.");
         }
 
         return opt.get();
@@ -105,9 +101,7 @@ public class PostgresDocumentRepository implements DocumentRepository {
 
         int result = jdbc.update(DocumentQuery.deleteById(), params);
         if (result != 1) {
-            String errorMsg = "Document delete error.";
-            log.error(errorMsg);
-            throw new UnpredictableException(errorMsg);
+            unpredictableError("Document delete error.");
         }
     }
 }

@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import one.util.streamex.StreamEx;
 import org.springframework.core.io.ByteArrayResource;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
-import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.docs.boot.service.TranslationService;
 import rgo.cloud.docs.boot.service.DocumentService;
 import rgo.cloud.docs.boot.service.LanguageService;
@@ -18,6 +17,7 @@ import rgo.cloud.docs.db.api.entity.ReadingDocument;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static rgo.cloud.common.api.util.ExceptionUtil.unpredictableError;
 import static rgo.cloud.docs.boot.facade.FileFacadeMapper.convert;
 
 @Slf4j
@@ -147,11 +147,8 @@ public class FileFacade {
             documentService.deleteById(documentId);
         } else {
             Optional<Translation> opt = translationService.findByDocumentIdAndLanguageId(documentId, languageId);
-
             if (opt.isEmpty()) {
-                String errorMsg = "Error searching for the translation while deleting the translation.";
-                log.error(errorMsg);
-                throw new UnpredictableException(errorMsg);
+                unpredictableError("Error searching for the translation while deleting the translation.");
             }
 
             translationService.deleteById(opt.get().getEntityId());

@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
-import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.TranslationQuery;
 import rgo.cloud.docs.boot.storage.query.LanguageQuery;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static rgo.cloud.common.api.util.ExceptionUtil.unpredictableError;
 import static rgo.cloud.docs.boot.storage.repository.natural.mapper.TranslationMapper.emptyMapper;
 import static rgo.cloud.docs.boot.storage.repository.natural.mapper.TranslationMapper.lazyMapper;
 import static rgo.cloud.docs.boot.storage.repository.natural.mapper.TranslationMapper.dataMapper;
@@ -113,13 +113,15 @@ public class PostgresTranslationRepository implements TranslationRepository {
 
 
         int result = jdbc.update(TranslationQuery.save(), params);
+        if (result != 1) {
+            unpredictableError("Translation save error.");
+        }
+
         Optional<Translation> opt =
                 findByDocumentIdAndLanguageId(translation.getDocument().getEntityId(), translation.getLanguage().getEntityId());
 
-        if (opt.isEmpty() || result != 1) {
-            String errorMsg = "Translation save error.";
-            log.error(errorMsg);
-            throw new UnpredictableException(errorMsg);
+        if (opt.isEmpty()) {
+            unpredictableError("Translation save error during searching.");
         }
 
         return opt.get();
@@ -142,9 +144,7 @@ public class PostgresTranslationRepository implements TranslationRepository {
 
         int result = jdbc.update(TranslationQuery.deleteById(), params);
         if (result != 1) {
-            String errorMsg = "Translation delete error.";
-            log.error(errorMsg);
-            throw new UnpredictableException(errorMsg);
+            unpredictableError("Translation delete error.");
         }
     }
 }

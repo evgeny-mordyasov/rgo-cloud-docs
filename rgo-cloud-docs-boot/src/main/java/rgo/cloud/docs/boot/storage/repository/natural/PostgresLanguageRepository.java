@@ -3,7 +3,6 @@ package rgo.cloud.docs.boot.storage.repository.natural;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.LanguageQuery;
 import rgo.cloud.docs.db.api.entity.Language;
@@ -13,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static rgo.cloud.common.api.util.ExceptionUtil.unpredictableError;
 import static rgo.cloud.docs.boot.storage.repository.natural.mapper.LanguageMapper.mapper;
 
 @Slf4j
@@ -63,13 +63,14 @@ public class PostgresLanguageRepository implements LanguageRepository {
     public Language save(Language language) {
         MapSqlParameterSource params = new MapSqlParameterSource("name", language.getName());
 
-        jdbc.update(LanguageQuery.save(), params);
-        Optional<Language> opt = findByName(language.getName());
+        int result = jdbc.update(LanguageQuery.save(), params);
+        if (result != 1) {
+            unpredictableError("Language save error.");
+        }
 
+        Optional<Language> opt = findByName(language.getName());
         if (opt.isEmpty()) {
-            String errorMsg = "Language save error.";
-            log.error(errorMsg);
-            throw new UnpredictableException(errorMsg);
+            unpredictableError("Language save error during searching.");
         }
 
         return opt.get();
@@ -81,13 +82,14 @@ public class PostgresLanguageRepository implements LanguageRepository {
                 "entity_id", language.getEntityId(),
                 "name", language.getName()));
 
-        jdbc.update(LanguageQuery.update(), params);
-        Optional<Language> opt = findByName(language.getName());
+        int result = jdbc.update(LanguageQuery.update(), params);
+        if (result != 1) {
+            unpredictableError("Language update error.");
+        }
 
+        Optional<Language> opt = findByName(language.getName());
         if (opt.isEmpty()) {
-            String errorMsg = "Language update error.";
-            log.error(errorMsg);
-            throw new UnpredictableException(errorMsg);
+            unpredictableError("Language update error during searching.");
         }
 
         return opt.get();

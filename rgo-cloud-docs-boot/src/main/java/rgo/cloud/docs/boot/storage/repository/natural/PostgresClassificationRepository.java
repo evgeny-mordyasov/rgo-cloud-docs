@@ -3,7 +3,6 @@ package rgo.cloud.docs.boot.storage.repository.natural;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.storage.query.ClassificationQuery;
 import rgo.cloud.docs.db.api.entity.Classification;
@@ -13,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static rgo.cloud.common.api.util.ExceptionUtil.unpredictableError;
 import static rgo.cloud.docs.boot.storage.repository.natural.mapper.ClassificationMapper.mapper;
 
 @Slf4j
@@ -63,13 +63,14 @@ public class PostgresClassificationRepository implements ClassificationRepositor
     public Classification save(Classification classification) {
         MapSqlParameterSource params = new MapSqlParameterSource("name", classification.getName());
 
-        jdbc.update(ClassificationQuery.save(), params);
-        Optional<Classification> opt = findByName(classification.getName());
+        int result = jdbc.update(ClassificationQuery.save(), params);
+        if (result != 1) {
+            unpredictableError("Classification save error.");
+        }
 
+        Optional<Classification> opt = findByName(classification.getName());
         if (opt.isEmpty()) {
-            String errorMsg = "Classification save error.";
-            log.error(errorMsg);
-            throw new UnpredictableException(errorMsg);
+            unpredictableError("Classification save error during searching.");
         }
 
         return opt.get();
@@ -81,13 +82,14 @@ public class PostgresClassificationRepository implements ClassificationRepositor
                 "entity_id", classification.getEntityId(),
                 "name", classification.getName()));
 
-        jdbc.update(ClassificationQuery.update(), params);
-        Optional<Classification> opt = findByName(classification.getName());
+        int result = jdbc.update(ClassificationQuery.update(), params);
+        if (result != 1) {
+            unpredictableError("Classification update error.");
+        }
 
+        Optional<Classification> opt = findByName(classification.getName());
         if (opt.isEmpty()) {
-            String errorMsg = "Classification update error.";
-            log.error(errorMsg);
-            throw new UnpredictableException(errorMsg);
+            unpredictableError("Classification update error during searching.");
         }
 
         return opt.get();
@@ -99,9 +101,7 @@ public class PostgresClassificationRepository implements ClassificationRepositor
 
         int result = jdbc.update(ClassificationQuery.deleteById(), params);
         if (result != 1) {
-            String errorMsg = "Classification delete error.";
-            log.error(errorMsg);
-            throw new UnpredictableException(errorMsg);
+            unpredictableError("Classification delete error.");
         }
     }
 }
