@@ -38,8 +38,8 @@ public final class EntityGenerator {
                 .name();
     }
 
-    public static DocumentLanguage createRandomDocumentLanguage(Document document, Language language) {
-        return DocumentLanguage.builder()
+    public static Translation createRandomTranslation(Document document, Language language) {
+        return Translation.builder()
                 .document(document)
                 .language(language)
                 .data(RandomUtils.nextBytes(256))

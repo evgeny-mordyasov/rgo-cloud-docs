@@ -11,7 +11,7 @@ import rgo.cloud.docs.boot.api.decorator.LanguageServiceDecorator;
 import rgo.cloud.docs.boot.facade.FileFacade;
 import rgo.cloud.docs.boot.service.*;
 import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
-import rgo.cloud.docs.boot.storage.repository.DocumentLanguageRepository;
+import rgo.cloud.docs.boot.storage.repository.TranslationRepository;
 import rgo.cloud.docs.boot.storage.repository.DocumentRepository;
 import rgo.cloud.docs.boot.storage.repository.LanguageRepository;
 import rgo.cloud.docs.boot.storage.repository.ReadingDocumentRepository;
@@ -38,8 +38,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public DocumentLanguageService documentLanguageService(DocumentLanguageRepository repository) {
-        return new DocumentLanguageService(repository);
+    public TranslationService translationService(TranslationRepository repository) {
+        return new TranslationService(repository);
     }
 
     @Bean
@@ -50,11 +50,11 @@ public class ApplicationConfig {
     @Bean
     public FileFacade fileFacade(
             DocumentService documentService,
-            DocumentLanguageService dlService,
+            TranslationService translationService,
             LanguageService languageService,
             ReadingDocumentService readingDocumentService
     ) {
-        return new FileFacade(documentService, dlService, languageService, readingDocumentService);
+        return new FileFacade(documentService, translationService, languageService, readingDocumentService);
     }
 
     @Bean

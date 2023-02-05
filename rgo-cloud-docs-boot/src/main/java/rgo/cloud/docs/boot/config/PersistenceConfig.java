@@ -10,7 +10,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.boot.config.properties.DbProperties;
 import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
-import rgo.cloud.docs.boot.storage.repository.DocumentLanguageRepository;
+import rgo.cloud.docs.boot.storage.repository.TranslationRepository;
 import rgo.cloud.docs.boot.storage.repository.DocumentRepository;
 import rgo.cloud.docs.boot.storage.repository.LanguageRepository;
 import rgo.cloud.docs.boot.storage.repository.ReadingDocumentRepository;
@@ -64,8 +64,8 @@ public class PersistenceConfig {
     }
 
     @Bean
-    public DocumentLanguageRepository documentLanguageRepository(DbTxManager dbTxManager) {
-        return new DocumentLanguageRepository(dbTxManager);
+    public TranslationRepository translationRepository(DbTxManager dbTxManager) {
+        return new TranslationRepository(dbTxManager);
     }
 
     @Bean

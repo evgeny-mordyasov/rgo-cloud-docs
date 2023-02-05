@@ -3,16 +3,16 @@ package rgo.cloud.docs.boot.storage.repository.mapper;
 import org.springframework.jdbc.core.RowMapper;
 import rgo.cloud.docs.internal.api.storage.Classification;
 import rgo.cloud.docs.internal.api.storage.Document;
-import rgo.cloud.docs.internal.api.storage.DocumentLanguage;
+import rgo.cloud.docs.internal.api.storage.Translation;
 import rgo.cloud.docs.internal.api.storage.Language;
 
-public final class DocumentLanguageMapper {
-    private DocumentLanguageMapper() {
+public final class TranslationMapper {
+    private TranslationMapper() {
     }
 
-    public static final RowMapper<DocumentLanguage> lazyMapper =
-            (rs, num) -> DocumentLanguage.builder()
-                    .entityId(rs.getLong("DL_ENTITY_ID"))
+    public static final RowMapper<Translation> lazyMapper =
+            (rs, num) -> Translation.builder()
+                    .entityId(rs.getLong("TR_ENTITY_ID"))
                     .document(Document.builder()
                             .entityId(rs.getLong("DOCUMENT_ID"))
                             .fullName(rs.getString("DOCUMENT_FULL_NAME"))
@@ -30,13 +30,13 @@ public final class DocumentLanguageMapper {
                     .downloads(rs.getLong("DOWNLOADS"))
                     .build();
 
-    public static final RowMapper<DocumentLanguage> emptyMapper =
-            (rs, num) -> DocumentLanguage.builder()
+    public static final RowMapper<Translation> emptyMapper =
+            (rs, num) -> Translation.builder()
                     .entityId(rs.getLong("ENTITY_ID"))
                     .build();
 
-    public static final RowMapper<DocumentLanguage> dataMapper =
-            (rs, num) -> DocumentLanguage.builder()
+    public static final RowMapper<Translation> dataMapper =
+            (rs, num) -> Translation.builder()
                     .data(rs.getBytes("DATA"))
                     .document(Document.builder()
                             .fullName(rs.getString("DOCUMENT_FULL_NAME"))

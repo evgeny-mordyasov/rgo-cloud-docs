@@ -1,10 +1,10 @@
 package rgo.cloud.docs.boot.storage.query;
 
-public final class DocumentLanguageQuery {
-    private static final String TABLE_NAME = "document_language";
+public final class TranslationQuery {
+    private static final String TABLE_NAME = "translation";
     private static final String WHERE_MODIFIER = "#WHERE#";
 
-    private DocumentLanguageQuery() {
+    private TranslationQuery() {
     }
 
     public static String findById() {
@@ -32,11 +32,11 @@ public final class DocumentLanguageQuery {
     }
 
     public static String findByDocumentIdAndLanguageIdWithData() {
-        return  "SELECT dl.data, " +
+        return  "SELECT tr.data, " +
                 "       d.full_name AS document_full_name " +
-                "FROM " + TABLE_NAME + " AS dl " +
+                "FROM " + TABLE_NAME + " AS tr " +
                 "    JOIN document AS d " +
-                "        ON dl.document_id = :document_id " +
+                "        ON tr.document_id = :document_id " +
                 "WHERE language_id = :language_id";
     }
 
@@ -48,7 +48,7 @@ public final class DocumentLanguageQuery {
     
     private static String select() {
         return  "WITH document_cnt AS (" +
-                "    SELECT dl.entity_id        AS dl_entity_id," +
+                "    SELECT tr.entity_id        AS tr_entity_id," +
                 "           l.entity_id         AS language_id," +
                 "           l.name              AS language_name," +
                 "           d.entity_id         AS document_id," +
@@ -59,18 +59,18 @@ public final class DocumentLanguageQuery {
                 "           c.name              AS document_classification_name," +
                 "           rd.language_id      AS rd_language_id," +
                 "           COUNT(*)            AS cnt" +
-                "    FROM " + TABLE_NAME + " AS dl" +
+                "    FROM " + TABLE_NAME + " AS tr" +
                 "             JOIN language AS l" +
-                "                  ON dl.language_id = l.entity_id" +
+                "                  ON tr.language_id = l.entity_id" +
                 "             JOIN document AS d" +
-                "                  ON dl.document_id = d.entity_id" +
+                "                  ON tr.document_id = d.entity_id" +
                 "             JOIN classification AS c" +
                 "                  ON d.classification_id = c.entity_id" +
                 "             LEFT JOIN reading_document rd" +
                 "                  ON l.entity_id = rd.language_id" +
                 "                     AND d.entity_id = rd.document_id" +
                 " " + WHERE_MODIFIER +
-                "    GROUP BY dl.entity_id," +
+                "    GROUP BY tr.entity_id," +
                 "             l.entity_id," +
                 "             l.name," +
                 "             d.entity_id," +
@@ -81,7 +81,7 @@ public final class DocumentLanguageQuery {
                 "             c.name," +
                 "             rd.language_id" +
                 ")" +
-                "SELECT dl_entity_id," +
+                "SELECT tr_entity_id," +
                 "       language_id," +
                 "       language_name," +
                 "       document_id," +

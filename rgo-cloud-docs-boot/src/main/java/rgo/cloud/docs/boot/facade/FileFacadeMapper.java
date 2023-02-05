@@ -5,7 +5,7 @@ import rgo.cloud.docs.internal.api.facade.FileDto;
 import rgo.cloud.docs.internal.api.facade.ResourceDto;
 import rgo.cloud.docs.internal.api.storage.Classification;
 import rgo.cloud.docs.internal.api.storage.Document;
-import rgo.cloud.docs.internal.api.storage.DocumentLanguage;
+import rgo.cloud.docs.internal.api.storage.Translation;
 import rgo.cloud.docs.internal.api.storage.Language;
 
 import java.util.List;
@@ -20,13 +20,13 @@ public final class FileFacadeMapper {
     private FileFacadeMapper() {
     }
 
-    public static List<FileDto> convert(Set<Map.Entry<Long, List<DocumentLanguage>>> set) {
+    public static List<FileDto> convert(Set<Map.Entry<Long, List<Translation>>> set) {
         return set.stream()
                 .map(e -> convert(e.getValue().get(0).getDocument(), e.getValue()))
                 .collect(Collectors.toList());
     }
 
-    public static FileDto convert(Document document, List<DocumentLanguage> languages) {
+    public static FileDto convert(Document document, List<Translation> translations) {
         return FileDto.builder()
                 .document(Document.builder()
                         .entityId(document.getEntityId())
@@ -38,18 +38,18 @@ public final class FileFacadeMapper {
                                 .name(document.getClassification().getName())
                                 .build())
                         .build())
-                .resources(languages.stream().map(dl ->
+                .resources(translations.stream().map(tr ->
                         ResourceDto.builder()
                                 .language(Language.builder()
-                                        .entityId(dl.getLanguage().getEntityId())
-                                        .name(dl.getLanguage().getName())
+                                        .entityId(tr.getLanguage().getEntityId())
+                                        .name(tr.getLanguage().getName())
                                         .build())
-                                .resource(resource(dl.getDocument().getEntityId(), dl.getLanguage().getEntityId()))
-                                .downloads(dl.getDownloads())
+                                .resource(resource(tr.getDocument().getEntityId(), tr.getLanguage().getEntityId()))
+                                .downloads(tr.getDownloads())
                                 .build())
                         .collect(Collectors.toList()))
-                .downloads(languages.stream()
-                        .map(DocumentLanguage::getDownloads)
+                .downloads(translations.stream()
+                        .map(Translation::getDownloads)
                         .reduce(0L, Long::sum))
                 .build();
     }

@@ -11,14 +11,14 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import rgo.cloud.common.api.rest.StatusCode;
 import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.boot.facade.FileFacade;
-import rgo.cloud.docs.boot.service.DocumentLanguageService;
+import rgo.cloud.docs.boot.service.TranslationService;
 import rgo.cloud.docs.boot.service.DocumentService;
 import rgo.cloud.docs.boot.storage.repository.ClassificationRepository;
 import rgo.cloud.docs.boot.storage.repository.LanguageRepository;
 import rgo.cloud.docs.internal.api.facade.FileDto;
 import rgo.cloud.docs.internal.api.storage.Classification;
 import rgo.cloud.docs.internal.api.storage.Document;
-import rgo.cloud.docs.internal.api.storage.DocumentLanguage;
+import rgo.cloud.docs.internal.api.storage.Translation;
 import rgo.cloud.docs.internal.api.storage.Language;
 import rgo.cloud.security.config.util.Endpoint;
 
@@ -47,7 +47,7 @@ public class FileRestControllerTest extends CommonTest {
     private FileFacade facade;
 
     @Autowired
-    private DocumentLanguageService dlService;
+    private TranslationService translationService;
 
     @Autowired
     private DocumentService documentService;
@@ -82,7 +82,7 @@ public class FileRestControllerTest extends CommonTest {
 
         Language savedLanguage = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
-        FileDto file = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage));
+        FileDto file = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage));
 
         mvc.perform(get(Endpoint.File.BASE_URL))
                 .andExpect(content().contentType(JSON))
@@ -114,8 +114,8 @@ public class FileRestControllerTest extends CommonTest {
 
         Classification savedClassification = classificationRepository.save(createRandomClassification());
 
-        FileDto file = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), language1));
-        FileDto patchFile = facade.patch(createRandomDocumentLanguage(file.getDocument(), language2));
+        FileDto file = facade.save(createRandomTranslation(createRandomDocument(savedClassification), language1));
+        FileDto patchFile = facade.patch(createRandomTranslation(file.getDocument(), language2));
 
         mvc.perform(get(Endpoint.File.BASE_URL))
                 .andExpect(content().contentType(JSON))
@@ -148,8 +148,8 @@ public class FileRestControllerTest extends CommonTest {
         Language savedLanguage = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
 
-        FileDto file1 = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage));
-        FileDto file2 = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage));
+        FileDto file1 = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage));
+        FileDto file2 = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage));
 
         mvc.perform(get(Endpoint.File.BASE_URL))
                 .andExpect(content().contentType(JSON))
@@ -199,7 +199,7 @@ public class FileRestControllerTest extends CommonTest {
 
         Language savedLanguage = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
-        FileDto file = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage));
+        FileDto file = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage));
 
         mvc.perform(get(Endpoint.File.BASE_URL + "?classificationId=" + savedClassification.getEntityId()))
                 .andExpect(content().contentType(JSON))
@@ -229,10 +229,10 @@ public class FileRestControllerTest extends CommonTest {
         Classification savedClassification1 = classificationRepository.save(createRandomClassification());
         Classification savedClassification2 = classificationRepository.save(createRandomClassification());
 
-        FileDto file1 = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification1), savedLanguage));
+        FileDto file1 = facade.save(createRandomTranslation(createRandomDocument(savedClassification1), savedLanguage));
 
-        facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification2), savedLanguage));
-        facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification2), savedLanguage));
+        facade.save(createRandomTranslation(createRandomDocument(savedClassification2), savedLanguage));
+        facade.save(createRandomTranslation(createRandomDocument(savedClassification2), savedLanguage));
 
         mvc.perform(get(Endpoint.File.BASE_URL + "?classificationId=" + savedClassification1.getEntityId()))
                 .andExpect(content().contentType(JSON))
@@ -271,7 +271,7 @@ public class FileRestControllerTest extends CommonTest {
 
         Language savedLanguage = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
-        FileDto file = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage));
+        FileDto file = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage));
 
         mvc.perform(get(Endpoint.File.BASE_URL + "/" + file.getDocument().getEntityId()))
                 .andExpect(content().contentType(JSON))
@@ -301,8 +301,8 @@ public class FileRestControllerTest extends CommonTest {
 
         Classification savedClassification = classificationRepository.save(createRandomClassification());
 
-        FileDto file = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage1));
-        FileDto patchFile = facade.patch(createRandomDocumentLanguage(file.getDocument(), savedLanguage2));
+        FileDto file = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage1));
+        FileDto patchFile = facade.patch(createRandomTranslation(file.getDocument(), savedLanguage2));
 
         mvc.perform(get(Endpoint.File.BASE_URL + "/" + file.getDocument().getEntityId()))
                 .andExpect(content().contentType(JSON))
@@ -343,7 +343,7 @@ public class FileRestControllerTest extends CommonTest {
 
         Language savedLanguage = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
-        FileDto file = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage));
+        FileDto file = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage));
 
         mvc.perform(get(Endpoint.File.BASE_URL + "/free-languages/" + file.getDocument().getEntityId()))
                 .andExpect(content().contentType(JSON))
@@ -360,7 +360,7 @@ public class FileRestControllerTest extends CommonTest {
         Language lang2 = languageRepository.save(createRandomLanguage());
 
         Classification savedClassification = classificationRepository.save(createRandomClassification());
-        FileDto file = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), lang1));
+        FileDto file = facade.save(createRandomTranslation(createRandomDocument(savedClassification), lang1));
 
         mvc.perform(get(Endpoint.File.BASE_URL + "/free-languages/" + file.getDocument().getEntityId()))
                 .andExpect(content().contentType(JSON))
@@ -376,7 +376,7 @@ public class FileRestControllerTest extends CommonTest {
         Language savedLanguage = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
 
-        FileDto savedFile = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage));
+        FileDto savedFile = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage));
 
         downloadDocument(savedFile.getDocument().getEntityId(), savedLanguage.getEntityId());
     }
@@ -387,7 +387,7 @@ public class FileRestControllerTest extends CommonTest {
 
         Language savedLanguage = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
-        FileDto file = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage));
+        FileDto file = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage));
 
         ExecutorService executor = Executors.newFixedThreadPool(clients);
         List<Future<?>> futures = new ArrayList<>();
@@ -418,9 +418,9 @@ public class FileRestControllerTest extends CommonTest {
 
         Classification savedClassification = classificationRepository.save(createRandomClassification());
 
-        FileDto file = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), languages.get(0)));
+        FileDto file = facade.save(createRandomTranslation(createRandomDocument(savedClassification), languages.get(0)));
         for (int i = 1; i <= numberOfLanguages - 1; i++) {
-            facade.patch(createRandomDocumentLanguage(file.getDocument(), languages.get(i)));
+            facade.patch(createRandomTranslation(file.getDocument(), languages.get(i)));
         }
 
         ExecutorService executor = Executors.newFixedThreadPool(clients);
@@ -451,7 +451,7 @@ public class FileRestControllerTest extends CommonTest {
 
         List<FileDto> files = new ArrayList<>();
         for (int i = 0; i < numberOfFiles; i++) {
-            files.add(facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage)));
+            files.add(facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage)));
         }
 
         ExecutorService executor = Executors.newFixedThreadPool(clients);
@@ -490,10 +490,10 @@ public class FileRestControllerTest extends CommonTest {
         Classification savedClassification = classificationRepository.save(createRandomClassification());
 
         for (int i = 0; i < numberOfFiles; i++) {
-            var currentFile = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), languages.get(0)));
+            var currentFile = facade.save(createRandomTranslation(createRandomDocument(savedClassification), languages.get(0)));
 
             for (int j = 1; j <= numberOfLanguages - 1; j++) {
-                facade.patch(createRandomDocumentLanguage(currentFile.getDocument(), languages.get(j)));
+                facade.patch(createRandomTranslation(currentFile.getDocument(), languages.get(j)));
             }
         }
 
@@ -588,7 +588,7 @@ public class FileRestControllerTest extends CommonTest {
         Language savedLanguage2 = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
 
-        FileDto savedFile = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage1));
+        FileDto savedFile = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage1));
 
         MockMultipartFile file = createFile();
 
@@ -633,7 +633,7 @@ public class FileRestControllerTest extends CommonTest {
         Language savedLanguage = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
 
-        FileDto savedFile = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage));
+        FileDto savedFile = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage));
 
         mvc.perform(delete(Endpoint.File.BASE_URL)
                 .param("documentId", savedFile.getDocument().getEntityId().toString())
@@ -642,7 +642,7 @@ public class FileRestControllerTest extends CommonTest {
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.description", nullValue()));
 
-        Optional<DocumentLanguage> opt1 = dlService.findByDocumentIdAndLanguageId(savedFile.getDocument().getEntityId(), savedLanguage.getEntityId());
+        Optional<Translation> opt1 = translationService.findByDocumentIdAndLanguageId(savedFile.getDocument().getEntityId(), savedLanguage.getEntityId());
         assertTrue(opt1.isEmpty());
 
         Optional<Document> opt2 = documentService.findById(savedFile.getDocument().getEntityId());
@@ -655,8 +655,8 @@ public class FileRestControllerTest extends CommonTest {
         Language savedLanguage2 = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
 
-        FileDto savedFile = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage1));
-        FileDto patchFile = facade.patch(createRandomDocumentLanguage(savedFile.getDocument(), savedLanguage2));
+        FileDto savedFile = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage1));
+        FileDto patchFile = facade.patch(createRandomTranslation(savedFile.getDocument(), savedLanguage2));
 
         mvc.perform(delete(Endpoint.File.BASE_URL)
                 .param("documentId", patchFile.getDocument().getEntityId().toString())
@@ -665,10 +665,10 @@ public class FileRestControllerTest extends CommonTest {
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.description", nullValue()));
 
-        Optional<DocumentLanguage> opt = dlService.findByDocumentIdAndLanguageId(patchFile.getDocument().getEntityId(), savedLanguage1.getEntityId());
+        Optional<Translation> opt = translationService.findByDocumentIdAndLanguageId(patchFile.getDocument().getEntityId(), savedLanguage1.getEntityId());
         assertTrue(opt.isEmpty());
 
-        List<DocumentLanguage> list = dlService.findByDocumentId(patchFile.getDocument().getEntityId());
+        List<Translation> list = translationService.findByDocumentId(patchFile.getDocument().getEntityId());
         assertEquals(1, list.size());
     }
 
@@ -678,15 +678,15 @@ public class FileRestControllerTest extends CommonTest {
         Language savedLanguage2 = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
 
-        FileDto savedFile = facade.save(createRandomDocumentLanguage(createRandomDocument(savedClassification), savedLanguage1));
-        FileDto patchFile = facade.patch(createRandomDocumentLanguage(savedFile.getDocument(), savedLanguage2));
+        FileDto savedFile = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage1));
+        FileDto patchFile = facade.patch(createRandomTranslation(savedFile.getDocument(), savedLanguage2));
 
         mvc.perform(delete(Endpoint.File.BASE_URL + "/" + patchFile.getDocument().getEntityId()))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.description", nullValue()));
 
-        List<DocumentLanguage> list = dlService.findByDocumentId(patchFile.getDocument().getEntityId());
+        List<Translation> list = translationService.findByDocumentId(patchFile.getDocument().getEntityId());
         assertEquals(0, list.size());
 
         Optional<Document> opt = documentService.findById(patchFile.getDocument().getEntityId());

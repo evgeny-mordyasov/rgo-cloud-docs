@@ -9,7 +9,7 @@ import lombok.ToString;
 @Builder(toBuilder = true)
 @ToString
 @EqualsAndHashCode
-public class DocumentLanguage {
+public class Translation {
     private final Long entityId;
     private final Document document;
     private final Language language;
