@@ -2,7 +2,7 @@ package rgo.cloud.docs.boot.api.decorator.converter;
 
 import org.springframework.web.multipart.MultipartFile;
 import rgo.cloud.docs.boot.util.FileUtil;
-import rgo.cloud.docs.rest.api.facade.MultipartFileDto;
+import rgo.cloud.docs.model.facade.MultipartFileDto;
 import rgo.cloud.docs.rest.api.file.request.FilePatchRequest;
 import rgo.cloud.docs.rest.api.file.request.FileSaveRequest;
 import rgo.cloud.docs.db.api.entity.Classification;

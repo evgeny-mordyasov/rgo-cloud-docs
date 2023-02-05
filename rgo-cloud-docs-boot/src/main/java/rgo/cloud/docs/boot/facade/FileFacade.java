@@ -9,7 +9,7 @@ import rgo.cloud.docs.boot.service.TranslationService;
 import rgo.cloud.docs.boot.service.DocumentService;
 import rgo.cloud.docs.boot.service.LanguageService;
 import rgo.cloud.docs.boot.service.ReadingDocumentService;
-import rgo.cloud.docs.rest.api.facade.FileDto;
+import rgo.cloud.docs.model.facade.FileDto;
 import rgo.cloud.docs.db.api.entity.Document;
 import rgo.cloud.docs.db.api.entity.Translation;
 import rgo.cloud.docs.db.api.entity.Language;

@@ -1,8 +1,8 @@
 package rgo.cloud.docs.boot.facade;
 
 import rgo.cloud.security.config.util.Endpoint;
-import rgo.cloud.docs.rest.api.facade.FileDto;
-import rgo.cloud.docs.rest.api.facade.ResourceDto;
+import rgo.cloud.docs.model.facade.FileDto;
+import rgo.cloud.docs.model.facade.ResourceDto;
 import rgo.cloud.docs.db.api.entity.Classification;
 import rgo.cloud.docs.db.api.entity.Document;
 import rgo.cloud.docs.db.api.entity.Translation;
