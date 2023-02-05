@@ -4,11 +4,11 @@ import rgo.cloud.common.api.rest.EmptySuccessfulResponse;
 import rgo.cloud.common.api.rest.Response;
 import rgo.cloud.common.spring.annotation.Validate;
 import rgo.cloud.docs.boot.service.ClassificationService;
-import rgo.cloud.docs.internal.api.rest.classification.request.*;
-import rgo.cloud.docs.internal.api.rest.classification.response.ClassificationDeleteResponse;
-import rgo.cloud.docs.internal.api.rest.classification.response.ClassificationGetEntityResponse;
-import rgo.cloud.docs.internal.api.rest.classification.response.ClassificationGetListResponse;
-import rgo.cloud.docs.internal.api.rest.classification.response.ClassificationModifyResponse;
+import rgo.cloud.docs.rest.api.classification.request.*;
+import rgo.cloud.docs.rest.api.classification.response.ClassificationDeleteResponse;
+import rgo.cloud.docs.rest.api.classification.response.ClassificationGetEntityResponse;
+import rgo.cloud.docs.rest.api.classification.response.ClassificationGetListResponse;
+import rgo.cloud.docs.rest.api.classification.response.ClassificationModifyResponse;
 import rgo.cloud.docs.db.api.entity.Classification;
 
 import java.util.List;

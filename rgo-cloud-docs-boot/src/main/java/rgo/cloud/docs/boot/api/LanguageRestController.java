@@ -4,10 +4,10 @@ import org.springframework.web.bind.annotation.*;
 import rgo.cloud.common.api.rest.Response;
 import rgo.cloud.security.config.util.Endpoint;
 import rgo.cloud.docs.boot.api.decorator.LanguageServiceDecorator;
-import rgo.cloud.docs.internal.api.rest.language.request.LanguageGetByIdRequest;
-import rgo.cloud.docs.internal.api.rest.language.request.LanguageGetByNameRequest;
-import rgo.cloud.docs.internal.api.rest.language.request.LanguageSaveRequest;
-import rgo.cloud.docs.internal.api.rest.language.request.LanguageUpdateRequest;
+import rgo.cloud.docs.rest.api.language.request.LanguageGetByIdRequest;
+import rgo.cloud.docs.rest.api.language.request.LanguageGetByNameRequest;
+import rgo.cloud.docs.rest.api.language.request.LanguageSaveRequest;
+import rgo.cloud.docs.rest.api.language.request.LanguageUpdateRequest;
 
 import static rgo.cloud.common.api.util.RequestUtil.JSON;
 import static rgo.cloud.common.api.util.RequestUtil.execute;

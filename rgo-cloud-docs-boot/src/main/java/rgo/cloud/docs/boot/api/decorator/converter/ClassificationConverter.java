@@ -1,7 +1,7 @@
 package rgo.cloud.docs.boot.api.decorator.converter;
 
-import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationSaveRequest;
-import rgo.cloud.docs.internal.api.rest.classification.request.ClassificationUpdateRequest;
+import rgo.cloud.docs.rest.api.classification.request.ClassificationSaveRequest;
+import rgo.cloud.docs.rest.api.classification.request.ClassificationUpdateRequest;
 import rgo.cloud.docs.db.api.entity.Classification;
 
 public final class ClassificationConverter {

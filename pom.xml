@@ -11,8 +11,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>rgo-cloud-docs-internal-api</module>
         <module>rgo-cloud-docs-boot</module>
+        <module>rgo-cloud-docs-rest-api</module>
         <module>rgo-cloud-docs-db-api</module>
     </modules>
 
@@ -46,7 +46,7 @@
             <!-- self module -->
             <dependency>
                 <groupId>ru.gold.ordance</groupId>
-                <artifactId>rgo-cloud-docs-internal-api</artifactId>
+                <artifactId>rgo-cloud-docs-rest-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

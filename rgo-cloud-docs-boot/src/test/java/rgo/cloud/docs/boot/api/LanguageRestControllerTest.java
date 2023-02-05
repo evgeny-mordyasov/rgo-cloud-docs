@@ -9,8 +9,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import rgo.cloud.common.api.rest.StatusCode;
 import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.db.api.repository.LanguageRepository;
-import rgo.cloud.docs.internal.api.rest.language.request.LanguageSaveRequest;
-import rgo.cloud.docs.internal.api.rest.language.request.LanguageUpdateRequest;
+import rgo.cloud.docs.rest.api.language.request.LanguageSaveRequest;
+import rgo.cloud.docs.rest.api.language.request.LanguageUpdateRequest;
 import rgo.cloud.docs.db.api.entity.Language;
 import rgo.cloud.security.config.util.Endpoint;
 

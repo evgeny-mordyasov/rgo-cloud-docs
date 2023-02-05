@@ -15,7 +15,7 @@ import rgo.cloud.docs.boot.service.TranslationService;
 import rgo.cloud.docs.boot.service.DocumentService;
 import rgo.cloud.docs.db.api.repository.ClassificationRepository;
 import rgo.cloud.docs.db.api.repository.LanguageRepository;
-import rgo.cloud.docs.internal.api.facade.FileDto;
+import rgo.cloud.docs.rest.api.facade.FileDto;
 import rgo.cloud.docs.db.api.entity.Classification;
 import rgo.cloud.docs.db.api.entity.Document;
 import rgo.cloud.docs.db.api.entity.Translation;

@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import rgo.cloud.common.api.rest.Response;
 import rgo.cloud.docs.boot.api.decorator.FileFacadeDecorator;
 import rgo.cloud.docs.boot.facade.FileResource;
-import rgo.cloud.docs.internal.api.rest.file.request.*;
+import rgo.cloud.docs.rest.api.file.request.*;
 import rgo.cloud.security.config.util.Endpoint;
 
 import java.util.Optional;
