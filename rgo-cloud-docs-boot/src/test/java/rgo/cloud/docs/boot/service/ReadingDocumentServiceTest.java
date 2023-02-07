@@ -56,7 +56,6 @@ public class ReadingDocumentServiceTest extends CommonTest {
 
         ReadingDocument saved = service.save(created);
 
-        assertEquals(created.getDocumentId(), saved.getDocumentId());
-        assertEquals(created.getLanguageId(), saved.getLanguageId());
+        assertEquals(created.getKey(), saved.getKey());
     }
 }

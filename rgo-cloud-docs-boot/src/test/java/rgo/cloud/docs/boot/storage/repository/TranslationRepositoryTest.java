@@ -7,10 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.common.spring.test.CommonTest;
-import rgo.cloud.docs.db.api.entity.Classification;
-import rgo.cloud.docs.db.api.entity.Document;
-import rgo.cloud.docs.db.api.entity.Translation;
-import rgo.cloud.docs.db.api.entity.Language;
+import rgo.cloud.docs.db.api.entity.*;
 import rgo.cloud.docs.db.api.repository.ClassificationRepository;
 import rgo.cloud.docs.db.api.repository.LanguageRepository;
 import rgo.cloud.docs.db.api.repository.TranslationRepository;
@@ -148,21 +145,23 @@ public class TranslationRepositoryTest extends CommonTest {
     }
 
     @Test
-    public void findByDocumentIdAndLanguageId_notFound() {
-        long fakeDocumentId = generateId();
-        long fakeLanguageId = generateId();
+    public void findByKey_notFound() {
+        TranslationKey fakeKey = TranslationKey.builder()
+                .documentId(generateId())
+                .languageId(generateId())
+                .build();
 
-        Optional<Translation> found = translationRepository.findByDocumentIdAndLanguageId(fakeDocumentId, fakeLanguageId);
+        Optional<Translation> found = translationRepository.findByKey(fakeKey);
 
         assertTrue(found.isEmpty());
     }
 
     @Test
-    public void findByDocumentIdAndLanguageId_found() {
+    public void findByKey_found() {
         Translation saved = translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
 
         Optional<Translation> found =
-                translationRepository.findByDocumentIdAndLanguageId(saved.getDocument().getEntityId(), saved.getLanguage().getEntityId());
+                translationRepository.findByKey(saved.key());
 
         assertTrue(found.isPresent());
         assertEquals(saved.getEntityId(), found.get().getEntityId());
@@ -172,21 +171,23 @@ public class TranslationRepositoryTest extends CommonTest {
     }
 
     @Test
-    public void findByDocumentIdAndLanguageIdWithData_notFound() {
-        long fakeDocumentId = generateId();
-        long fakeLanguageId = generateId();
+    public void findByKeyWithData_notFound() {
+        TranslationKey fakeKey = TranslationKey.builder()
+                .documentId(generateId())
+                .languageId(generateId())
+                .build();
 
-        Optional<Translation> found = translationRepository.findByDocumentIdAndLanguageIdWithData(fakeDocumentId, fakeLanguageId);
+        Optional<Translation> found = translationRepository.findByKeyWithData(fakeKey);
 
         assertTrue(found.isEmpty());
     }
 
     @Test
-    public void findByDocumentIdAndLanguageIdWithData_notFound_found() {
+    public void findByKeyWithData_notFound_found() {
         Translation saved = translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
 
         Optional<Translation> found =
-                translationRepository.findByDocumentIdAndLanguageIdWithData(saved.getDocument().getEntityId(), saved.getLanguage().getEntityId());
+                translationRepository.findByKeyWithData(saved.key());
 
         assertTrue(found.isPresent());
         assertEquals(saved.getDocument().getFullName(), found.get().getDocument().getFullName());
@@ -217,7 +218,7 @@ public class TranslationRepositoryTest extends CommonTest {
         translationRepository.deleteById(saved.getEntityId());
 
         Optional<Translation> found =
-                translationRepository.findByDocumentIdAndLanguageId(saved.getDocument().getEntityId(), saved.getLanguage().getEntityId());
+                translationRepository.findByKey(saved.key());
 
         assertTrue(found.isEmpty());
     }
@@ -228,7 +229,7 @@ public class TranslationRepositoryTest extends CommonTest {
         documentRepository.deleteById(saved.getDocument().getEntityId());
 
         Optional<Translation> found =
-                translationRepository.findByDocumentIdAndLanguageId(saved.getDocument().getEntityId(), saved.getLanguage().getEntityId());
+                translationRepository.findByKey(saved.key());
 
         assertTrue(found.isEmpty());
     }

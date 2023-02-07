@@ -48,8 +48,10 @@ public final class EntityGenerator {
 
     public static ReadingDocument createRandomReadingDocument(Long documentId, Long languageId) {
         return ReadingDocument.builder()
-                .documentId(documentId)
-                .languageId(languageId)
+                .key(TranslationKey.builder()
+                        .documentId(documentId)
+                        .languageId(languageId)
+                        .build())
                 .build();
     }
 }

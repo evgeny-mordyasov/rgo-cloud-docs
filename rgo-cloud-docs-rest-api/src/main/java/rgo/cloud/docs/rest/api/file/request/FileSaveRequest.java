@@ -9,7 +9,7 @@ import static rgo.cloud.common.api.util.ValidatorUtil.*;
 
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(force = true)
+
 @Getter
 @ToString
 public class FileSaveRequest implements Request {

@@ -10,6 +10,7 @@ import rgo.cloud.docs.boot.storage.query.LanguageQuery;
 import rgo.cloud.docs.boot.storage.repository.natural.mapper.LanguageMapper;
 import rgo.cloud.docs.db.api.entity.Translation;
 import rgo.cloud.docs.db.api.entity.Language;
+import rgo.cloud.docs.db.api.entity.TranslationKey;
 import rgo.cloud.docs.db.api.repository.TranslationRepository;
 
 import java.util.List;
@@ -64,23 +65,23 @@ public class PostgresTranslationRepository implements TranslationRepository {
     }
 
     @Override
-    public Optional<Translation> findByDocumentIdAndLanguageId(Long documentId, Long languageId) {
+    public Optional<Translation> findByKey(TranslationKey key) {
         MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
-                "document_id", documentId,
-                "language_id", languageId));
+                "document_id", key.getDocumentId(),
+                "language_id", key.getLanguageId()));
 
         return first(
-                jdbc.query(TranslationQuery.findByDocumentIdAndLanguageId(), params, lazyMapper));
+                jdbc.query(TranslationQuery.findByKey(), params, lazyMapper));
     }
 
     @Override
-    public Optional<Translation> findByDocumentIdAndLanguageIdWithData(Long documentId, Long languageId) {
+    public Optional<Translation> findByKeyWithData(TranslationKey key) {
         MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
-                "document_id", documentId,
-                "language_id", languageId));
+                "document_id", key.getDocumentId(),
+                "language_id", key.getLanguageId()));
 
         return first(
-                jdbc.query(TranslationQuery.findByDocumentIdAndLanguageIdWithData(), params, dataMapper));
+                jdbc.query(TranslationQuery.findByKeyWithData(), params, dataMapper));
     }
 
     private Optional<Translation> first(List<Translation> list) {
@@ -98,8 +99,8 @@ public class PostgresTranslationRepository implements TranslationRepository {
     }
 
     @Override
-    public boolean exists(Long documentId, Long languageId) {
-        return findByDocumentIdAndLanguageId(documentId, languageId).isPresent();
+    public boolean exists(TranslationKey key) {
+        return findByKey(key).isPresent();
     }
 
     @Override
@@ -117,9 +118,7 @@ public class PostgresTranslationRepository implements TranslationRepository {
             unpredictableError("Translation save error.");
         }
 
-        Optional<Translation> opt =
-                findByDocumentIdAndLanguageId(translation.getDocument().getEntityId(), translation.getLanguage().getEntityId());
-
+        Optional<Translation> opt = findByKey(translation.key());
         if (opt.isEmpty()) {
             unpredictableError("Translation save error during searching.");
         }

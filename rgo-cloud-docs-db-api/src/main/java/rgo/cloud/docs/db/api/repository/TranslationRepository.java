@@ -1,6 +1,7 @@
 package rgo.cloud.docs.db.api.repository;
 
 import rgo.cloud.docs.db.api.entity.Translation;
+import rgo.cloud.docs.db.api.entity.TranslationKey;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,13 +13,13 @@ public interface TranslationRepository {
 
     List<Translation> findByClassificationId(Long classificationId);
 
-    Optional<Translation> findByDocumentIdAndLanguageId(Long documentId, Long languageId);
+    Optional<Translation> findByKey(TranslationKey key);
 
-    Optional<Translation> findByDocumentIdAndLanguageIdWithData(Long documentId, Long languageId);
+    Optional<Translation> findByKeyWithData(TranslationKey key);
 
     boolean exists(Long entityId);
 
-    boolean exists(Long documentId, Long languageId);
+    boolean exists(TranslationKey key);
 
     Translation save(Translation translation);
 

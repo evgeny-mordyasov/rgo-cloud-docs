@@ -291,7 +291,7 @@ public class FileRestControllerValidateTest extends CommonTest {
     }
 
     @Test
-    public void deleteByDocumentIdAndLanguageId_documentIdIsNotPositive() throws Exception {
+    public void deleteByKey_documentIdIsNotPositive() throws Exception {
         long documentId = -1L;
         long languageId = 1L;
         String errorMessage = "The documentId is not positive.";
@@ -303,7 +303,7 @@ public class FileRestControllerValidateTest extends CommonTest {
     }
 
     @Test
-    public void deleteByDocumentIdAndLanguageId_languageIdIsNotPositive() throws Exception {
+    public void deleteByKey_languageIdIsNotPositive() throws Exception {
         long documentId = 1L;
         long languageId = -1L;
         String errorMessage = "The languageId is not positive.";

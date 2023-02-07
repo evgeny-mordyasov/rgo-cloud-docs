@@ -57,7 +57,6 @@ public class ReadingDocumentRepositoryTest extends CommonTest {
 
         ReadingDocument saved = readingDocumentRepository.save(created);
 
-        assertEquals(created.getDocumentId(), saved.getDocumentId());
-        assertEquals(created.getLanguageId(), saved.getLanguageId());
+        assertEquals(created.getKey(), saved.getKey());
     }
 }

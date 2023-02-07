@@ -36,10 +36,10 @@ public final class FileFacadeConverter {
     public static Translation convert(FilePatchRequest rq) throws IOException {
         return Translation.builder()
                 .document(Document.builder()
-                        .entityId(rq.getDocumentId())
+                        .entityId(rq.getKey().getDocumentId())
                         .build())
                 .language(Language.builder()
-                        .entityId(rq.getLanguageId())
+                        .entityId(rq.getKey().getLanguageId())
                         .build())
                 .data(rq.getFile().getInputStream().readAllBytes())
                 .build();

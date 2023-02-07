@@ -3,6 +3,7 @@ package rgo.cloud.docs.boot.service;
 import lombok.extern.slf4j.Slf4j;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.common.api.exception.ViolatesConstraintException;
+import rgo.cloud.docs.db.api.entity.TranslationKey;
 import rgo.cloud.docs.db.api.repository.TranslationRepository;
 import rgo.cloud.docs.db.api.entity.Translation;
 
@@ -29,12 +30,12 @@ public class TranslationService {
         return repository.findByClassificationId(classificationId);
     }
 
-    public Optional<Translation> findByDocumentIdAndLanguageId(Long documentId, Long languageId) {
-        return repository.findByDocumentIdAndLanguageId(documentId, languageId);
+    public Optional<Translation> findByKey(TranslationKey key) {
+        return repository.findByKey(key);
     }
 
-    public Optional<Translation> findByDocumentIdAndLanguageIdWithData(Long documentId, Long languageId) {
-        return repository.findByDocumentIdAndLanguageIdWithData(documentId, languageId);
+    public Optional<Translation> findByKeyWithData(TranslationKey key) {
+        return repository.findByKeyWithData(key);
     }
 
     public Translation save(Translation tr) {
@@ -48,7 +49,7 @@ public class TranslationService {
     }
 
     private void checkForDuplicate(Translation tr) {
-        if (repository.exists(tr.getDocument().getEntityId(), tr.getLanguage().getEntityId())) {
+        if (repository.exists(tr.key())) {
             String errorMsg = "The translation by documentId and languageId already exists.";
             log.error(errorMsg);
             throw new ViolatesConstraintException(errorMsg);

@@ -51,7 +51,7 @@ public class FileFacadeDecorator {
     }
 
     public FileResource load(FileGetResourceRequest rq) {
-        return facade.load(rq.getDocumentId(), rq.getLanguageId());
+        return facade.load(rq.getKey());
     }
 
     @Transactional
@@ -72,8 +72,8 @@ public class FileFacadeDecorator {
     }
 
     @Transactional
-    public Response deleteByDocumentIdAndLanguageId(FileDeleteByDocumentIdAndLanguageIdRequest rq) {
-        facade.deleteByDocumentIdAndLanguageId(rq.getDocumentId(), rq.getLanguageId());
+    public Response deleteByKey(FileDeleteByKeyRequest rq) {
+        facade.deleteByKey(rq.getKey());
         return FileDeleteResponse.success();
     }
 }

@@ -8,11 +8,8 @@ import rgo.cloud.docs.boot.service.TranslationService;
 import rgo.cloud.docs.boot.service.DocumentService;
 import rgo.cloud.docs.boot.service.LanguageService;
 import rgo.cloud.docs.boot.service.ReadingDocumentService;
+import rgo.cloud.docs.db.api.entity.*;
 import rgo.cloud.docs.model.facade.FileDto;
-import rgo.cloud.docs.db.api.entity.Document;
-import rgo.cloud.docs.db.api.entity.Translation;
-import rgo.cloud.docs.db.api.entity.Language;
-import rgo.cloud.docs.db.api.entity.ReadingDocument;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -84,8 +81,8 @@ public class FileFacade {
         return allLanguages;
     }
 
-    public FileResource load(Long documentId, Long languageId) {
-        Optional<Translation> opt = translationService.findByDocumentIdAndLanguageIdWithData(documentId, languageId);
+    public FileResource load(TranslationKey key) {
+        Optional<Translation> opt = translationService.findByKeyWithData(key);
 
         if (opt.isEmpty()) {
             String errorMsg = "The resource by documentId and languageId not found.";
@@ -93,10 +90,7 @@ public class FileFacade {
             throw new EntityNotFoundException(errorMsg);
         }
 
-        readingDocumentService.save(ReadingDocument.builder()
-                .documentId(documentId)
-                .languageId(languageId)
-                .build());
+        readingDocumentService.save(ReadingDocument.builder().key(key).build());
 
         return FileResource.builder()
                 .withData(new ByteArrayResource(opt.get().getData()))
@@ -134,8 +128,8 @@ public class FileFacade {
         documentService.deleteById(documentId);
    }
 
-   public void deleteByDocumentIdAndLanguageId(Long documentId, Long languageId) {
-        List<Translation> translations = translationService.findByDocumentId(documentId);
+   public void deleteByKey(TranslationKey key) {
+        List<Translation> translations = translationService.findByDocumentId(key.getDocumentId());
 
         if (translations.isEmpty()) {
             String errorMsg = "The translation by documentId not found.";
@@ -144,9 +138,9 @@ public class FileFacade {
         }
 
         if (translations.size() == 1) {
-            documentService.deleteById(documentId);
+            documentService.deleteById(key.getDocumentId());
         } else {
-            Optional<Translation> opt = translationService.findByDocumentIdAndLanguageId(documentId, languageId);
+            Optional<Translation> opt = translationService.findByKey(key);
             if (opt.isEmpty()) {
                 unpredictableError("Error searching for the translation while deleting the translation.");
             }

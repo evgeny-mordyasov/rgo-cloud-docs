@@ -2,6 +2,7 @@ package rgo.cloud.docs.boot.storage.repository;
 
 import rgo.cloud.common.spring.storage.DbTxManager;
 import rgo.cloud.docs.db.api.entity.Translation;
+import rgo.cloud.docs.db.api.entity.TranslationKey;
 import rgo.cloud.docs.db.api.repository.TranslationRepository;
 
 import java.util.List;
@@ -32,13 +33,13 @@ public class TxTranslationRepositoryDecorator implements TranslationRepository {
     }
 
     @Override
-    public Optional<Translation> findByDocumentIdAndLanguageId(Long documentId, Long languageId) {
-        return tx.tx(() -> delegate.findByDocumentIdAndLanguageId(documentId, languageId));
+    public Optional<Translation> findByKey(TranslationKey key) {
+        return tx.tx(() -> delegate.findByKey(key));
     }
 
     @Override
-    public Optional<Translation> findByDocumentIdAndLanguageIdWithData(Long documentId, Long languageId) {
-        return tx.tx(() -> delegate.findByDocumentIdAndLanguageIdWithData(documentId, languageId));
+    public Optional<Translation> findByKeyWithData(TranslationKey key) {
+        return tx.tx(() -> delegate.findByKeyWithData(key));
     }
 
     @Override
@@ -47,8 +48,8 @@ public class TxTranslationRepositoryDecorator implements TranslationRepository {
     }
 
     @Override
-    public boolean exists(Long documentId, Long languageId) {
-        return tx.tx(() -> delegate.exists(documentId, languageId));
+    public boolean exists(TranslationKey key) {
+        return tx.tx(() -> delegate.exists(key));
     }
 
     @Override

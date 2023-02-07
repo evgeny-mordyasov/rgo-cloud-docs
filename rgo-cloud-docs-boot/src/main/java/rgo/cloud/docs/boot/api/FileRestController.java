@@ -8,7 +8,15 @@ import org.springframework.web.multipart.MultipartFile;
 import rgo.cloud.common.api.rest.Response;
 import rgo.cloud.docs.boot.api.decorator.FileFacadeDecorator;
 import rgo.cloud.docs.boot.facade.FileResource;
-import rgo.cloud.docs.rest.api.file.request.*;
+import rgo.cloud.docs.db.api.entity.TranslationKey;
+import rgo.cloud.docs.rest.api.file.request.FileGetByDocumentIdRequest;
+import rgo.cloud.docs.rest.api.file.request.FileGetByClassificationIdRequest;
+import rgo.cloud.docs.rest.api.file.request.FileGetFreeLanguagesByDocumentIdRequest;
+import rgo.cloud.docs.rest.api.file.request.FileGetResourceRequest;
+import rgo.cloud.docs.rest.api.file.request.FileSaveRequest;
+import rgo.cloud.docs.rest.api.file.request.FilePatchRequest;
+import rgo.cloud.docs.rest.api.file.request.FileDeleteByKeyRequest;
+import rgo.cloud.docs.rest.api.file.request.FileDeleteByDocumentIdRequest;
 import rgo.cloud.security.config.util.Endpoint;
 
 import java.util.Optional;
@@ -51,7 +59,11 @@ public class FileRestController {
     public ResponseEntity<?> findResource(@RequestParam(name = "documentId") Long documentId,
                                           @RequestParam(name = "languageId") Long languageId) {
         try {
-            FileResource resource = service.load(new FileGetResourceRequest(documentId, languageId));
+            TranslationKey key = TranslationKey.builder()
+                    .documentId(documentId)
+                    .languageId(languageId)
+                    .build();
+            FileResource resource = service.load(new FileGetResourceRequest(key));
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFullFileName() + "\"")
@@ -89,8 +101,10 @@ public class FileRestController {
             try {
                 FilePatchRequest rq = FilePatchRequest.builder()
                         .file(convert(file))
-                        .documentId(documentId)
-                        .languageId(languageId)
+                        .key(TranslationKey.builder()
+                                .documentId(documentId)
+                                .languageId(languageId)
+                                .build())
                         .build();
 
                 return service.patch(rq);
@@ -101,10 +115,14 @@ public class FileRestController {
     }
 
     @DeleteMapping(produces = JSON)
-    public Response deleteByDocumentIdAndLanguageId(@RequestParam(name = "documentId") Long documentId,
-                                                    @RequestParam(name = "languageId") Long languageId) {
-        return execute(() -> service.deleteByDocumentIdAndLanguageId(
-                new FileDeleteByDocumentIdAndLanguageIdRequest(documentId, languageId)));
+    public Response deleteByKey(@RequestParam(name = "documentId") Long documentId,
+                                @RequestParam(name = "languageId") Long languageId) {
+        TranslationKey key = TranslationKey.builder()
+                .documentId(documentId)
+                .languageId(languageId)
+                .build();
+
+        return execute(() -> service.deleteByKey(new FileDeleteByKeyRequest(key)));
     }
 
     @DeleteMapping(value = Endpoint.ENTITY_ID_VARIABLE, produces = JSON)

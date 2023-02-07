@@ -28,8 +28,8 @@ public class PostgresReadingDocumentRepository implements ReadingDocumentReposit
     @Override
     public ReadingDocument save(ReadingDocument rd) {
         MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
-                "document_id", rd.getDocumentId(),
-                "language_id", rd.getLanguageId()));
+                "document_id", rd.getKey().getDocumentId(),
+                "language_id", rd.getKey().getLanguageId()));
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int result = jdbc.update(ReadingDocumentQuery.save(), params, keyHolder, new String[]{"entity_id"});

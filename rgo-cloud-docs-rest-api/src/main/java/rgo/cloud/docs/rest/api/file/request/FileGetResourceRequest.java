@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import rgo.cloud.common.api.rest.Request;
+import rgo.cloud.docs.db.api.entity.TranslationKey;
 
 import static rgo.cloud.common.api.util.ValidatorUtil.errorObjectId;
 import static rgo.cloud.common.api.util.ValidatorUtil.finish;
@@ -12,13 +13,12 @@ import static rgo.cloud.common.api.util.ValidatorUtil.finish;
 @Getter
 @ToString
 public class FileGetResourceRequest implements Request {
-    private final Long documentId;
-    private final Long languageId;
+    private final TranslationKey key;
 
     @Override
     public void validate() {
-        errorObjectId(documentId, "documentId");
-        errorObjectId(languageId, "languageId");
+        errorObjectId(key.getDocumentId(), "documentId");
+        errorObjectId(key.getLanguageId(), "languageId");
         finish();
     }
 }

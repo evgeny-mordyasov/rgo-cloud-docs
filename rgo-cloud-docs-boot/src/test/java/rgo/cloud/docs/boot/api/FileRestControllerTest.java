@@ -19,6 +19,7 @@ import rgo.cloud.docs.model.facade.FileDto;
 import rgo.cloud.docs.db.api.entity.Classification;
 import rgo.cloud.docs.db.api.entity.Document;
 import rgo.cloud.docs.db.api.entity.Translation;
+import rgo.cloud.docs.db.api.entity.TranslationKey;
 import rgo.cloud.docs.db.api.entity.Language;
 import rgo.cloud.security.config.util.Endpoint;
 
@@ -616,7 +617,7 @@ public class FileRestControllerTest extends CommonTest {
     }
 
     @Test
-    public void deleteByDocumentIdAndLanguageId_notFound() throws Exception {
+    public void deleteByKey_notFound() throws Exception {
         long fakeDocumentId = generateId();
         long fakeLanguageId = generateId();
 
@@ -629,7 +630,7 @@ public class FileRestControllerTest extends CommonTest {
     }
 
     @Test
-    public void deleteByDocumentIdAndLanguageId() throws Exception {
+    public void deleteByKey() throws Exception {
         Language savedLanguage = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
 
@@ -642,7 +643,11 @@ public class FileRestControllerTest extends CommonTest {
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.description", nullValue()));
 
-        Optional<Translation> opt1 = translationService.findByDocumentIdAndLanguageId(savedFile.getDocument().getEntityId(), savedLanguage.getEntityId());
+        TranslationKey key = TranslationKey.builder()
+                .documentId(savedFile.getDocument().getEntityId())
+                .languageId(savedLanguage.getEntityId())
+                .build();
+        Optional<Translation> opt1 = translationService.findByKey(key);
         assertTrue(opt1.isEmpty());
 
         Optional<Document> opt2 = documentService.findById(savedFile.getDocument().getEntityId());
@@ -650,7 +655,7 @@ public class FileRestControllerTest extends CommonTest {
     }
 
     @Test
-    public void deleteByDocumentIdAndLanguageId_twoLanguages() throws Exception {
+    public void deleteByKey_twoLanguages() throws Exception {
         Language savedLanguage1 = languageRepository.save(createRandomLanguage());
         Language savedLanguage2 = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
@@ -665,7 +670,11 @@ public class FileRestControllerTest extends CommonTest {
                 .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.description", nullValue()));
 
-        Optional<Translation> opt = translationService.findByDocumentIdAndLanguageId(patchFile.getDocument().getEntityId(), savedLanguage1.getEntityId());
+        TranslationKey key = TranslationKey.builder()
+                .documentId(patchFile.getDocument().getEntityId())
+                .languageId(savedLanguage1.getEntityId())
+                .build();
+        Optional<Translation> opt = translationService.findByKey(key);
         assertTrue(opt.isEmpty());
 
         List<Translation> list = translationService.findByDocumentId(patchFile.getDocument().getEntityId());

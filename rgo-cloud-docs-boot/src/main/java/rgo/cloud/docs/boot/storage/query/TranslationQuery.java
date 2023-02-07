@@ -23,7 +23,7 @@ public final class TranslationQuery {
                 .replace(WHERE_MODIFIER, where);
     }
 
-    public static String findByDocumentIdAndLanguageId() {
+    public static String findByKey() {
         String where =
                 "WHERE d.entity_id = :document_id" +
                 "      AND l.entity_id = :language_id";
@@ -31,7 +31,7 @@ public final class TranslationQuery {
                 .replace(WHERE_MODIFIER, where);
     }
 
-    public static String findByDocumentIdAndLanguageIdWithData() {
+    public static String findByKeyWithData() {
         return  "SELECT tr.data, " +
                 "       d.full_name AS document_full_name " +
                 "FROM " + TABLE_NAME + " AS tr " +

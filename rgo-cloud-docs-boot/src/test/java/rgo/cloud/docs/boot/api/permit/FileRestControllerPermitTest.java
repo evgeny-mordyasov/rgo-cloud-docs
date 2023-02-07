@@ -299,7 +299,7 @@ public class FileRestControllerPermitTest extends CommonTest {
     }
 
     @Test
-    public void deleteByDocumentIdAndLanguageId_forbidden_anonymous() throws Exception {
+    public void deleteByKey_forbidden_anonymous() throws Exception {
         long documentId = generateId();
         long languageId = generateId();
 
@@ -309,7 +309,7 @@ public class FileRestControllerPermitTest extends CommonTest {
     }
 
     @Test
-    public void deleteByDocumentIdAndLanguageId_forbidden_client() throws Exception {
+    public void deleteByKey_forbidden_client() throws Exception {
         String jwt = createJwt(Role.USER);
         long documentId = generateId();
         long languageId = generateId();
@@ -321,7 +321,7 @@ public class FileRestControllerPermitTest extends CommonTest {
     }
 
     @Test
-    public void deleteByDocumentIdAndLanguageId_success_admin() throws Exception {
+    public void deleteByKey_success_admin() throws Exception {
         String jwt = createJwt(Role.ADMIN);
         long documentId = generateId();
         long languageId = generateId();
