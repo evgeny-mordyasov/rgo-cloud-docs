@@ -16,7 +16,7 @@ public final class FileFacadeConverter {
     private FileFacadeConverter() {
     }
 
-    public static Translation convert(FileSaveRequest rq) throws IOException {
+    public static Translation convert(FileSaveRequest rq) {
         return Translation.builder()
                 .document(Document.builder()
                         .fullName(rq.getFile().getFullFileName())
@@ -29,11 +29,11 @@ public final class FileFacadeConverter {
                 .language(Language.builder()
                         .entityId(rq.getLanguageId())
                         .build())
-                .data(rq.getFile().getInputStream().readAllBytes())
+                .data(rq.getFile().getData())
                 .build();
     }
 
-    public static Translation convert(FilePatchRequest rq) throws IOException {
+    public static Translation convert(FilePatchRequest rq) {
         return Translation.builder()
                 .document(Document.builder()
                         .entityId(rq.getKey().getDocumentId())
@@ -41,18 +41,18 @@ public final class FileFacadeConverter {
                 .language(Language.builder()
                         .entityId(rq.getKey().getLanguageId())
                         .build())
-                .data(rq.getFile().getInputStream().readAllBytes())
+                .data(rq.getFile().getData())
                 .build();
     }
 
     public static MultipartFileDto convert(MultipartFile file) throws IOException {
         return MultipartFileDto.builder()
-                .withFullFileName(file.getOriginalFilename())
-                .withFileName(FileUtil.getFileName(file.getOriginalFilename()))
-                .withExtension(FileUtil.getFileExtension(file.getOriginalFilename()))
-                .withInputStream(file.getInputStream())
-                .withIsEmpty(file.isEmpty())
-                .withSize(file.getSize())
+                .fullFileName(file.getOriginalFilename())
+                .fileName(FileUtil.getFileName(file.getOriginalFilename()))
+                .extension(FileUtil.getFileExtension(file.getOriginalFilename()))
+                .data(file.getInputStream().readAllBytes())
+                .isEmpty(file.isEmpty())
+                .size(file.getSize())
                 .build();
     }
 }

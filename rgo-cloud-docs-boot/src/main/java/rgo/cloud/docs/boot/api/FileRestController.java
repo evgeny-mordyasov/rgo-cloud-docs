@@ -5,10 +5,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.api.rest.Response;
 import rgo.cloud.docs.boot.api.decorator.FileFacadeDecorator;
 import rgo.cloud.docs.boot.facade.FileResource;
 import rgo.cloud.docs.db.api.entity.TranslationKey;
+import rgo.cloud.docs.model.facade.MultipartFileDto;
 import rgo.cloud.docs.rest.api.file.request.FileGetByDocumentIdRequest;
 import rgo.cloud.docs.rest.api.file.request.FileGetByClassificationIdRequest;
 import rgo.cloud.docs.rest.api.file.request.FileGetFreeLanguagesByDocumentIdRequest;
@@ -19,6 +21,7 @@ import rgo.cloud.docs.rest.api.file.request.FileDeleteByKeyRequest;
 import rgo.cloud.docs.rest.api.file.request.FileDeleteByDocumentIdRequest;
 import rgo.cloud.security.config.util.Endpoint;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import static rgo.cloud.common.api.rest.BaseErrorResponse.handleException;
@@ -79,17 +82,13 @@ public class FileRestController {
                          @RequestParam("languageId") Long languageId,
                          @RequestParam("classificationId") Long classificationId) {
         return execute(() -> {
-            try {
-                FileSaveRequest rq = FileSaveRequest.builder()
-                        .file(convert(file))
-                        .languageId(languageId)
-                        .classificationId(classificationId)
-                        .build();
+            FileSaveRequest rq = FileSaveRequest.builder()
+                    .file(readFile(file))
+                    .languageId(languageId)
+                    .classificationId(classificationId)
+                    .build();
 
-                return service.save(rq);
-            } catch (Exception e) {
-                return handleException(e);
-            }
+            return service.save(rq);
         });
     }
 
@@ -98,19 +97,15 @@ public class FileRestController {
                           @RequestParam("documentId") Long documentId,
                           @RequestParam("languageId") Long languageId) {
         return execute(() -> {
-            try {
-                FilePatchRequest rq = FilePatchRequest.builder()
-                        .file(convert(file))
-                        .key(TranslationKey.builder()
-                                .documentId(documentId)
-                                .languageId(languageId)
-                                .build())
-                        .build();
+            FilePatchRequest rq = FilePatchRequest.builder()
+                    .file(readFile(file))
+                    .key(TranslationKey.builder()
+                            .documentId(documentId)
+                            .languageId(languageId)
+                            .build())
+                    .build();
 
-                return service.patch(rq);
-            } catch (Exception e) {
-                return handleException(e);
-            }
+            return service.patch(rq);
         });
     }
 
@@ -128,5 +123,13 @@ public class FileRestController {
     @DeleteMapping(value = Endpoint.ENTITY_ID_VARIABLE, produces = JSON)
     public Response deleteByDocumentId(@PathVariable Long entityId) {
         return execute(() -> service.deleteByDocumentId(new FileDeleteByDocumentIdRequest(entityId)));
+    }
+
+    private MultipartFileDto readFile(MultipartFile file) {
+        try {
+            return convert(file);
+        } catch (IOException e) {
+            throw new UnpredictableException("Failed to read file.");
+        }
     }
 }

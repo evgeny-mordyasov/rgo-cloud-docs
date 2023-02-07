@@ -11,7 +11,6 @@ import rgo.cloud.docs.db.api.entity.Language;
 import rgo.cloud.docs.rest.api.file.request.*;
 import rgo.cloud.docs.rest.api.file.response.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,13 +52,13 @@ public class FileFacadeDecorator {
     }
 
     @Transactional
-    public Response save(FileSaveRequest rq) throws IOException {
+    public Response save(FileSaveRequest rq) {
         FileDto saved = facade.save(convert(rq));
         return FileModifyResponse.success(saved);
     }
 
     @Transactional
-    public Response patch(FilePatchRequest rq) throws IOException {
+    public Response patch(FilePatchRequest rq) {
         FileDto updated = facade.patch(convert(rq));
         return FileModifyResponse.success(updated);
     }
