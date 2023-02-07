@@ -35,7 +35,6 @@ public class FileFacadeDecorator {
         return FileGetListResponse.success(list);
     }
 
-    @Transactional
     public Response findByDocumentId(FileGetByDocumentIdRequest rq) {
         Optional<FileDto> opt = facade.findByDocumentId(rq.getDocumentId());
 
@@ -44,7 +43,6 @@ public class FileFacadeDecorator {
                 : new EmptySuccessfulResponse();
     }
 
-    @Transactional
     public Response getFreeLanguages(FileGetFreeLanguagesByDocumentIdRequest rq) {
         List<Language> languages = facade.getFreeLanguages(rq.getDocumentId());
         return FileGetFreeLanguagesByDocumentIdResponse.success(languages);
