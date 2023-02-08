@@ -13,6 +13,7 @@ import rgo.cloud.docs.db.api.entity.Classification;
 import rgo.cloud.docs.db.api.entity.Document;
 import rgo.cloud.docs.db.api.entity.Language;
 import rgo.cloud.docs.db.api.entity.ReadingDocument;
+import rgo.cloud.docs.service.ReadingDocumentService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static rgo.cloud.docs.boot.EntityGenerator.*;

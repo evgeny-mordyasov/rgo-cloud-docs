@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>ru.gold.ordance</groupId>
-            <artifactId>rgo-cloud-docs-db</artifactId>
+            <artifactId>rgo-cloud-docs-service</artifactId>
         </dependency>
         <!-- self module -->
 

@@ -13,6 +13,7 @@ import rgo.cloud.docs.db.api.repository.ClassificationRepository;
 import rgo.cloud.docs.db.api.repository.TranslationRepository;
 import rgo.cloud.docs.db.api.repository.DocumentRepository;
 import rgo.cloud.docs.db.api.repository.LanguageRepository;
+import rgo.cloud.docs.service.TranslationService;
 
 import java.util.List;
 import java.util.Optional;

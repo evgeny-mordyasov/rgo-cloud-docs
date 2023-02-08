@@ -4,10 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import one.util.streamex.StreamEx;
 import org.springframework.core.io.ByteArrayResource;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
-import rgo.cloud.docs.boot.service.TranslationService;
-import rgo.cloud.docs.boot.service.DocumentService;
-import rgo.cloud.docs.boot.service.LanguageService;
-import rgo.cloud.docs.boot.service.ReadingDocumentService;
+import rgo.cloud.docs.service.TranslationService;
+import rgo.cloud.docs.service.DocumentService;
+import rgo.cloud.docs.service.LanguageService;
+import rgo.cloud.docs.service.ReadingDocumentService;
 import rgo.cloud.docs.db.api.entity.*;
 import rgo.cloud.docs.model.facade.FileDto;
 

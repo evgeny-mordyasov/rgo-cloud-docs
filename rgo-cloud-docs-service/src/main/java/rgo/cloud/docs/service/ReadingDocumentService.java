@@ -1,4 +1,4 @@
-package rgo.cloud.docs.boot.service;
+package rgo.cloud.docs.service;
 
 import rgo.cloud.docs.db.api.repository.ReadingDocumentRepository;
 import rgo.cloud.docs.db.api.entity.ReadingDocument;

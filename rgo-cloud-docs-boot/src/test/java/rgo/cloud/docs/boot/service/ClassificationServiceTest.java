@@ -10,6 +10,7 @@ import rgo.cloud.common.api.exception.ViolatesConstraintException;
 import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.db.api.repository.ClassificationRepository;
 import rgo.cloud.docs.db.api.entity.Classification;
+import rgo.cloud.docs.service.ClassificationService;
 
 import java.util.List;
 import java.util.Optional;

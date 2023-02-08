@@ -1,4 +1,4 @@
-package rgo.cloud.docs.boot.service;
+package rgo.cloud.docs.service;
 
 import lombok.extern.slf4j.Slf4j;
 import rgo.cloud.common.api.exception.EntityNotFoundException;

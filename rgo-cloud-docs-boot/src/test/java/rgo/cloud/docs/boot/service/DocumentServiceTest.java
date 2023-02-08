@@ -11,6 +11,7 @@ import rgo.cloud.docs.db.api.repository.ClassificationRepository;
 import rgo.cloud.docs.db.api.repository.DocumentRepository;
 import rgo.cloud.docs.db.api.entity.Classification;
 import rgo.cloud.docs.db.api.entity.Document;
+import rgo.cloud.docs.service.DocumentService;
 
 import java.util.Optional;
 
