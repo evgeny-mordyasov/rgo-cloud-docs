@@ -1,4 +1,4 @@
-package rgo.cloud.docs.boot.config.properties;
+package rgo.cloud.docs.db.config.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
