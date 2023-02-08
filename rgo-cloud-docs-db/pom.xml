@@ -10,7 +10,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rgo-cloud-docs-rest-api</artifactId>
+    <artifactId>rgo-cloud-docs-db</artifactId>
 
     <dependencies>
         <!-- self-modules -->
@@ -19,5 +19,19 @@
             <artifactId>rgo-cloud-docs-db-api</artifactId>
         </dependency>
         <!-- self-modules -->
+
+        <!-- rgo-cloud -->
+        <dependency>
+            <groupId>ru.gold.ordance</groupId>
+            <artifactId>rgo-cloud-common-spring</artifactId>
+        </dependency>
+        <!-- rgo-cloud -->
+
+        <!-- spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jdbc</artifactId>
+        </dependency>
+        <!-- spring -->
     </dependencies>
 </project>

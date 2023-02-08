@@ -15,11 +15,12 @@ import rgo.cloud.docs.db.api.repository.TranslationRepository;
 import rgo.cloud.docs.db.api.repository.DocumentRepository;
 import rgo.cloud.docs.db.api.repository.LanguageRepository;
 import rgo.cloud.docs.db.api.repository.ReadingDocumentRepository;
+import rgo.cloud.docs.db.config.PersistenceConfig;
 import rgo.cloud.security.config.SecurityConfig;
 
 @Configuration
 @ConfigurationPropertiesScan
-@Import(value = { SecurityConfig.class, AspectConfig.class })
+@Import(value = { SecurityConfig.class, AspectConfig.class, PersistenceConfig.class})
 public class ApplicationConfig {
 
     @Bean

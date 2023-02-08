@@ -26,13 +26,13 @@
             <groupId>ru.gold.ordance</groupId>
             <artifactId>rgo-cloud-docs-rest-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ru.gold.ordance</groupId>
+            <artifactId>rgo-cloud-docs-db</artifactId>
+        </dependency>
         <!-- self module -->
 
         <!-- rgo-cloud -->
-        <dependency>
-            <groupId>ru.gold.ordance</groupId>
-            <artifactId>rgo-cloud-common-spring</artifactId>
-        </dependency>
         <dependency>
             <groupId>ru.gold.ordance</groupId>
             <artifactId>rgo-cloud-security-config</artifactId>
