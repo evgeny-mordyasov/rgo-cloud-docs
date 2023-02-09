@@ -1,5 +1,6 @@
 package rgo.cloud.docs.boot.api;
 
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +72,7 @@ public class FileRestController {
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFullFileName() + "\"")
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .body(resource.getData());
+                    .body(new ByteArrayResource(resource.getData()));
         } catch (Exception e) {
             return ResponseEntity.of(Optional.of(handleException(e)));
         }

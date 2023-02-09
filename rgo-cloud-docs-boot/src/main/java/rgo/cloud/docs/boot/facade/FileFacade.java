@@ -93,7 +93,7 @@ public class FileFacade {
         readingDocumentService.save(ReadingDocument.builder().key(key).build());
 
         return FileResource.builder()
-                .withData(new ByteArrayResource(opt.get().getData()))
+                .withData(opt.get().getData())
                 .withFullFileName(opt.get().getDocument().getFullName())
                 .build();
     }
