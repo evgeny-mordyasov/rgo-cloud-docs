@@ -16,7 +16,7 @@ import rgo.cloud.docs.db.api.entity.Language;
 import java.util.List;
 import java.util.Optional;
 
-import static rgo.cloud.docs.boot.api.decorator.converter.LanguageConverter.convert;
+import static rgo.cloud.docs.rest.converter.LanguageConverter.convert;
 
 @Validate
 public class LanguageServiceDecorator {

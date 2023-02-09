@@ -10,6 +10,7 @@ import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.api.rest.Response;
 import rgo.cloud.docs.boot.api.decorator.FileFacadeDecorator;
 import rgo.cloud.docs.boot.facade.FileResource;
+import rgo.cloud.docs.boot.util.FileUtil;
 import rgo.cloud.docs.db.api.entity.TranslationKey;
 import rgo.cloud.docs.model.facade.MultipartFileDto;
 import rgo.cloud.docs.rest.api.file.request.FileGetByDocumentIdRequest;
@@ -28,7 +29,6 @@ import java.util.Optional;
 import static rgo.cloud.common.api.rest.BaseErrorResponse.handleException;
 import static rgo.cloud.common.api.util.RequestUtil.JSON;
 import static rgo.cloud.common.api.util.RequestUtil.execute;
-import static rgo.cloud.docs.boot.api.decorator.converter.FileFacadeConverter.convert;
 
 @RestController
 @RequestMapping(Endpoint.File.BASE_URL)
@@ -132,5 +132,16 @@ public class FileRestController {
         } catch (IOException e) {
             throw new UnpredictableException("Failed to read file.");
         }
+    }
+
+    private static MultipartFileDto convert(MultipartFile file) throws IOException {
+        return MultipartFileDto.builder()
+                .fullFileName(file.getOriginalFilename())
+                .fileName(FileUtil.getFileName(file.getOriginalFilename()))
+                .extension(FileUtil.getFileExtension(file.getOriginalFilename()))
+                .data(file.getInputStream().readAllBytes())
+                .isEmpty(file.isEmpty())
+                .size(file.getSize())
+                .build();
     }
 }

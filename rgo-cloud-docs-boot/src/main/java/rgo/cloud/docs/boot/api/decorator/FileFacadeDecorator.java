@@ -14,7 +14,7 @@ import rgo.cloud.docs.rest.api.file.response.*;
 import java.util.List;
 import java.util.Optional;
 
-import static rgo.cloud.docs.boot.api.decorator.converter.FileFacadeConverter.convert;
+import static rgo.cloud.docs.rest.converter.FileFacadeConverter.convert;
 
 @Validate
 public class FileFacadeDecorator {

@@ -1,4 +1,4 @@
-package rgo.cloud.docs.boot.api.decorator.converter;
+package rgo.cloud.docs.rest.converter;
 
 import rgo.cloud.docs.rest.api.language.request.LanguageSaveRequest;
 import rgo.cloud.docs.rest.api.language.request.LanguageUpdateRequest;

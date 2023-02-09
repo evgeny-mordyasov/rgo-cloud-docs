@@ -14,7 +14,7 @@ import rgo.cloud.docs.db.api.entity.Classification;
 import java.util.List;
 import java.util.Optional;
 
-import static rgo.cloud.docs.boot.api.decorator.converter.ClassificationConverter.convert;
+import static rgo.cloud.docs.rest.converter.ClassificationConverter.convert;
 
 @Validate
 public class ClassificationServiceDecorator {
