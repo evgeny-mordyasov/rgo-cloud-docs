@@ -1,8 +1,7 @@
-package rgo.cloud.docs.boot.facade;
+package rgo.cloud.docs.facade;
 
-import rgo.cloud.security.config.util.Endpoint;
-import rgo.cloud.docs.model.facade.FileDto;
-import rgo.cloud.docs.model.facade.ResourceDto;
+import rgo.cloud.docs.facade.api.FileDto;
+import rgo.cloud.docs.facade.api.ResourceDto;
 import rgo.cloud.docs.db.api.entity.Classification;
 import rgo.cloud.docs.db.api.entity.Document;
 import rgo.cloud.docs.db.api.entity.Translation;
@@ -14,8 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class FileFacadeMapper {
-    public static final String RESOURCE = "http://localhost:8091" +
-            Endpoint.File.BASE_URL + Endpoint.File.RESOURCE + "?documentId=%s&languageId=%s";
+    private static final String RESOURCE = "http://localhost:8091/api/v1/files/resource/search?documentId=%s&languageId=%s";
 
     private FileFacadeMapper() {
     }

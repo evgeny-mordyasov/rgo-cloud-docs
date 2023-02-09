@@ -16,6 +16,8 @@
         <module>rgo-cloud-docs-service</module>
         <module>rgo-cloud-docs-db</module>
         <module>rgo-cloud-docs-db-api</module>
+        <module>rgo-cloud-docs-facade-api</module>
+        <module>rgo-cloud-docs-facade</module>
     </modules>
 
     <properties>
@@ -49,6 +51,16 @@
             <dependency>
                 <groupId>ru.gold.ordance</groupId>
                 <artifactId>rgo-cloud-docs-rest-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-cloud-docs-facade-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-cloud-docs-facade</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -3,7 +3,7 @@ package rgo.cloud.docs.rest.api.file.request;
 import lombok.*;
 import rgo.cloud.common.api.rest.Request;
 import rgo.cloud.docs.db.api.entity.TranslationKey;
-import rgo.cloud.docs.model.facade.MultipartFileDto;
+import rgo.cloud.docs.facade.api.MultipartFileDto;
 import rgo.cloud.docs.rest.api.file.FileExtension;
 
 import static rgo.cloud.common.api.util.ValidatorUtil.*;

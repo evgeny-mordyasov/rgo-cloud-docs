@@ -1,21 +1,21 @@
-package rgo.cloud.docs.boot.facade;
+package rgo.cloud.docs.facade;
 
 import lombok.extern.slf4j.Slf4j;
 import one.util.streamex.StreamEx;
-import org.springframework.core.io.ByteArrayResource;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
+import rgo.cloud.docs.facade.api.FileResource;
 import rgo.cloud.docs.service.TranslationService;
 import rgo.cloud.docs.service.DocumentService;
 import rgo.cloud.docs.service.LanguageService;
 import rgo.cloud.docs.service.ReadingDocumentService;
 import rgo.cloud.docs.db.api.entity.*;
-import rgo.cloud.docs.model.facade.FileDto;
+import rgo.cloud.docs.facade.api.FileDto;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static rgo.cloud.common.api.util.ExceptionUtil.unpredictableError;
-import static rgo.cloud.docs.boot.facade.FileFacadeMapper.convert;
+import static rgo.cloud.docs.facade.FileFacadeMapper.convert;
 
 @Slf4j
 public class FileFacade {

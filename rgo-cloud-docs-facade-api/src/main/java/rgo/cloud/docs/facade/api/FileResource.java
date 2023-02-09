@@ -1,4 +1,4 @@
-package rgo.cloud.docs.boot.facade;
+package rgo.cloud.docs.facade.api;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,6 +8,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class FileResource {
-    private final byte[] data;
     private final String fullFileName;
+    private final byte[] data;
 }

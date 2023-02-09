@@ -8,7 +8,7 @@ import rgo.cloud.common.spring.config.AspectConfig;
 import rgo.cloud.docs.boot.api.decorator.ClassificationServiceDecorator;
 import rgo.cloud.docs.boot.api.decorator.FileFacadeDecorator;
 import rgo.cloud.docs.boot.api.decorator.LanguageServiceDecorator;
-import rgo.cloud.docs.boot.facade.FileFacade;
+import rgo.cloud.docs.facade.FileFacade;
 import rgo.cloud.docs.service.*;
 import rgo.cloud.docs.service.config.ServiceConfig;
 import rgo.cloud.security.config.SecurityConfig;

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 import rgo.cloud.common.api.rest.Response;
 import rgo.cloud.common.api.rest.Status;
-import rgo.cloud.docs.model.facade.FileDto;
+import rgo.cloud.docs.facade.api.FileDto;
 
 @Builder
 @Getter

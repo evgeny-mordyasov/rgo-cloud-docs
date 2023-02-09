@@ -9,10 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 import rgo.cloud.common.api.exception.UnpredictableException;
 import rgo.cloud.common.api.rest.Response;
 import rgo.cloud.docs.boot.api.decorator.FileFacadeDecorator;
-import rgo.cloud.docs.boot.facade.FileResource;
-import rgo.cloud.docs.boot.util.FileUtil;
+import rgo.cloud.docs.facade.api.FileResource;
+import rgo.cloud.docs.boot.utils.FileUtils;
 import rgo.cloud.docs.db.api.entity.TranslationKey;
-import rgo.cloud.docs.model.facade.MultipartFileDto;
+import rgo.cloud.docs.facade.api.MultipartFileDto;
 import rgo.cloud.docs.rest.api.file.request.FileGetByDocumentIdRequest;
 import rgo.cloud.docs.rest.api.file.request.FileGetByClassificationIdRequest;
 import rgo.cloud.docs.rest.api.file.request.FileGetFreeLanguagesByDocumentIdRequest;
@@ -137,8 +137,8 @@ public class FileRestController {
     private static MultipartFileDto convert(MultipartFile file) throws IOException {
         return MultipartFileDto.builder()
                 .fullFileName(file.getOriginalFilename())
-                .fileName(FileUtil.getFileName(file.getOriginalFilename()))
-                .extension(FileUtil.getFileExtension(file.getOriginalFilename()))
+                .fileName(FileUtils.getFileName(file.getOriginalFilename()))
+                .extension(FileUtils.getFileExtension(file.getOriginalFilename()))
                 .data(file.getInputStream().readAllBytes())
                 .isEmpty(file.isEmpty())
                 .size(file.getSize())

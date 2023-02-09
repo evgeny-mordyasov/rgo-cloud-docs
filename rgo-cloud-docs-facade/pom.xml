@@ -10,7 +10,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rgo-cloud-docs-rest-api</artifactId>
+    <artifactId>rgo-cloud-docs-facade</artifactId>
 
     <dependencies>
         <!-- self-modules -->
@@ -18,6 +18,15 @@
             <groupId>ru.gold.ordance</groupId>
             <artifactId>rgo-cloud-docs-facade-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ru.gold.ordance</groupId>
+            <artifactId>rgo-cloud-docs-service</artifactId>
+        </dependency>
         <!-- self-modules -->
+
+        <dependency>
+            <groupId>one.util</groupId>
+            <artifactId>streamex</artifactId>
+        </dependency>
     </dependencies>
 </project>

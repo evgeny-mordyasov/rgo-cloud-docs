@@ -1,7 +1,7 @@
-package rgo.cloud.docs.boot.util;
+package rgo.cloud.docs.boot.utils;
 
-public final class FileUtil {
-    private FileUtil() {
+public final class FileUtils {
+    private FileUtils() {
     }
 
     public static String getFileExtension(String fullFileName) {

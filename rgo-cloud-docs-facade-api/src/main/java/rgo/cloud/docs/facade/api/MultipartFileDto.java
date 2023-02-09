@@ -1,4 +1,4 @@
-package rgo.cloud.docs.model.facade;
+package rgo.cloud.docs.facade.api;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -10,13 +10,14 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rgo-cloud-docs-rest-api</artifactId>
+    <artifactId>rgo-cloud-docs-facade-api</artifactId>
+
 
     <dependencies>
         <!-- self-modules -->
         <dependency>
             <groupId>ru.gold.ordance</groupId>
-            <artifactId>rgo-cloud-docs-facade-api</artifactId>
+            <artifactId>rgo-cloud-docs-db-api</artifactId>
         </dependency>
         <!-- self-modules -->
     </dependencies>
