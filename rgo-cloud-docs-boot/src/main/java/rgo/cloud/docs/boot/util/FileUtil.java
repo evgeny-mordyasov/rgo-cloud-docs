@@ -5,7 +5,7 @@ public final class FileUtil {
     }
 
     public static String getFileExtension(String fullFileName) {
-        if (!fullFileName.contains(".")) {
+        if (fullFileName == null || !fullFileName.contains(".")) {
             return "";
         }
 
@@ -13,6 +13,10 @@ public final class FileUtil {
     }
 
     public static String getFileName(String fullFileName) {
+        if (fullFileName == null) {
+            return "";
+        }
+
         if (!fullFileName.contains(".")) {
             return fullFileName;
         }
