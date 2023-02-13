@@ -24,11 +24,8 @@ import rgo.cloud.docs.rest.api.file.request.FileDeleteByDocumentIdRequest;
 import rgo.cloud.security.config.util.Endpoint;
 
 import java.io.IOException;
-import java.util.Optional;
 
-import static rgo.cloud.common.api.rest.BaseErrorResponse.handleException;
-import static rgo.cloud.common.spring.util.RequestUtil.JSON;
-import static rgo.cloud.common.spring.util.RequestUtil.execute;
+import static rgo.cloud.common.spring.util.RequestUtil.*;
 
 @RestController
 @RequestMapping(Endpoint.File.BASE_URL)
@@ -74,7 +71,7 @@ public class FileRestController {
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(new ByteArrayResource(resource.getData()));
         } catch (Exception e) {
-            return ResponseEntity.of(Optional.of(handleException(e)));
+            return errorResponse(e);
         }
     }
 
