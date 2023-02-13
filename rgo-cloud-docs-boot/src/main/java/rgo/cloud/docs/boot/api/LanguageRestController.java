@@ -1,5 +1,6 @@
 package rgo.cloud.docs.boot.api;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rgo.cloud.common.api.rest.Response;
 import rgo.cloud.security.config.util.Endpoint;
@@ -9,8 +10,8 @@ import rgo.cloud.docs.rest.api.language.request.LanguageGetByNameRequest;
 import rgo.cloud.docs.rest.api.language.request.LanguageSaveRequest;
 import rgo.cloud.docs.rest.api.language.request.LanguageUpdateRequest;
 
-import static rgo.cloud.common.api.util.RequestUtil.JSON;
-import static rgo.cloud.common.api.util.RequestUtil.execute;
+import static rgo.cloud.common.spring.util.RequestUtil.JSON;
+import static rgo.cloud.common.spring.util.RequestUtil.execute;
 
 @RestController
 @RequestMapping(Endpoint.Language.BASE_URL)
@@ -22,27 +23,27 @@ public class LanguageRestController {
     }
 
     @GetMapping(produces = JSON)
-    public Response findAll() {
+    public ResponseEntity<Response> findAll() {
         return execute(service::findAll);
     }
 
     @GetMapping(value = Endpoint.ENTITY_ID_VARIABLE, produces = JSON)
-    public Response findById(@PathVariable Long entityId) {
+    public ResponseEntity<Response> findById(@PathVariable Long entityId) {
         return execute(() -> service.findById(new LanguageGetByIdRequest(entityId)));
     }
 
     @GetMapping(params = "name", produces = JSON)
-    public Response findByName(@RequestParam("name") String name) {
+    public ResponseEntity<Response> findByName(@RequestParam("name") String name) {
         return execute(() -> service.findByName(new LanguageGetByNameRequest(name)));
     }
 
     @PostMapping(consumes = JSON, produces = JSON)
-    public Response save(@RequestBody LanguageSaveRequest rq) {
+    public ResponseEntity<Response> save(@RequestBody LanguageSaveRequest rq) {
         return execute(() -> service.save(rq));
     }
 
     @PutMapping(consumes = JSON, produces = JSON)
-    public Response update(@RequestBody LanguageUpdateRequest rq) {
+    public ResponseEntity<Response> update(@RequestBody LanguageUpdateRequest rq) {
         return execute(() -> service.update(rq));
     }
 }

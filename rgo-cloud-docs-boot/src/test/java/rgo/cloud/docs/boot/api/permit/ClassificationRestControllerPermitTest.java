@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static rgo.cloud.common.api.util.JsonUtil.toJson;
-import static rgo.cloud.common.api.util.RequestUtil.JSON;
+import static rgo.cloud.common.spring.util.RequestUtil.JSON;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
 import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
 
@@ -141,14 +141,14 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
     }
 
     @Test
-    public void save_forbidden_anonymous() throws Exception {
+    public void save_unauthorized_anonymous() throws Exception {
         ClassificationSaveRequest rq = new ClassificationSaveRequest(randomString());
 
         mvc.perform(post(Endpoint.Classification.BASE_URL)
                 .content(toJson(rq))
                 .contentType(JSON))
                 .andExpect(content().contentType(JSON))
-                .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
+                .andExpect(jsonPath("$.status.code", is(StatusCode.UNAUTHORIZED.name())));
     }
 
     @Test
@@ -178,14 +178,14 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
     }
 
     @Test
-    public void update_forbidden_anonymous() throws Exception {
+    public void update_unauthorized_anonymous() throws Exception {
         ClassificationUpdateRequest rq = new ClassificationUpdateRequest(generateId(), randomString());
 
         mvc.perform(put(Endpoint.Classification.BASE_URL)
                 .content(toJson(rq))
                 .contentType(JSON))
                 .andExpect(content().contentType(JSON))
-                .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
+                .andExpect(jsonPath("$.status.code", is(StatusCode.UNAUTHORIZED.name())));
     }
 
     @Test
@@ -215,13 +215,13 @@ public class ClassificationRestControllerPermitTest extends CommonTest {
     }
 
     @Test
-    public void deleteById_forbidden_anonymous() throws Exception {
+    public void deleteById_unauthorized_anonymous() throws Exception {
         long fakeId = generateId();
 
         mvc.perform(delete(Endpoint.Classification.BASE_URL + "/" + fakeId)
                 .contentType(JSON))
                 .andExpect(content().contentType(JSON))
-                .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
+                .andExpect(jsonPath("$.status.code", is(StatusCode.UNAUTHORIZED.name())));
     }
 
     @Test

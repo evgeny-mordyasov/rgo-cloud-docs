@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static rgo.cloud.common.api.util.RequestUtil.JSON;
+import static rgo.cloud.common.spring.util.RequestUtil.JSON;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
 import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
 import static rgo.cloud.docs.boot.FileGenerator.createFile;
@@ -173,13 +173,13 @@ public class FileRestControllerPermitTest extends CommonTest {
     }
 
     @Test
-    public void findResource_forbidden_anonymous() throws Exception {
+    public void findResource_unauthorized_anonymous() throws Exception {
         long documentId = generateId();
         long languageId = generateId();
 
         mvc.perform(get(Endpoint.File.BASE_URL + Endpoint.File.RESOURCE + "?documentId=" + documentId + "&languageId=" + languageId))
                 .andExpect(content().contentType(JSON))
-                .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
+                .andExpect(jsonPath("$.status.code", is(StatusCode.UNAUTHORIZED.name())));
     }
 
     @Test
@@ -207,7 +207,7 @@ public class FileRestControllerPermitTest extends CommonTest {
     }
 
     @Test
-    public void save_forbidden_anonymous() throws Exception {
+    public void save_unauthorized_anonymous() throws Exception {
         long classificationId = generateId();
         long languageId = generateId();
         MockMultipartFile file = createFile();
@@ -217,7 +217,7 @@ public class FileRestControllerPermitTest extends CommonTest {
                 .param("languageId", Long.toString(languageId))
                 .param("classificationId", Long.toString(classificationId)))
                 .andExpect(content().contentType(JSON))
-                .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
+                .andExpect(jsonPath("$.status.code", is(StatusCode.UNAUTHORIZED.name())));
     }
 
     @Test
@@ -253,7 +253,7 @@ public class FileRestControllerPermitTest extends CommonTest {
     }
 
     @Test
-    public void patch_forbidden_anonymous() throws Exception {
+    public void patch_unauthorized_anonymous() throws Exception {
         long documentId = generateId();
         long languageId = generateId();
         MockMultipartFile file = createFile();
@@ -263,7 +263,7 @@ public class FileRestControllerPermitTest extends CommonTest {
                 .param("languageId", Long.toString(languageId))
                 .param("documentId", Long.toString(documentId)))
                 .andExpect(content().contentType(JSON))
-                .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
+                .andExpect(jsonPath("$.status.code", is(StatusCode.UNAUTHORIZED.name())));
     }
 
     @Test
@@ -299,13 +299,13 @@ public class FileRestControllerPermitTest extends CommonTest {
     }
 
     @Test
-    public void deleteByKey_forbidden_anonymous() throws Exception {
+    public void deleteByKey_unauthorized_anonymous() throws Exception {
         long documentId = generateId();
         long languageId = generateId();
 
         mvc.perform(delete(Endpoint.File.BASE_URL + "?documentId=" + documentId + "&languageId=" + languageId))
                 .andExpect(content().contentType(JSON))
-                .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
+                .andExpect(jsonPath("$.status.code", is(StatusCode.UNAUTHORIZED.name())));
     }
 
     @Test
@@ -333,12 +333,12 @@ public class FileRestControllerPermitTest extends CommonTest {
     }
 
     @Test
-    public void deleteByDocumentId_forbidden_anonymous() throws Exception {
+    public void deleteByDocumentId_unauthorized_anonymous() throws Exception {
         long documentId = generateId();
 
         mvc.perform(delete(Endpoint.File.BASE_URL + "/" + documentId))
                 .andExpect(content().contentType(JSON))
-                .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
+                .andExpect(jsonPath("$.status.code", is(StatusCode.UNAUTHORIZED.name())));
     }
 
     @Test

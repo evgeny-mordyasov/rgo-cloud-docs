@@ -27,8 +27,8 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static rgo.cloud.common.api.rest.BaseErrorResponse.handleException;
-import static rgo.cloud.common.api.util.RequestUtil.JSON;
-import static rgo.cloud.common.api.util.RequestUtil.execute;
+import static rgo.cloud.common.spring.util.RequestUtil.JSON;
+import static rgo.cloud.common.spring.util.RequestUtil.execute;
 
 @RestController
 @RequestMapping(Endpoint.File.BASE_URL)
@@ -40,22 +40,22 @@ public class FileRestController {
     }
 
     @GetMapping(produces = JSON)
-    public Response findAll() {
+    public ResponseEntity<Response> findAll() {
         return execute(service::findAll);
     }
 
     @GetMapping(value = Endpoint.File.DOCUMENT_ID_VARIABLE, produces = JSON)
-    public Response findByDocumentId(@PathVariable Long documentId) {
+    public ResponseEntity<Response> findByDocumentId(@PathVariable Long documentId) {
         return execute(() -> service.findByDocumentId(new FileGetByDocumentIdRequest(documentId)));
     }
 
     @GetMapping(params = "classificationId", produces = JSON)
-    public Response findByClassificationId(@RequestParam("classificationId") Long classificationId) {
+    public ResponseEntity<Response> findByClassificationId(@RequestParam("classificationId") Long classificationId) {
         return execute(() -> service.findByClassificationId(new FileGetByClassificationIdRequest(classificationId)));
     }
 
     @GetMapping(value = Endpoint.File.FREE_LANGUAGES, produces = JSON)
-    public Response getFreeLanguages(@PathVariable Long documentId) {
+    public ResponseEntity<Response> getFreeLanguages(@PathVariable Long documentId) {
         return execute(() -> service.getFreeLanguages(new FileGetFreeLanguagesByDocumentIdRequest(documentId)));
     }
 
@@ -79,7 +79,7 @@ public class FileRestController {
     }
 
     @PostMapping(produces = JSON)
-    public Response save(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<Response> save(@RequestParam("file") MultipartFile file,
                          @RequestParam("languageId") Long languageId,
                          @RequestParam("classificationId") Long classificationId) {
         return execute(() -> {
@@ -94,7 +94,7 @@ public class FileRestController {
     }
 
     @PatchMapping(produces = JSON)
-    public Response patch(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<Response> patch(@RequestParam("file") MultipartFile file,
                           @RequestParam("documentId") Long documentId,
                           @RequestParam("languageId") Long languageId) {
         return execute(() -> {
@@ -111,7 +111,7 @@ public class FileRestController {
     }
 
     @DeleteMapping(produces = JSON)
-    public Response deleteByKey(@RequestParam(name = "documentId") Long documentId,
+    public ResponseEntity<Response> deleteByKey(@RequestParam(name = "documentId") Long documentId,
                                 @RequestParam(name = "languageId") Long languageId) {
         TranslationKey key = TranslationKey.builder()
                 .documentId(documentId)
@@ -122,7 +122,7 @@ public class FileRestController {
     }
 
     @DeleteMapping(value = Endpoint.ENTITY_ID_VARIABLE, produces = JSON)
-    public Response deleteByDocumentId(@PathVariable Long entityId) {
+    public ResponseEntity<Response> deleteByDocumentId(@PathVariable Long entityId) {
         return execute(() -> service.deleteByDocumentId(new FileDeleteByDocumentIdRequest(entityId)));
     }
 

@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static rgo.cloud.common.api.util.JsonUtil.toJson;
-import static rgo.cloud.common.api.util.RequestUtil.JSON;
+import static rgo.cloud.common.spring.util.RequestUtil.JSON;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
 import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
 
@@ -141,14 +141,14 @@ public class LanguageRestControllerPermitTest extends CommonTest {
     }
 
     @Test
-    public void save_forbidden_anonymous() throws Exception {
+    public void save_unauthorized_anonymous() throws Exception {
         LanguageSaveRequest rq = new LanguageSaveRequest(randomString());
 
         mvc.perform(post(Endpoint.Language.BASE_URL)
                 .content(toJson(rq))
                 .contentType(JSON))
                 .andExpect(content().contentType(JSON))
-                .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
+                .andExpect(jsonPath("$.status.code", is(StatusCode.UNAUTHORIZED.name())));
     }
 
     @Test
@@ -178,14 +178,14 @@ public class LanguageRestControllerPermitTest extends CommonTest {
     }
 
     @Test
-    public void update_forbidden_anonymous() throws Exception {
+    public void update_unauthorized_anonymous() throws Exception {
         LanguageUpdateRequest rq = new LanguageUpdateRequest(generateId(), randomString());
 
         mvc.perform(put(Endpoint.Language.BASE_URL)
                 .content(toJson(rq))
                 .contentType(JSON))
                 .andExpect(content().contentType(JSON))
-                .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
+                .andExpect(jsonPath("$.status.code", is(StatusCode.UNAUTHORIZED.name())));
     }
 
     @Test

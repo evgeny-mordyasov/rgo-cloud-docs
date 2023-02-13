@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static rgo.cloud.common.api.util.RequestUtil.JSON;
+import static rgo.cloud.common.spring.util.RequestUtil.JSON;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
 import static rgo.cloud.docs.boot.EntityGenerator.*;
 import static rgo.cloud.docs.boot.FileGenerator.createFile;
@@ -516,7 +516,7 @@ public class FileRestControllerTest extends CommonTest {
 
         wait(futures);
 
-        List<FileDto> list = facade.findByClassificationId(savedClassification.getEntityId());
+        List<FileDto> list = facade.findAll();
         assertFalse(list.isEmpty());
 
         long downloads = list.stream()
