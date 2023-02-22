@@ -124,6 +124,13 @@ public class FileFacade {
         return convert(opt.get(), translations);
     }
 
+    public FileDto patchFileName(Document document) {
+        Document updatedDocument = documentService.patchFileName(document);
+        List<Translation> translations = translationService.findByDocumentId(document.getEntityId());
+
+        return convert(updatedDocument, translations);
+    }
+
    public void deleteByDocumentId(Long documentId) {
         documentService.deleteById(documentId);
    }

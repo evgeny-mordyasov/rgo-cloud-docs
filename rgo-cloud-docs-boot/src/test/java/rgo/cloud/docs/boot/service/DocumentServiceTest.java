@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
+import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
 import static rgo.cloud.docs.boot.EntityGenerator.createRandomClassification;
 import static rgo.cloud.docs.boot.EntityGenerator.createRandomDocument;
 
@@ -76,6 +77,30 @@ public class DocumentServiceTest extends CommonTest {
         assertEquals(created.getExtension(), saved.getExtension());
         assertEquals(created.getClassification().getEntityId(), saved.getClassification().getEntityId());
         assertEquals(created.getClassification().getName(), saved.getClassification().getName());
+    }
+
+    @Test
+    public void patchFileName() {
+        Document saved = documentRepository.save(createRandomDocument(savedClassification));
+        String newFileName = randomString();
+        String newFullFileName = newFileName + "." + saved.getExtension();
+
+        Document newDocument = saved.toBuilder()
+                .fullName(newFullFileName)
+                .name(newFileName)
+                .build();
+        Document document = service.patchFileName(newDocument);
+
+        assertEquals(saved.getEntityId(), document.getEntityId());
+        assertEquals(newFullFileName, document.getFullName());
+        assertEquals(newFileName, document.getName());
+    }
+
+    @Test
+    public void patchFileName_notFound() {
+        Document fakeDocument = createRandomDocument(savedClassification);
+
+        assertThrows(EntityNotFoundException.class, () -> service.patchFileName(fakeDocument), "The document by id not found.");
     }
 
     @Test

@@ -299,6 +299,46 @@ public class FileRestControllerPermitTest extends CommonTest {
     }
 
     @Test
+    public void patchFileName_unauthorized_anonymous() throws Exception {
+        long documentId = generateId();
+        String fileName = randomString();
+
+        mvc.perform(patch(Endpoint.File.BASE_URL + Endpoint.File.UPDATE_NAME)
+                .param("documentId", Long.toString(documentId))
+                .param("fileName", fileName))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.UNAUTHORIZED.name())));
+    }
+
+    @Test
+    public void patchFileName_forbidden_client() throws Exception {
+        String jwt = createJwt(Role.USER);
+        long documentId = generateId();
+        String fileName = randomString();
+
+        mvc.perform(patch(Endpoint.File.BASE_URL + Endpoint.File.UPDATE_NAME)
+                .param("documentId", Long.toString(documentId))
+                .param("fileName", fileName)
+                .cookie(new Cookie(config.getAuthCookieName(), jwt)))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.FORBIDDEN.name())));
+    }
+
+    @Test
+    public void patchFileName_success_admin() throws Exception {
+        String jwt = createJwt(Role.ADMIN);
+        long documentId = generateId();
+        String fileName = randomString();
+
+        mvc.perform(patch(Endpoint.File.BASE_URL + Endpoint.File.UPDATE_NAME)
+                .param("documentId", Long.toString(documentId))
+                .param("fileName", fileName)
+                .cookie(new Cookie(config.getAuthCookieName(), jwt)))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.ENTITY_NOT_FOUND.name())));
+    }
+
+    @Test
     public void deleteByKey_unauthorized_anonymous() throws Exception {
         long documentId = generateId();
         long languageId = generateId();

@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
+import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
 import static rgo.cloud.docs.boot.EntityGenerator.createRandomClassification;
 import static rgo.cloud.docs.boot.EntityGenerator.createRandomDocument;
 
@@ -110,6 +111,23 @@ public class DocumentRepositoryTest extends CommonTest {
         Document created = createRandomDocument(createRandomClassification());
 
         assertThrows(EntityNotFoundException.class, () -> documentRepository.save(created), "Classification by id not found.");
+    }
+
+    @Test
+    public void patchFileName() {
+        Document saved = documentRepository.save(createRandomDocument(savedClassification));
+        String newFileName = randomString();
+        String newFullFileName = newFileName + "." + saved.getExtension();
+
+        Document newDocument = saved.toBuilder()
+                .fullName(newFullFileName)
+                .name(newFileName)
+                .build();
+        Document document = documentRepository.patchFileName(newDocument);
+
+        assertEquals(saved.getEntityId(), document.getEntityId());
+        assertEquals(newFullFileName, document.getFullName());
+        assertEquals(newFileName, document.getName());
     }
 
     @Test

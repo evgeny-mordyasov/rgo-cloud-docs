@@ -36,6 +36,13 @@ public final class DocumentQuery {
                 "VALUES (:full_name, :name, :extension, :classification_id)";
     }
 
+    public static String patchFileName() {
+        return  "UPDATE " + TABLE_NAME + " " +
+                "SET full_name = :full_name, " +
+                "    name = :name " +
+                "WHERE entity_id = :entity_id";
+    }
+
     public static String deleteById() {
         return  "DELETE FROM " + TABLE_NAME + " " +
                 "WHERE entity_id = :entity_id";

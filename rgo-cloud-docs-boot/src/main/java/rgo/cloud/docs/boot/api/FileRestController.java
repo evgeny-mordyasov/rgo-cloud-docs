@@ -13,14 +13,7 @@ import rgo.cloud.docs.facade.api.FileResource;
 import rgo.cloud.docs.boot.utils.FileUtils;
 import rgo.cloud.docs.db.api.entity.TranslationKey;
 import rgo.cloud.docs.facade.api.MultipartFileDto;
-import rgo.cloud.docs.rest.api.file.request.FileGetByDocumentIdRequest;
-import rgo.cloud.docs.rest.api.file.request.FileGetByClassificationIdRequest;
-import rgo.cloud.docs.rest.api.file.request.FileGetFreeLanguagesByDocumentIdRequest;
-import rgo.cloud.docs.rest.api.file.request.FileGetResourceRequest;
-import rgo.cloud.docs.rest.api.file.request.FileSaveRequest;
-import rgo.cloud.docs.rest.api.file.request.FilePatchRequest;
-import rgo.cloud.docs.rest.api.file.request.FileDeleteByKeyRequest;
-import rgo.cloud.docs.rest.api.file.request.FileDeleteByDocumentIdRequest;
+import rgo.cloud.docs.rest.api.file.request.*;
 import rgo.cloud.security.config.util.Endpoint;
 
 import java.io.IOException;
@@ -77,8 +70,8 @@ public class FileRestController {
 
     @PostMapping(produces = JSON)
     public ResponseEntity<Response> save(@RequestParam("file") MultipartFile file,
-                         @RequestParam("languageId") Long languageId,
-                         @RequestParam("classificationId") Long classificationId) {
+                                         @RequestParam("languageId") Long languageId,
+                                         @RequestParam("classificationId") Long classificationId) {
         return execute(() -> {
             FileSaveRequest rq = FileSaveRequest.builder()
                     .file(readFile(file))
@@ -92,8 +85,8 @@ public class FileRestController {
 
     @PatchMapping(produces = JSON)
     public ResponseEntity<Response> patch(@RequestParam("file") MultipartFile file,
-                          @RequestParam("documentId") Long documentId,
-                          @RequestParam("languageId") Long languageId) {
+                                          @RequestParam("documentId") Long documentId,
+                                          @RequestParam("languageId") Long languageId) {
         return execute(() -> {
             FilePatchRequest rq = FilePatchRequest.builder()
                     .file(readFile(file))
@@ -105,6 +98,17 @@ public class FileRestController {
 
             return service.patch(rq);
         });
+    }
+
+    @PatchMapping(value = Endpoint.File.UPDATE_NAME, produces = JSON)
+    public ResponseEntity<Response> patchFileName(@RequestParam("documentId") Long documentId,
+                                                  @RequestParam("fileName") String fileName) {
+        FilePatchNameRequest rq = FilePatchNameRequest.builder()
+                .documentId(documentId)
+                .fileName(fileName)
+                .build();
+
+        return execute(() -> service.patchFileName(rq));
     }
 
     @DeleteMapping(produces = JSON)

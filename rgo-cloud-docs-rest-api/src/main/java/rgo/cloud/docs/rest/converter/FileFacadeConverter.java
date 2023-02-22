@@ -1,5 +1,6 @@
 package rgo.cloud.docs.rest.converter;
 
+import rgo.cloud.docs.rest.api.file.request.FilePatchNameRequest;
 import rgo.cloud.docs.rest.api.file.request.FilePatchRequest;
 import rgo.cloud.docs.rest.api.file.request.FileSaveRequest;
 import rgo.cloud.docs.db.api.entity.Classification;
@@ -37,6 +38,13 @@ public final class FileFacadeConverter {
                         .entityId(rq.getKey().getLanguageId())
                         .build())
                 .data(rq.getFile().getData())
+                .build();
+    }
+
+    public static Document convert(FilePatchNameRequest rq) {
+        return Document.builder()
+                .entityId(rq.getDocumentId())
+                .name(rq.getFileName())
                 .build();
     }
 }

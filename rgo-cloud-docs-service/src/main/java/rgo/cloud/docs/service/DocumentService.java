@@ -28,16 +28,31 @@ public class DocumentService {
         return repository.save(document);
     }
 
+    public Document patchFileName(Document document) {
+        Document fromDb = getById(document.getEntityId());
+
+        Document data = fromDb.toBuilder()
+                .fullName(document.getName() + "." + fromDb.getExtension())
+                .name(document.getName())
+                .build();
+
+        return repository.patchFileName(data);
+    }
+
     public void deleteById(Long entityId) {
-        validateDocument(entityId);
+        getById(entityId);
         repository.deleteById(entityId);
     }
 
-    private void validateDocument(Long entityId) {
-        if (!repository.exists(entityId)) {
+    private Document getById(Long entityId) {
+        Optional<Document> opt = repository.findById(entityId);
+
+        if (opt.isEmpty()) {
             String errorMsg = "The document by id not found.";
             log.error(errorMsg);
             throw new EntityNotFoundException(errorMsg);
         }
+
+        return opt.get();
     }
 }

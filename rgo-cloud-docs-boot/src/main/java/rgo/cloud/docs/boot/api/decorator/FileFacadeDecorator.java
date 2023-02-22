@@ -63,6 +63,11 @@ public class FileFacadeDecorator {
         return FileModifyResponse.success(updated);
     }
 
+    public FileModifyResponse patchFileName(FilePatchNameRequest rq) {
+        FileDto updated = facade.patchFileName(convert(rq));
+        return FileModifyResponse.success(updated);
+    }
+
     public FileDeleteResponse deleteByDocumentId(FileDeleteByDocumentIdRequest rq) {
         facade.deleteByDocumentId(rq.getDocumentId());
         return FileDeleteResponse.success();

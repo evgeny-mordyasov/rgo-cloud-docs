@@ -54,11 +54,6 @@ public class PostgresDocumentRepository implements DocumentRepository {
     }
 
     @Override
-    public boolean exists(Long entityId) {
-        return findById(entityId).isPresent();
-    }
-
-    @Override
     public Document save(Document document) {
         checkInternalEntity(document.getClassification().getEntityId());
 
@@ -79,6 +74,26 @@ public class PostgresDocumentRepository implements DocumentRepository {
         Optional<Document> opt = findById(key.longValue());
         if (opt.isEmpty()) {
             unpredictableError("Error saving the document when selecting by ID.");
+        }
+
+        return opt.get();
+    }
+
+    @Override
+    public Document patchFileName(Document document) {
+        MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
+                "entity_id", document.getEntityId(),
+                "full_name", document.getFullName(),
+                "name", document.getName()));
+
+        int result = jdbc.update(DocumentQuery.patchFileName(), params);
+        if (result != 1) {
+            unpredictableError("Error when changing the document file name.");
+        }
+
+        Optional<Document> opt = findById(document.getEntityId());
+        if (opt.isEmpty()) {
+            unpredictableError("Error when changing the document file name during searching.");
         }
 
         return opt.get();

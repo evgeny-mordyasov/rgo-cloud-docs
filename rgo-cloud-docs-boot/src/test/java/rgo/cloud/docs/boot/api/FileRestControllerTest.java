@@ -31,11 +31,14 @@ import java.util.concurrent.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static rgo.cloud.common.spring.util.RequestUtil.JSON;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
+import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
 import static rgo.cloud.docs.boot.EntityGenerator.*;
+import static rgo.cloud.docs.boot.EntityGenerator.createRandomTranslation;
 import static rgo.cloud.docs.boot.FileGenerator.createFile;
 import static rgo.cloud.docs.boot.FileGenerator.multipartPatch;
 
@@ -582,7 +585,7 @@ public class FileRestControllerTest extends CommonTest {
     }
 
     @Test
-    public void patch() throws Exception {
+    public void patch_twoResources() throws Exception {
         int twoResources = 2;
 
         Language savedLanguage1 = languageRepository.save(createRandomLanguage());
@@ -605,6 +608,40 @@ public class FileRestControllerTest extends CommonTest {
                 .andExpect(jsonPath("$.object.document.entityId", is(savedFile.getDocument().getEntityId().intValue())))
                 .andExpect(jsonPath("$.object.document.fullName", is(savedFile.getDocument().getFullName())))
                 .andExpect(jsonPath("$.object.document.name", is(savedFile.getDocument().getName())))
+                .andExpect(jsonPath("$.object.document.extension", is(savedFile.getDocument().getExtension())))
+                .andExpect(jsonPath("$.object.document.classification.entityId", is(savedFile.getDocument().getClassification().getEntityId().intValue())))
+                .andExpect(jsonPath("$.object.document.classification.name", is(savedFile.getDocument().getClassification().getName())))
+                .andExpect(jsonPath("$.object.resources", hasSize(twoResources)))
+                .andExpect(jsonPath("$.object.resources[*].language", notNullValue()))
+                .andExpect(jsonPath("$.object.resources[*].language.entityId",
+                        containsInAnyOrder(savedLanguage1.getEntityId().intValue(), savedLanguage2.getEntityId().intValue())))
+                .andExpect(jsonPath("$.object.resources[*].language.name",
+                        containsInAnyOrder(savedLanguage1.getName(), savedLanguage2.getName())));
+    }
+
+    @Test
+    public void patchFileName() throws Exception {
+        int twoResources = 2;
+
+        Language savedLanguage1 = languageRepository.save(createRandomLanguage());
+        Language savedLanguage2 = languageRepository.save(createRandomLanguage());
+        Classification savedClassification = classificationRepository.save(createRandomClassification());
+
+        FileDto savedFile = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage1));
+        FileDto patchFile = facade.patch(createRandomTranslation(savedFile.getDocument(), savedLanguage2));
+
+        String newFileName = randomString();
+        mvc.perform(patch(Endpoint.File.BASE_URL + Endpoint.File.UPDATE_NAME)
+                .param("documentId", Long.toString(patchFile.getDocument().getEntityId()))
+                .param("fileName", newFileName))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
+                .andExpect(jsonPath("$.status.description", nullValue()))
+                .andExpect(jsonPath("$.object", notNullValue()))
+                .andExpect(jsonPath("$.object.document", notNullValue()))
+                .andExpect(jsonPath("$.object.document.entityId", is(savedFile.getDocument().getEntityId().intValue())))
+                .andExpect(jsonPath("$.object.document.fullName", is(newFileName + "." + savedFile.getDocument().getExtension())))
+                .andExpect(jsonPath("$.object.document.name", is(newFileName)))
                 .andExpect(jsonPath("$.object.document.extension", is(savedFile.getDocument().getExtension())))
                 .andExpect(jsonPath("$.object.document.classification.entityId", is(savedFile.getDocument().getClassification().getEntityId().intValue())))
                 .andExpect(jsonPath("$.object.document.classification.name", is(savedFile.getDocument().getClassification().getName())))

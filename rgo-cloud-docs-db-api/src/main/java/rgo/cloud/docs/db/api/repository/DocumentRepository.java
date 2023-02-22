@@ -10,9 +10,9 @@ public interface DocumentRepository {
 
     Optional<Document> findById(Long entityId);
 
-    boolean exists(Long entityId);
-
     Document save(Document document);
+
+    Document patchFileName(Document document);
 
     void deleteById(Long entityId);
 }

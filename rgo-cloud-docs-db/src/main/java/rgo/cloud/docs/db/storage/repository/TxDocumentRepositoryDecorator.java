@@ -27,13 +27,13 @@ public class TxDocumentRepositoryDecorator implements DocumentRepository {
     }
 
     @Override
-    public boolean exists(Long entityId) {
-        return tx.tx(() -> delegate.exists(entityId));
+    public Document save(Document document) {
+        return tx.tx(() -> delegate.save(document));
     }
 
     @Override
-    public Document save(Document document) {
-        return tx.tx(() -> delegate.save(document));
+    public Document patchFileName(Document document) {
+        return tx.tx(() -> delegate.patchFileName(document));
     }
 
     @Override

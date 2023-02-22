@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static rgo.cloud.common.spring.util.RequestUtil.JSON;
+import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
 import static rgo.cloud.docs.boot.FileGenerator.*;
 
 @SpringBootTest
@@ -285,6 +286,34 @@ public class FileRestControllerValidateTest extends CommonTest {
                 .file(file)
                 .param("languageId", languageId)
                 .param("documentId", documentId))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.INVALID_RQ.name())))
+                .andExpect(jsonPath("$.status.description", is(errorMessage)));
+    }
+
+    @Test
+    public void patchFileName_documentIdIsNotPositive() throws Exception {
+        String documentId = "-1";
+        String fileName = randomString();
+        String errorMessage = "The documentId is not positive.";
+
+        mvc.perform(patch(Endpoint.File.BASE_URL + Endpoint.File.UPDATE_NAME)
+                .param("documentId", documentId)
+                .param("fileName", fileName))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.INVALID_RQ.name())))
+                .andExpect(jsonPath("$.status.description", is(errorMessage)));
+    }
+
+    @Test
+    public void patchFileName_fileNameIsEmpty() throws Exception {
+        String documentId = "1";
+        String fileName = "";
+        String errorMessage = "The fileName is empty.";
+
+        mvc.perform(patch(Endpoint.File.BASE_URL + Endpoint.File.UPDATE_NAME)
+                .param("documentId", documentId)
+                .param("fileName", fileName))
                 .andExpect(content().contentType(JSON))
                 .andExpect(jsonPath("$.status.code", is(StatusCode.INVALID_RQ.name())))
                 .andExpect(jsonPath("$.status.description", is(errorMessage)));
