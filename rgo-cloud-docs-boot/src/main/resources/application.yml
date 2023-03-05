@@ -1,6 +1,11 @@
 server:
   port: 8091
 
+spring:
+  servlet:
+    multipart:
+      max-file-size: 6MB
+
 module-properties:
   auth:
     cookie:
