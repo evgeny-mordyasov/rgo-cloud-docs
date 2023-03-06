@@ -7,7 +7,6 @@ import rgo.cloud.common.api.rest.Request;
 import rgo.cloud.docs.db.api.entity.TranslationKey;
 
 import static rgo.cloud.common.api.util.ValidatorUtil.errorObjectId;
-import static rgo.cloud.common.api.util.ValidatorUtil.finish;
 
 @AllArgsConstructor
 @Getter
@@ -19,6 +18,5 @@ public class FileDeleteByKeyRequest implements Request {
     public void validate() {
         errorObjectId(key.getDocumentId(), "documentId");
         errorObjectId(key.getLanguageId(), "languageId");
-        finish();
     }
 }

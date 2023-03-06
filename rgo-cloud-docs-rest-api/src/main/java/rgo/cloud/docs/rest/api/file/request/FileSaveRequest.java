@@ -1,6 +1,9 @@
 package rgo.cloud.docs.rest.api.file.request;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 import rgo.cloud.common.api.rest.Request;
 import rgo.cloud.docs.facade.api.MultipartFileDto;
 import rgo.cloud.docs.rest.api.file.FileExtension;
@@ -27,6 +30,5 @@ public class FileSaveRequest implements Request {
         errorString(file.getFileName(), "fileName");
         errorFalse(FileExtension.isFromWhitelist(file.getExtension()), "The file extension not supported.");
         errorFalse(file.getSize() <= 1024 * 1024 * 5, "The file size exceeds 5 MB.");
-        finish();
     }
 }

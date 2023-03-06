@@ -7,7 +7,6 @@ import lombok.ToString;
 import rgo.cloud.common.api.rest.Request;
 
 import static rgo.cloud.common.api.util.ValidatorUtil.errorString;
-import static rgo.cloud.common.api.util.ValidatorUtil.finish;
 
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
@@ -19,6 +18,5 @@ public class LanguageSaveRequest implements Request {
     @Override
     public void validate() {
         errorString(name, "name");
-        finish();
     }
 }
