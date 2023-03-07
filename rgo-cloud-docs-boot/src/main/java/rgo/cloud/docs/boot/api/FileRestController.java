@@ -1,5 +1,6 @@
 package rgo.cloud.docs.boot.api;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,6 +21,7 @@ import java.io.IOException;
 
 import static rgo.cloud.common.spring.util.RequestUtil.*;
 
+@Hidden
 @RestController
 @RequestMapping(Endpoint.File.BASE_URL)
 public class FileRestController {

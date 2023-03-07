@@ -18,6 +18,7 @@
         <module>rgo-cloud-docs-db-api</module>
         <module>rgo-cloud-docs-facade-api</module>
         <module>rgo-cloud-docs-facade</module>
+        <module>rgo-cloud-docs-openapi</module>
     </modules>
 
     <properties>
@@ -44,11 +45,19 @@
         <streamex.version>0.8.1</streamex.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <jackson-databind.version>2.14.1</jackson-databind.version>
+        <springdoc-openapi.version>1.6.4</springdoc-openapi.version>
+        <swagger-parser.version>2.1.12</swagger-parser.version>
+        <jupiter.version>5.9.2</jupiter.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <!-- self module -->
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-cloud-docs-openapi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>ru.gold.ordance</groupId>
                 <artifactId>rgo-cloud-docs-rest-api</artifactId>
@@ -160,6 +169,27 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
                 <version>${jackson-databind.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>${springdoc-openapi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-webmvc-core</artifactId>
+                <version>${springdoc-openapi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger.parser.v3</groupId>
+                <artifactId>swagger-parser-v3</artifactId>
+                <version>${swagger-parser.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${jupiter.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

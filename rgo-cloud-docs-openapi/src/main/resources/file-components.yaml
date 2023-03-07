@@ -1,0 +1,85 @@
+openapi: 3.0.0
+
+info:
+  title: Language components
+  version: 1.0.0
+paths:
+
+components:
+  schemas:
+    Document:
+      type: object
+      properties:
+        entityId:
+          type: integer
+          format: int64
+        fullName:
+          type: string
+        name:
+          type: string
+        extension:
+          type: string
+        classification:
+          $ref: 'classification-components.yaml#/components/schemas/Classification'
+    ResourceDto:
+      type: object
+      properties:
+        language:
+          $ref: 'language-components.yaml#/components/schemas/Language'
+        resource:
+          type: string
+        downloads:
+          type: integer
+          format: int64
+    FileDto:
+      type: object
+      properties:
+        document:
+          $ref: '#/components/schemas/Document'
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceDto'
+        downloads:
+          type: integer
+          format: int64
+    FileGetListResponse:
+      type: object
+      properties:
+        status:
+          $ref: 'common-components.yaml#/components/schemas/Status'
+        list:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileDto'
+        total:
+          type: integer
+          format: int32
+    FileGetEntityResponse:
+      type: object
+      properties:
+        status:
+          $ref: 'common-components.yaml#/components/schemas/Status'
+        object:
+          $ref: '#/components/schemas/FileDto'
+    FileGetFreeLanguagesByDocumentIdResponse:
+      type: object
+      properties:
+        status:
+          $ref: 'common-components.yaml#/components/schemas/Status'
+        list:
+          type: array
+          items:
+            $ref: 'language-components.yaml#/components/schemas/Language'
+    FileModifyResponse:
+      type: object
+      properties:
+        status:
+          $ref: 'common-components.yaml#/components/schemas/Status'
+        object:
+          $ref: '#/components/schemas/FileDto'
+    FileDeleteResponse:
+      type: object
+      properties:
+        status:
+          $ref: 'common-components.yaml#/components/schemas/Status'

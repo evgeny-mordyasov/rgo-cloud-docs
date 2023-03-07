@@ -24,6 +24,10 @@
         <!-- self module -->
         <dependency>
             <groupId>ru.gold.ordance</groupId>
+            <artifactId>rgo-cloud-docs-openapi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.gold.ordance</groupId>
             <artifactId>rgo-cloud-docs-rest-api</artifactId>
         </dependency>
         <dependency>

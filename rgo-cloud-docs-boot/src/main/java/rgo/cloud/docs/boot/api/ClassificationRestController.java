@@ -1,5 +1,6 @@
 package rgo.cloud.docs.boot.api;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rgo.cloud.common.api.rest.Response;
@@ -10,6 +11,7 @@ import rgo.cloud.docs.boot.api.decorator.ClassificationServiceDecorator;
 import static rgo.cloud.common.spring.util.RequestUtil.JSON;
 import static rgo.cloud.common.spring.util.RequestUtil.execute;
 
+@Hidden
 @RestController
 @RequestMapping(Endpoint.Classification.BASE_URL)
 public class ClassificationRestController {

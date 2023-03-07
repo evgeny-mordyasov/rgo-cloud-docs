@@ -1,0 +1,990 @@
+openapi: 3.0.0
+info:
+  title: API
+  description: This is the application API
+  version: 1.0.0
+paths:
+  /api/v1/files:
+    get:
+      summary: Get a list of files
+      tags:
+        - File
+      responses:
+        '200':
+          description: A list of files
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'file-components.yaml#/components/schemas/FileGetListResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+    post:
+      summary: Save file
+      tags:
+        - File
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                classificationId:
+                  type: integer
+                  format: int64
+                languageId:
+                  type: integer
+                  format: int64
+      responses:
+        '200':
+          description: The file saved
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'file-components.yaml#/components/schemas/FileModifyResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '401':
+          description: The AUTH_TOKEN cookie is missing
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: UNAUTHORIZED
+                  description: null
+        '403':
+          description: Access denied
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: FORBIDDEN
+                  description: null
+        '404':
+          description: The passed classificationId or languageId does not exists
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: ENTITY_NOT_FOUND
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+    patch:
+      summary: Patch file
+      tags:
+        - File
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                documentId:
+                  type: integer
+                  format: int64
+                languageId:
+                  type: integer
+                  format: int64
+      responses:
+        '200':
+          description: The file updated
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'file-components.yaml#/components/schemas/FileModifyResponse'
+        '400':
+          description: The passed parameters are not valid (INVALID_RQ) or document already has this languageId (VIOLATES_CONSTRAINT)
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ or VIOLATES_CONSTRAINT
+                  description: ERROR MESSAGE
+        '401':
+          description: The AUTH_TOKEN cookie is missing
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: UNAUTHORIZED
+                  description: null
+        '403':
+          description: Access denied
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: FORBIDDEN
+                  description: null
+        '404':
+          description: The passed documentId or languageId does not exists
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: ENTITY_NOT_FOUND
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+
+  /api/v1/files/update-name:
+    patch:
+      summary: Patch document name
+      tags:
+        - File
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                documentId:
+                  type: integer
+                  format: int64
+                fileName:
+                  type: string
+      responses:
+        '200':
+          description: The file name updated
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'file-components.yaml#/components/schemas/FileModifyResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '401':
+          description: The AUTH_TOKEN cookie is missing
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: UNAUTHORIZED
+                  description: null
+        '403':
+          description: Access denied
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: FORBIDDEN
+                  description: null
+        '404':
+          description: The passed documentId does not exists
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: ENTITY_NOT_FOUND
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+
+  /api/v1/files/{documentId}:
+    get:
+      summary: Get document by documentId
+      tags:
+        - File
+      parameters:
+        - name: documentId
+          in: path
+          description: This is the document identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: cookie
+          name: AUTH_TOKEN
+          schema:
+            type: string
+            description: Cookie value
+      responses:
+        '200':
+          description: The document found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                oneOf:
+                  - $ref: 'file-components.yaml#/components/schemas/FileGetEntityResponse'
+                  - $ref: 'common-components.yaml#/components/schemas/EmptySuccessfulResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+    delete:
+      summary: Delete document by documentId
+      tags:
+        - File
+      parameters:
+        - name: documentId
+          in: path
+          description: This is the document identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: The document deleted
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'file-components.yaml#/components/schemas/FileDeleteResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '401':
+          description: The AUTH_TOKEN cookie is missing
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: UNAUTHORIZED
+                  description: null
+        '403':
+          description: Access denied
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: FORBIDDEN
+                  description: null
+        '404':
+          description: The passed documentId does not exists
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: ENTITY_NOT_FOUND
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+
+  /api/v1/files?classificationId={classificationId}:
+    get:
+      summary: Get a list of documents by classificationId
+      tags:
+        - File
+      parameters:
+        - name: classificationId
+          in: path
+          description: This is the classification identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A list of documents
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'file-components.yaml#/components/schemas/FileGetListResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+
+  /api/v1/files/free-languages/{documentId}:
+    get:
+      summary: Get free languages for document
+      tags:
+        - File
+      parameters:
+        - name: documentId
+          in: path
+          description: This is the document identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: The free languages found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                oneOf:
+                  - $ref: 'file-components.yaml#/components/schemas/FileGetFreeLanguagesByDocumentIdResponse'
+                  - $ref: 'common-components.yaml#/components/schemas/EmptySuccessfulResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+
+  /api/v1/files?documentId={documentId}&languageId={languageId}:
+    get:
+      summary: Download file by documentId and languageId
+      tags:
+        - File
+      parameters:
+        - name: documentId
+          in: path
+          description: This is the document identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: languageId
+          in: path
+          description: This is the language identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: File downloaded
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+                description: Binary image data
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '401':
+          description: The AUTH_TOKEN cookie is missing
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: UNAUTHORIZED
+                  description: null
+        '404':
+          description: The passed documentId or languageId does not exists
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: ENTITY_NOT_FOUND
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+    delete:
+      summary: Delete document by documentId and languageId
+      tags:
+        - File
+      parameters:
+        - name: documentId
+          in: path
+          description: This is the document identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: languageId
+          in: path
+          description: This is the language identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Document deleted
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'file-components.yaml#/components/schemas/FileDeleteResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '401':
+          description: The AUTH_TOKEN cookie is missing
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: UNAUTHORIZED
+                  description: null
+        '403':
+          description: Access denied
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: FORBIDDEN
+                  description: null
+        '404':
+          description: The passed documentId or languageId does not exists
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: ENTITY_NOT_FOUND
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+
+  /api/v1/languages:
+    get:
+      summary: Get a list of languages
+      tags:
+        - Language
+      responses:
+        '200':
+          description: A list of languages
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'language-components.yaml#/components/schemas/LanguageGetListResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+    post:
+      summary: Save language
+      tags:
+        - Language
+      requestBody:
+        required: true
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: 'language-components.yaml#/components/schemas/LanguageSaveRequest'
+      responses:
+        '200':
+          description: The language saved
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'language-components.yaml#/components/schemas/LanguageModifyResponse'
+        '400':
+          description: The passed parameters are not valid (INVALID_RQ) or classification name already exists (VIOLATES_CONSTRAINT)
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ or VIOLATES_CONSTRAINT
+                  description: ERROR MESSAGE
+        '401':
+          description: The AUTH_TOKEN cookie is missing
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: UNAUTHORIZED
+                  description: null
+        '403':
+          description: Access denied
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: FORBIDDEN
+                  description: null
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+
+  /api/v1/languages/{entityId}:
+    get:
+      summary: Get language by entityId
+      tags:
+        - Language
+      parameters:
+        - name: entityId
+          in: path
+          description: This is the language identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: The language found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                oneOf:
+                  - $ref: 'language-components.yaml#/components/schemas/LanguageGetEntityResponse'
+                  - $ref: 'common-components.yaml#/components/schemas/EmptySuccessfulResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+
+  /api/v1/languages?name={name}:
+    get:
+      summary: Get language by name
+      tags:
+        - Language
+      parameters:
+        - name: name
+          in: path
+          description: This is the language name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The language found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                oneOf:
+                  - $ref: 'language-components.yaml#/components/schemas/LanguageGetEntityResponse'
+                  - $ref: 'common-components.yaml#/components/schemas/EmptySuccessfulResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+
+  /api/v1/classifications:
+    get:
+      summary: Get a list of classifications
+      tags:
+        - Classification
+      responses:
+        '200':
+          description: A list of classifications
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'classification-components.yaml#/components/schemas/ClassificationGetListResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+    post:
+      summary: Save classification
+      tags:
+        - Classification
+      requestBody:
+        required: true
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: 'classification-components.yaml#/components/schemas/ClassificationSaveRequest'
+      responses:
+        '200':
+          description: The classification saved
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                  $ref: 'classification-components.yaml#/components/schemas/ClassificationModifyResponse'
+        '400':
+          description: The passed parameters are not valid (INVALID_RQ) or classification name already exists (VIOLATES_CONSTRAINT)
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ or VIOLATES_CONSTRAINT
+                  description: ERROR MESSAGE
+        '401':
+          description: The AUTH_TOKEN cookie is missing
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: UNAUTHORIZED
+                  description: null
+        '403':
+          description: Access denied
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: FORBIDDEN
+                  description: null
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+    put:
+      summary: Update classification
+      tags:
+        - Classification
+      requestBody:
+        required: true
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: 'classification-components.yaml#/components/schemas/ClassificationUpdateRequest'
+      responses:
+        '200':
+          description: The classification updated
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'classification-components.yaml#/components/schemas/ClassificationModifyResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '401':
+          description: The AUTH_TOKEN cookie is missing
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: UNAUTHORIZED
+                  description: null
+        '403':
+          description: Access denied
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: FORBIDDEN
+                  description: null
+        '404':
+          description: The classification by entityId not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: ENTITY_NOT_FOUND
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+
+  /api/v1/classifications/{entityId}:
+    get:
+      summary: Get classification by entityId
+      tags:
+        - Classification
+      parameters:
+        - name: entityId
+          in: path
+          description: This is the classification identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: The classification found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                oneOf:
+                  - $ref: 'classification-components.yaml#/components/schemas/ClassificationGetEntityResponse'
+                  - $ref: 'common-components.yaml#/components/schemas/EmptySuccessfulResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+    delete:
+      summary: Delete classification by entityId
+      tags:
+        - Classification
+      parameters:
+        - name: entityId
+          in: path
+          description: This is the classification identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: The classification deleted
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'classification-components.yaml#/components/schemas/ClassificationDeleteResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '401':
+          description: The AUTH_TOKEN cookie is missing
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: UNAUTHORIZED
+                  description: null
+        '403':
+          description: Access denied
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: FORBIDDEN
+                  description: null
+        '404':
+          description: The classification by entityId not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: ENTITY_NOT_FOUND
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+
+  /api/v1/classifications?name={name}:
+    get:
+      summary: Get classifiaction by name
+      tags:
+        - Classification
+      parameters:
+        - name: name
+          in: path
+          description: This is the classification name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The classification found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                oneOf:
+                  - $ref: 'classification-components.yaml#/components/schemas/ClassificationGetEntityResponse'
+                  - $ref: 'common-components.yaml#/components/schemas/EmptySuccessfulResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'

@@ -1,0 +1,61 @@
+openapi: 3.0.0
+
+info:
+  title: Classification components
+  version: 1.0.0
+paths:
+
+components:
+  schemas:
+    Classification:
+      type: object
+      properties:
+        entityId:
+          type: integer
+          format: int64
+        name:
+          type: string
+    ClassificationSaveRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    ClassificationUpdateRequest:
+      type: object
+      properties:
+        entityId:
+          type: integer
+          format: int64
+        name:
+          type: string
+    ClassificationGetListResponse:
+      type: object
+      properties:
+        status:
+          $ref: 'common-components.yaml#/components/schemas/Status'
+        list:
+          type: array
+          items:
+            $ref: '#/components/schemas/Classification'
+        total:
+          type: integer
+          format: int32
+    ClassificationGetEntityResponse:
+      type: object
+      properties:
+        status:
+          $ref: 'common-components.yaml#/components/schemas/Status'
+        object:
+          $ref: '#/components/schemas/Classification'
+    ClassificationModifyResponse:
+      type: object
+      properties:
+        status:
+          $ref: 'common-components.yaml#/components/schemas/Status'
+        object:
+          $ref: '#/components/schemas/Classification'
+    ClassificationDeleteResponse:
+      type: object
+      properties:
+        status:
+          $ref: 'common-components.yaml#/components/schemas/Status'

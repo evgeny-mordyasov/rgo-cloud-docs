@@ -1,0 +1,56 @@
+openapi: 3.0.0
+
+info:
+  title: Language components
+  version: 1.0.0
+paths:
+
+components:
+  schemas:
+    Language:
+      type: object
+      properties:
+        entityId:
+          type: integer
+          format: int64
+        name:
+          type: string
+    LanguageSaveRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    LanguageUpdateRequest:
+      type: object
+      properties:
+        entityId:
+          type: integer
+          format: int64
+        name:
+          type: string
+    LanguageGetListResponse:
+      type: object
+      properties:
+        status:
+          $ref: 'common-components.yaml#/components/schemas/Status'
+        list:
+          type: array
+          items:
+            $ref: '#/components/schemas/Language'
+        total:
+          type: integer
+          format: int32
+    LanguageGetEntityResponse:
+      type: object
+      properties:
+        status:
+          $ref: 'common-components.yaml#/components/schemas/Status'
+        object:
+          $ref: '#/components/schemas/Language'
+    LanguageModifyResponse:
+      type: object
+      properties:
+        status:
+          $ref: 'common-components.yaml#/components/schemas/Status'
+        object:
+          $ref: '#/components/schemas/Language'

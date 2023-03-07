@@ -1,0 +1,50 @@
+openapi: 3.0.0
+
+info:
+  title: Common components
+  version: 1.0.0
+paths:
+
+components:
+  schemas:
+    StatusCode:
+      type: string
+      enum:
+        - SUCCESS
+        - INVALID_RQ
+        - ILLEGAL_STATE
+        - ENTITY_NOT_FOUND
+        - VIOLATES_CONSTRAINT
+        - UNAUTHORIZED
+        - BANNED
+        - FORBIDDEN
+        - ALREADY_VERIFIED
+        - CALL_ERROR
+    Status:
+      type: object
+      properties:
+        description:
+          type: string
+        code:
+          $ref: '#/components/schemas/StatusCode'
+    EmptySuccessfulResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        object:
+          type: object
+      example:
+        status:
+          code: SUCCESS
+          description: null
+        object: null
+    BaseErrorResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+      example:
+        status:
+          code: CALL_ERROR
+          description: ERROR MESSAGE
