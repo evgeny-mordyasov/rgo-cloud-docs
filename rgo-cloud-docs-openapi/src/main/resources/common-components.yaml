@@ -18,7 +18,6 @@ components:
         - UNAUTHORIZED
         - BANNED
         - FORBIDDEN
-        - ALREADY_VERIFIED
         - CALL_ERROR
     Status:
       type: object
