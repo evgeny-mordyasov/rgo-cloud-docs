@@ -253,11 +253,6 @@ paths:
           schema:
             type: integer
             format: int64
-        - in: cookie
-          name: AUTH_TOKEN
-          schema:
-            type: string
-            description: Cookie value
       responses:
         '200':
           description: The document found
