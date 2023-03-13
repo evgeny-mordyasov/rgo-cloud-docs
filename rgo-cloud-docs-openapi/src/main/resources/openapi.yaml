@@ -381,6 +381,43 @@ paths:
               schema:
                 $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
 
+  /api/v1/files?name={name}:
+    get:
+      summary: Get a list of documents by name
+      tags:
+        - File
+      parameters:
+        - name: name
+          in: path
+          description: This is the document name
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A list of documents
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'file-components.yaml#/components/schemas/FileGetListResponse'
+        '400':
+          description: The passed parameters are not valid
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+              example:
+                status:
+                  code: INVALID_RQ
+                  description: ERROR MESSAGE
+        '500':
+          description: Internal server error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
+
   /api/v1/files/free-languages/{documentId}:
     get:
       summary: Get free languages for document

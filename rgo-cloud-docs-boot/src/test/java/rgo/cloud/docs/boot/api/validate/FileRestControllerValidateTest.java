@@ -53,6 +53,17 @@ public class FileRestControllerValidateTest extends CommonTest {
     }
 
     @Test
+    public void findByFullName_nameIsEmpty() throws Exception {
+        String name = " ";
+        String errorMessage = "The name is empty.";
+
+        mvc.perform(get(Endpoint.File.BASE_URL + "?name=" + name))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.INVALID_RQ.name())))
+                .andExpect(jsonPath("$.status.description", equalTo(errorMessage)));
+    }
+
+    @Test
     public void getFreeLanguages_idIsNotPositive() throws Exception {
         long documentId = -1L;
         String errorMessage = "The documentId is not positive.";

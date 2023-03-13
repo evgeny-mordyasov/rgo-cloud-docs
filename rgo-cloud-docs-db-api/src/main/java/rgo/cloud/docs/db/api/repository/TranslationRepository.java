@@ -13,6 +13,8 @@ public interface TranslationRepository {
 
     List<Translation> findByClassificationId(Long classificationId);
 
+    List<Translation> findByFullName(String name);
+
     Optional<Translation> findByKey(TranslationKey key);
 
     Optional<Translation> findByKeyWithData(TranslationKey key);

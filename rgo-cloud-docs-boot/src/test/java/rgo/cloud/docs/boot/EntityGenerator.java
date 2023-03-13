@@ -25,10 +25,14 @@ public final class EntityGenerator {
     }
 
     public static Document createRandomDocument(Classification classification) {
+        String name = randomString();
+        String extension = generateExtension();
+        String fullName = name + "." + extension;
+
         return Document.builder()
-                .fullName(randomString())
-                .name(randomString())
-                .extension(generateExtension())
+                .fullName(fullName)
+                .name(name)
+                .extension(extension)
                 .classification(classification)
                 .build();
     }

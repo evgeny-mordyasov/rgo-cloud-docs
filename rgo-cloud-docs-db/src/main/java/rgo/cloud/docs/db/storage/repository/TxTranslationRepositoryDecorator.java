@@ -33,6 +33,11 @@ public class TxTranslationRepositoryDecorator implements TranslationRepository {
     }
 
     @Override
+    public List<Translation> findByFullName(String name) {
+        return tx.tx(() -> delegate.findByFullName(name));
+    }
+
+    @Override
     public Optional<Translation> findByKey(TranslationKey key) {
         return tx.tx(() -> delegate.findByKey(key));
     }

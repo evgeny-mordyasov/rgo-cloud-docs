@@ -44,6 +44,11 @@ public class FileFacade {
         return convert(grouping(translations));
     }
 
+    public List<FileDto> findByFullName(String name) {
+        List<Translation> translations = translationService.findByFullName(name);
+        return convert(grouping(translations));
+    }
+
     private Set<Map.Entry<Long, List<Translation>>> grouping(List<Translation> translations) {
         return StreamEx.of(translations)
                 .groupingBy(v -> v.getDocument().getEntityId())

@@ -46,6 +46,11 @@ public class FileRestController {
         return execute(() -> service.findByClassificationId(new FileGetByClassificationIdRequest(classificationId)));
     }
 
+    @GetMapping(params = "name", produces = JSON)
+    public ResponseEntity<Response> findByFullName(@RequestParam("name") String name) {
+        return execute(() -> service.findByFullName(new FileGetByFullNameRequest(name)));
+    }
+
     @GetMapping(value = Endpoint.File.FREE_LANGUAGES, produces = JSON)
     public ResponseEntity<Response> getFreeLanguages(@PathVariable Long documentId) {
         return execute(() -> service.getFreeLanguages(new FileGetFreeLanguagesByDocumentIdRequest(documentId)));

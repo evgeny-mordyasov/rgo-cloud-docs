@@ -142,6 +142,37 @@ public class FileRestControllerPermitTest extends CommonTest {
     }
 
     @Test
+    public void findByFullName_success_anonymous() throws Exception {
+        String name = randomString();
+
+        mvc.perform(get(Endpoint.File.BASE_URL + "?name=" + name))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
+    }
+
+    @Test
+    public void findByFullName_success_client() throws Exception {
+        String jwt = createJwt(Role.USER);
+        String name = randomString();
+
+        mvc.perform(get(Endpoint.File.BASE_URL + "?name=" + name)
+                .cookie(new Cookie(config.getAuthCookieName(), jwt)))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
+    }
+
+    @Test
+    public void findByFullName_success_admin() throws Exception {
+        String jwt = createJwt(Role.ADMIN);
+        String name = randomString();
+
+        mvc.perform(get(Endpoint.File.BASE_URL + "?name=" + name)
+                .cookie(new Cookie(config.getAuthCookieName(), jwt)))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())));
+    }
+
+    @Test
     public void getFreeLanguages_success_anonymous() throws Exception {
         long fakeDocumentId = generateId();
 

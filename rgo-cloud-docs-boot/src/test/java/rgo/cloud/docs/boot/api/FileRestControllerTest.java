@@ -259,6 +259,83 @@ public class FileRestControllerTest extends CommonTest {
     }
 
     @Test
+    public void findByFullName_noOneHasBeenFound() throws Exception {
+        int noOneHasBeenFound = 0;
+        String fakeName = randomString();
+
+        mvc.perform(get(Endpoint.File.BASE_URL + "?name=" + fakeName))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
+                .andExpect(jsonPath("$.status.description", nullValue()))
+                .andExpect(jsonPath("$.list", hasSize(noOneHasBeenFound)))
+                .andExpect(jsonPath("$.total", is(noOneHasBeenFound)));
+    }
+
+    @Test
+    public void findByFullName_foundOne() throws Exception {
+        int foundOne = 1;
+
+        Language savedLanguage = languageRepository.save(createRandomLanguage());
+        Classification savedClassification = classificationRepository.save(createRandomClassification());
+        FileDto file = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage));
+
+        mvc.perform(get(Endpoint.File.BASE_URL + "?name=" + file.getDocument().getName()))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
+                .andExpect(jsonPath("$.status.description", nullValue()))
+                .andExpect(jsonPath("$.list", hasSize(foundOne)))
+                .andExpect(jsonPath("$.list[*].document", notNullValue()))
+                .andExpect(jsonPath("$.list[*].document.entityId", containsInAnyOrder(file.getDocument().getEntityId().intValue())))
+                .andExpect(jsonPath("$.list[*].document.fullName", containsInAnyOrder(file.getDocument().getFullName())))
+                .andExpect(jsonPath("$.list[*].document.name", containsInAnyOrder(file.getDocument().getName())))
+                .andExpect(jsonPath("$.list[*].document.extension", containsInAnyOrder(file.getDocument().getExtension())))
+                .andExpect(jsonPath("$.list[*].document.classification.entityId", containsInAnyOrder(savedClassification.getEntityId().intValue())))
+                .andExpect(jsonPath("$.list[*].document.classification.name", containsInAnyOrder(savedClassification.getName())))
+                .andExpect(jsonPath("$.list[*].resources", hasSize(foundOne)))
+                .andExpect(jsonPath("$.list[*].resources[*].language", notNullValue()))
+                .andExpect(jsonPath("$.list[*].resources[*].language.entityId", containsInAnyOrder(file.getResources().get(0).getLanguage().getEntityId().intValue())))
+                .andExpect(jsonPath("$.list[*].resources[*].language.name", containsInAnyOrder(file.getResources().get(0).getLanguage().getName())))
+                .andExpect(jsonPath("$.list[*].resources[*].resource", containsInAnyOrder(file.getResources().get(0).getResource())))
+                .andExpect(jsonPath("$.total", is(foundOne)));
+    }
+
+    @Test
+    public void findByFullName_foundALot() throws Exception {
+        int foundALot = 3;
+        String name = randomString();
+
+        Language savedLanguage = languageRepository.save(createRandomLanguage());
+        Classification savedClassification = classificationRepository.save(createRandomClassification());
+
+        Document saved1 = documentService.save(createRandomDocument(savedClassification));
+        Document saved2 = documentService.save(createRandomDocument(savedClassification));
+        Document saved3 = documentService.save(createRandomDocument(savedClassification));
+
+        saved1 = documentService.patchFileName(saved1.toBuilder().name(saved1.getName() + name).build());
+        saved2 = documentService.patchFileName(saved2.toBuilder().name(name + saved1.getName()).build());
+        saved3 = documentService.patchFileName(saved3.toBuilder().name(name).build());
+
+        FileDto file1 = facade.save(createRandomTranslation(saved1, savedLanguage));
+        FileDto file2 = facade.save(createRandomTranslation(saved2, savedLanguage));
+        FileDto file3 = facade.save(createRandomTranslation(saved3, savedLanguage));
+
+        String[] names = new String[] {
+                file1.getDocument().getFullName(),
+                file2.getDocument().getFullName(),
+                file3.getDocument().getFullName()
+        };
+
+        mvc.perform(get(Endpoint.File.BASE_URL + "?name=" + name))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.SUCCESS.name())))
+                .andExpect(jsonPath("$.status.description", nullValue()))
+                .andExpect(jsonPath("$.list", hasSize(foundALot)))
+                .andExpect(jsonPath("$.list[*].document", notNullValue()))
+                .andExpect(jsonPath("$.list[*].document.fullName", containsInAnyOrder(names)))
+                .andExpect(jsonPath("$.total", is(foundALot)));
+    }
+
+    @Test
     public void findByDocumentId_notFound() throws Exception {
         long fakeDocumentId = generateId();
 

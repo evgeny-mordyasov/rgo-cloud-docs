@@ -13,22 +13,19 @@ public final class TranslationQuery {
     }
 
     public static String findAll() {
-        return select()
-                .replace(WHERE_MODIFIER, "");
+        return find("");
     }
 
     public static String findByDocumentId() {
         String where = "WHERE d.entity_id = :document_id";
-        return select()
-                .replace(WHERE_MODIFIER, where);
+        return find(where);
     }
 
     public static String findByKey() {
         String where =
                 "WHERE d.entity_id = :document_id" +
                 "      AND l.entity_id = :language_id";
-        return select()
-                .replace(WHERE_MODIFIER, where);
+        return find(where);
     }
 
     public static String findByKeyWithData() {
@@ -42,6 +39,15 @@ public final class TranslationQuery {
 
     public static String findByClassificationId() {
         String where = "WHERE d.classification_id = :classification_id";
+        return find(where);
+    }
+
+    public static String findByFullName() {
+        String where = "WHERE lower(d.full_name) LIKE lower(:name)";
+        return find(where);
+    }
+
+    private static String find(String where) {
         return select()
                 .replace(WHERE_MODIFIER, where);
     }

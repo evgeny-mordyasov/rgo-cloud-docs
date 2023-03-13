@@ -34,6 +34,11 @@ public class FileFacadeDecorator {
         return FileGetListResponse.success(list);
     }
 
+    public FileGetListResponse findByFullName(FileGetByFullNameRequest rq) {
+        List<FileDto> list = facade.findByFullName(rq.getName());
+        return FileGetListResponse.success(list);
+    }
+
     public Response findByDocumentId(FileGetByDocumentIdRequest rq) {
         Optional<FileDto> opt = facade.findByDocumentId(rq.getDocumentId());
 

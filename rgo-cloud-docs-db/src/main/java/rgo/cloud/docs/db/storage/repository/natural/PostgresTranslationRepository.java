@@ -58,6 +58,12 @@ public class PostgresTranslationRepository implements TranslationRepository {
         return translations;
     }
 
+    @Override
+    public List<Translation> findByFullName(String name) {
+        MapSqlParameterSource params = new MapSqlParameterSource("name", "%" + name + "%");
+        return jdbc.query(TranslationQuery.findByFullName(), params, lazyMapper);
+    }
+
     private Optional<Translation> findById(Long entityId) {
         MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
         return first(

@@ -30,6 +30,10 @@ public class TranslationService {
         return repository.findByClassificationId(classificationId);
     }
 
+    public List<Translation> findByFullName(String name) {
+        return repository.findByFullName(name);
+    }
+
     public Optional<Translation> findByKey(TranslationKey key) {
         return repository.findByKey(key);
     }

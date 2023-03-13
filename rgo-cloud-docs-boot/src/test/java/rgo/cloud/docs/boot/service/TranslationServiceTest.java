@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
+import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
 import static rgo.cloud.docs.boot.EntityGenerator.*;
 
 @SpringBootTest
@@ -147,6 +148,50 @@ public class TranslationServiceTest extends CommonTest {
         List<Translation> found = service.findByClassificationId(savedDocument.getClassification().getEntityId());
 
         assertEquals(foundALot, found.size());
+    }
+
+    @Test
+    public void findByFullName_noOneHasBeenFound() {
+        int noOneHasBeenFound = 0;
+        String fakeFullName = randomString();
+
+        List<Translation> found = service.findByFullName(fakeFullName);
+
+        assertEquals(noOneHasBeenFound, found.size());
+    }
+
+    @Test
+    public void findByFullName_foundOne() {
+        int foundOne = 1;
+        translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
+
+        List<Translation> found = service.findByFullName(savedDocument.getName());
+
+        assertEquals(foundOne, found.size());
+    }
+
+    @Test
+    public void findByFullName_foundALot() {
+        int foundALot = 3;
+        String name = randomString();
+
+        Classification savedClassification = classificationRepository.save(createRandomClassification());
+        Document saved1 = documentRepository.save(createRandomDocument(savedClassification));
+        Document saved2 = documentRepository.save(createRandomDocument(savedClassification));
+        Document saved3 = documentRepository.save(createRandomDocument(savedClassification));
+
+        saved1 = documentRepository.patchFileName(saved1.toBuilder().fullName(saved1.getFullName() + name).build());
+        saved2 = documentRepository.patchFileName(saved2.toBuilder().fullName(name + saved1.getFullName()).build());
+        saved3 = documentRepository.patchFileName(saved3.toBuilder().fullName(name).build());
+
+        translationRepository.save(createRandomTranslation(saved1, savedLanguage));
+        translationRepository.save(createRandomTranslation(saved2, savedLanguage));
+        translationRepository.save(createRandomTranslation(saved3, savedLanguage));
+
+        List<Translation> documents = service.findByFullName(name);
+
+        assertFalse(documents.isEmpty());
+        assertEquals(foundALot, documents.size());
     }
 
     @Test
