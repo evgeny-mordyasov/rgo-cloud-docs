@@ -2,6 +2,7 @@ package rgo.cloud.docs.service;
 
 import lombok.extern.slf4j.Slf4j;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
+import rgo.cloud.common.api.exception.ViolatesConstraintException;
 import rgo.cloud.docs.db.api.repository.DocumentRepository;
 import rgo.cloud.docs.db.api.entity.Document;
 
@@ -25,14 +26,25 @@ public class DocumentService {
     }
 
     public Document save(Document document) {
+        checkFullNameForDuplicate(document.getFullName());
         return repository.save(document);
+    }
+
+    private void checkFullNameForDuplicate(String fullName) {
+        repository.findByFullName(fullName).ifPresent(ignored -> {
+            String errorMsg = "Document by fullName already exist.";
+            log.error(errorMsg);
+            throw new ViolatesConstraintException(errorMsg);
+        });
     }
 
     public Document patchFileName(Document document) {
         Document fromDb = getById(document.getEntityId());
+        String fullName = document.getName() + "." + fromDb.getExtension();
 
+        checkFullNameForDuplicate(fullName);
         Document data = fromDb.toBuilder()
-                .fullName(document.getName() + "." + fromDb.getExtension())
+                .fullName(fullName)
                 .name(document.getName())
                 .build();
 

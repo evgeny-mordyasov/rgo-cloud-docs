@@ -94,6 +94,25 @@ public class DocumentRepositoryTest extends CommonTest {
     }
 
     @Test
+    public void findByFullName_notFound() {
+        String fullName = randomString();
+
+        Optional<Document> found = documentRepository.findByFullName(fullName);
+
+        assertTrue(found.isEmpty());
+    }
+
+    @Test
+    public void findByFullName_found() {
+        Document saved = documentRepository.save(createRandomDocument(savedClassification));
+
+        Optional<Document> found = documentRepository.findByFullName(saved.getFullName());
+
+        assertTrue(found.isPresent());
+        assertEquals(saved.getEntityId(), found.get().getEntityId());
+    }
+
+    @Test
     public void save() {
         Document created = createRandomDocument(savedClassification);
 

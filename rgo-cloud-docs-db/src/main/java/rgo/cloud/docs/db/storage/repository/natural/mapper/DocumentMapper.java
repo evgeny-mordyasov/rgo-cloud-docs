@@ -8,6 +8,11 @@ public final class DocumentMapper {
     private DocumentMapper() {
     }
 
+    public static final RowMapper<Document> emptyMapper =
+            (rs, num) -> Document.builder()
+                    .entityId(rs.getLong("ENTITY_ID"))
+                    .build();
+
     public static final RowMapper<Document> mapper = (rs, num) -> Document.builder()
             .entityId(rs.getLong("ENTITY_ID"))
             .fullName(rs.getString("FULL_NAME"))

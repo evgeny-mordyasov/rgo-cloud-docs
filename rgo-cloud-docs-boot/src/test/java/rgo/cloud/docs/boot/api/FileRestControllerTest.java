@@ -307,13 +307,13 @@ public class FileRestControllerTest extends CommonTest {
         Language savedLanguage = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
 
-        Document saved1 = documentService.save(createRandomDocument(savedClassification));
-        Document saved2 = documentService.save(createRandomDocument(savedClassification));
-        Document saved3 = documentService.save(createRandomDocument(savedClassification));
+        Document saved1 = createRandomDocument(savedClassification);
+        Document saved2 = createRandomDocument(savedClassification);
+        Document saved3 = createRandomDocument(savedClassification);
 
-        saved1 = documentService.patchFileName(saved1.toBuilder().name(saved1.getName() + name).build());
-        saved2 = documentService.patchFileName(saved2.toBuilder().name(name + saved1.getName()).build());
-        saved3 = documentService.patchFileName(saved3.toBuilder().name(name).build());
+        saved1 = saved1.toBuilder().fullName(saved1.getName() + name).build();
+        saved2 = saved2.toBuilder().fullName(name + saved1.getName()).build();
+        saved3 = saved3.toBuilder().fullName(name).build();
 
         FileDto file1 = facade.save(createRandomTranslation(saved1, savedLanguage));
         FileDto file2 = facade.save(createRandomTranslation(saved2, savedLanguage));

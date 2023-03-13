@@ -31,6 +31,12 @@ public final class DocumentQuery {
                 "       AND d.classification_id = c.entity_id";
     }
 
+    public static String findByFullName() {
+        return  "SELECT d.entity_id " +
+                "FROM " + TABLE_NAME + " AS d " +
+                "WHERE d.full_name = :full_name";
+    }
+
     public static String save() {
         return  "INSERT INTO " + TABLE_NAME + "(full_name, name, extension, classification_id) " +
                 "VALUES (:full_name, :name, :extension, :classification_id)";

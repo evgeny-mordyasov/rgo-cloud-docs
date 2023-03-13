@@ -27,6 +27,11 @@ public class TxDocumentRepositoryDecorator implements DocumentRepository {
     }
 
     @Override
+    public Optional<Document> findByFullName(String fullName) {
+        return tx.tx(() -> delegate.findByFullName(fullName));
+    }
+
+    @Override
     public Document save(Document document) {
         return tx.tx(() -> delegate.save(document));
     }

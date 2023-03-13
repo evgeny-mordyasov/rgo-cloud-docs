@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static rgo.cloud.common.api.util.ExceptionUtil.unpredictableError;
+import static rgo.cloud.docs.db.storage.repository.natural.mapper.DocumentMapper.emptyMapper;
 import static rgo.cloud.docs.db.storage.repository.natural.mapper.DocumentMapper.mapper;
 
 @Slf4j
@@ -42,6 +43,13 @@ public class PostgresDocumentRepository implements DocumentRepository {
         MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
         return first(
                 jdbc.query(DocumentQuery.findById(), params, mapper));
+    }
+
+    @Override
+    public Optional<Document> findByFullName(String fullName) {
+        MapSqlParameterSource params = new MapSqlParameterSource("full_name", fullName);
+        return first(
+                jdbc.query(DocumentQuery.findByFullName(), params, emptyMapper));
     }
 
     private Optional<Document> first(List<Document> list) {

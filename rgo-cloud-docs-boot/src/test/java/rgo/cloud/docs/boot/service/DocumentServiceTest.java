@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
+import rgo.cloud.common.api.exception.ViolatesConstraintException;
 import rgo.cloud.common.spring.test.CommonTest;
 import rgo.cloud.docs.db.api.repository.ClassificationRepository;
 import rgo.cloud.docs.db.api.repository.DocumentRepository;
@@ -77,6 +78,30 @@ public class DocumentServiceTest extends CommonTest {
         assertEquals(created.getExtension(), saved.getExtension());
         assertEquals(created.getClassification().getEntityId(), saved.getClassification().getEntityId());
         assertEquals(created.getClassification().getName(), saved.getClassification().getName());
+    }
+
+    @Test
+    public void save_alreadyExists() {
+        Document created = createRandomDocument(savedClassification);
+
+        service.save(created);
+
+        assertThrows(ViolatesConstraintException.class, () -> service.save(created), "Document by fullName already exist.");
+    }
+
+    @Test
+    public void save_extensionsAreDifferent() {
+        Document created1 = createRandomDocument(savedClassification);
+
+        String name = created1.getName();
+        String extension = randomString();
+        String fullName = name + "." + extension;
+
+        Document created2 = created1.toBuilder().fullName(fullName).build();
+
+        service.save(created1);
+
+        assertDoesNotThrow(() -> service.save(created2));
     }
 
     @Test

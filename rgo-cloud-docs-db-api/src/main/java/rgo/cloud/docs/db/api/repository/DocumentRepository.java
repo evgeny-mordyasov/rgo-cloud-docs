@@ -10,6 +10,8 @@ public interface DocumentRepository {
 
     Optional<Document> findById(Long entityId);
 
+    Optional<Document> findByFullName(String fullName);
+
     Document save(Document document);
 
     Document patchFileName(Document document);
