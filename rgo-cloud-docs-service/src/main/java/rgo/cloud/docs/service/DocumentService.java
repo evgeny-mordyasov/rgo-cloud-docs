@@ -26,13 +26,13 @@ public class DocumentService {
     }
 
     public Document save(Document document) {
-        checkFullNameForDuplicate(document.getFullName());
+        checkFullNameForDuplicate(document.getFullName(), document.getClassification().getEntityId());
         return repository.save(document);
     }
 
-    private void checkFullNameForDuplicate(String fullName) {
-        repository.findByFullName(fullName).ifPresent(ignored -> {
-            String errorMsg = "Document by fullName already exist.";
+    private void checkFullNameForDuplicate(String fullName, Long classificationId) {
+        repository.findByFullNameAndClassificationId(fullName, classificationId).ifPresent(ignored -> {
+            String errorMsg = "Document by fullName already exist for the current classificationId.";
             log.error(errorMsg);
             throw new ViolatesConstraintException(errorMsg);
         });
@@ -42,7 +42,13 @@ public class DocumentService {
         Document fromDb = getById(document.getEntityId());
         String fullName = document.getName() + "." + fromDb.getExtension();
 
-        checkFullNameForDuplicate(fullName);
+        Optional<Document> duplicate = repository.findByFullNameAndClassificationId(fullName, fromDb.getClassification().getEntityId());
+        if (duplicate.isPresent() && !duplicate.get().getEntityId().equals(fromDb.getEntityId())) {
+            String errorMsg = "Document by fullName already exist for the current classificationId.";
+            log.error(errorMsg);
+            throw new ViolatesConstraintException(errorMsg);
+        }
+
         Document data = fromDb.toBuilder()
                 .fullName(fullName)
                 .name(document.getName())

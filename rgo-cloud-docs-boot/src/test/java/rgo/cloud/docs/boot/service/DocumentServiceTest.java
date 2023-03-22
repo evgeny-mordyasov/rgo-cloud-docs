@@ -86,7 +86,8 @@ public class DocumentServiceTest extends CommonTest {
 
         service.save(created);
 
-        assertThrows(ViolatesConstraintException.class, () -> service.save(created), "Document by fullName already exist.");
+        assertThrows(ViolatesConstraintException.class, () -> service.save(created),
+                "Document by fullName already exist for the current classificationId.");
     }
 
     @Test
@@ -105,6 +106,28 @@ public class DocumentServiceTest extends CommonTest {
     }
 
     @Test
+    public void save_differentClassificationIds() {
+        Document created = createRandomDocument(savedClassification);
+        Document saved = service.save(created);
+
+        Document created2 = created.toBuilder()
+                .classification(classificationRepository.save(createRandomClassification()))
+                .build();
+        Document saved2 = service.save(created2);
+
+        assertEquals(created.getFullName(), saved.getFullName());
+        assertEquals(created.getName(), saved.getName());
+        assertEquals(created.getExtension(), saved.getExtension());
+        assertEquals(created.getClassification().getEntityId(), saved.getClassification().getEntityId());
+        assertEquals(created.getClassification().getName(), saved.getClassification().getName());
+
+        assertEquals(created2.getFullName(), saved2.getFullName());
+        assertEquals(created2.getName(), saved2.getName());
+        assertEquals(created2.getExtension(), saved2.getExtension());
+        assertEquals(created2.getClassification().getName(), saved2.getClassification().getName());
+    }
+
+    @Test
     public void patchFileName() {
         Document saved = documentRepository.save(createRandomDocument(savedClassification));
         String newFileName = randomString();
@@ -119,6 +142,48 @@ public class DocumentServiceTest extends CommonTest {
         assertEquals(saved.getEntityId(), document.getEntityId());
         assertEquals(newFullFileName, document.getFullName());
         assertEquals(newFileName, document.getName());
+    }
+
+    @Test
+    public void patchFileName_fullNameNotChanged() {
+        Document saved = documentRepository.save(createRandomDocument(savedClassification));
+
+        Document document = service.patchFileName(saved);
+
+        assertEquals(saved.getEntityId(), document.getEntityId());
+        assertEquals(saved.getFullName(), document.getFullName());
+        assertEquals(saved.getName(), document.getName());
+    }
+
+    @Test
+    public void patchFileName_fileNameAlreadyExistsForClassificationId() {
+        Document saved1 = documentRepository.save(createRandomDocument(savedClassification));
+        Document saved2 = documentRepository.save(
+                saved1.toBuilder()
+                        .name(saved1.getName())
+                        .fullName(randomString() + "." + saved1.getExtension())
+                        .build());
+
+        Document newDocument = saved2.toBuilder()
+                .fullName(saved1.getFullName())
+                .name(saved1.getName())
+                .build();
+
+        assertThrows(ViolatesConstraintException.class, () -> service.patchFileName(newDocument),
+                "Document by fullName already exist for the current classificationId.");
+    }
+
+    @Test
+    public void patchFileName_differentClassificationIds() {
+        Document saved1 = documentRepository.save(createRandomDocument(savedClassification));
+        Document saved2 = documentRepository.save(createRandomDocument(classificationRepository.save(createRandomClassification())));
+
+        Document newDocument = saved2.toBuilder()
+                .fullName(saved1.getName())
+                .name(saved1.getFullName())
+                .build();
+
+        assertDoesNotThrow( () -> service.patchFileName(newDocument));
     }
 
     @Test

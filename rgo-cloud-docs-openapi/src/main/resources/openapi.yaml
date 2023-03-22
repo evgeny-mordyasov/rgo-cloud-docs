@@ -50,14 +50,14 @@ paths:
               schema:
                 $ref: 'file-components.yaml#/components/schemas/FileModifyResponse'
         '400':
-          description: The passed parameters are not valid
+          description: The passed parameters are not valid or the file name already exists for classification_id
           content:
             application/json;charset=UTF-8:
               schema:
                 $ref: 'common-components.yaml#/components/schemas/BaseErrorResponse'
               example:
                 status:
-                  code: INVALID_RQ
+                  code: INVALID_RQ or VIOLATES_CONSTRAINT
                   description: ERROR MESSAGE
         '401':
           description: The AUTH_TOKEN cookie is missing
@@ -123,7 +123,7 @@ paths:
               schema:
                 $ref: 'file-components.yaml#/components/schemas/FileModifyResponse'
         '400':
-          description: The passed parameters are not valid (INVALID_RQ) or document already has this languageId (VIOLATES_CONSTRAINT)
+          description: The passed parameters are not valid (INVALID_RQ); document already has this languageId or the file name already exists for classification_id (VIOLATES_CONSTRAINT)
           content:
             application/json;charset=UTF-8:
               schema:

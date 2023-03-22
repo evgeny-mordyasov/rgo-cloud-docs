@@ -10,7 +10,7 @@ public interface DocumentRepository {
 
     Optional<Document> findById(Long entityId);
 
-    Optional<Document> findByFullName(String fullName);
+    Optional<Document> findByFullNameAndClassificationId(String fullName, Long classificationId);
 
     Document save(Document document);
 

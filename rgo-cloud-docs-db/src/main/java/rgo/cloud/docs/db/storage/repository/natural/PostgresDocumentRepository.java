@@ -46,10 +46,13 @@ public class PostgresDocumentRepository implements DocumentRepository {
     }
 
     @Override
-    public Optional<Document> findByFullName(String fullName) {
-        MapSqlParameterSource params = new MapSqlParameterSource("full_name", fullName);
+    public Optional<Document> findByFullNameAndClassificationId(String fullName, Long classificationId) {
+        MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
+                "full_name", fullName,
+                "classification_id", classificationId));
+
         return first(
-                jdbc.query(DocumentQuery.findByFullName(), params, emptyMapper));
+                jdbc.query(DocumentQuery.findByFullNameAndClassificationId(), params, emptyMapper));
     }
 
     private Optional<Document> first(List<Document> list) {

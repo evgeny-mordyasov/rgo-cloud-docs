@@ -31,10 +31,11 @@ public final class DocumentQuery {
                 "       AND d.classification_id = c.entity_id";
     }
 
-    public static String findByFullName() {
+    public static String findByFullNameAndClassificationId() {
         return  "SELECT d.entity_id " +
                 "FROM " + TABLE_NAME + " AS d " +
-                "WHERE d.full_name = :full_name";
+                "WHERE d.full_name = :full_name" +
+                "      AND d.classification_id = :classification_id";
     }
 
     public static String save() {
