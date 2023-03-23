@@ -1,3 +1,6 @@
+server:
+  port: 8091
+
 spring:
   main:
     banner-mode: off
@@ -9,3 +12,9 @@ module-properties:
       path: /
       expirationHours: 1
       secret: test
+
+jasypt:
+  encryptor:
+    property:
+      prefix: STUB(
+      suffix: )

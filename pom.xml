@@ -41,6 +41,8 @@
         <h2.version>2.1.210</h2.version>
         <!-- db -->
 
+        <jasypt.version>3.0.4</jasypt.version>
+        <jasypt-plugin.version>3.0.4</jasypt-plugin.version>
         <lombok.version>1.18.22</lombok.version>
         <streamex.version>0.8.1</streamex.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
@@ -145,6 +147,11 @@
             </dependency>
             <!-- db -->
 
+            <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>${jasypt.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>

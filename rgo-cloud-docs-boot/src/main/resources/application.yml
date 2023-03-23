@@ -10,10 +10,15 @@ module-properties:
   auth:
     cookie:
       authCookieName: AUTH_TOKEN
-      secret: ru.gold.ordance
+      secret: ENC(2lC1bZryCBUnMXoe+0a2a6KdaeG2OTbdR9LhUM44gYyhmfwXcCfiUnEOu+m5nIRH)
   persistence:
     url: jdbc:postgresql://common-db:5432/docs
     schema: docs
-    username: docs_appl
-    password: qwe123
+    username: ENC(l8wHZB10C6nJdYTEj0kGqZOoo+ruL7HfuLrUNfC+GeSPaq+EimGJesD9YGS8ZuIa)
+    password: ENC(Q25fdX5HGiXN/WsxWGXW3IE0ibpJ0r1T9y84f+z7ysz1Mn9/W3fn9pIQqohPv/Wn)
     maxPoolSize: 10
+
+jasypt:
+  encryptor:
+    password: ${JASYPT-ENCRYPTOR-PWD}
+    pool-size: 5
