@@ -15,7 +15,7 @@ import rgo.cloud.security.config.SecurityConfig;
 
 @Configuration
 @ConfigurationPropertiesScan
-@Import(value = { SecurityConfig.class, AspectConfig.class, ServiceConfig.class})
+@Import(value = { SecurityConfig.class, AspectConfig.class, ServiceConfig.class })
 public class ApplicationConfig {
 
     @Bean
