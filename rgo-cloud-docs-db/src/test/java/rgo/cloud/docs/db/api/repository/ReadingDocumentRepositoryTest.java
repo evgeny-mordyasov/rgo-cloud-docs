@@ -1,27 +1,26 @@
-package rgo.cloud.docs.boot.storage.repository;
+package rgo.cloud.docs.db.api.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import rgo.cloud.common.spring.test.CommonTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import rgo.cloud.common.spring.test.PersistenceTest;
 import rgo.cloud.docs.db.api.entity.Classification;
 import rgo.cloud.docs.db.api.entity.Document;
 import rgo.cloud.docs.db.api.entity.Language;
 import rgo.cloud.docs.db.api.entity.ReadingDocument;
-import rgo.cloud.docs.db.api.repository.ClassificationRepository;
-import rgo.cloud.docs.db.api.repository.DocumentRepository;
-import rgo.cloud.docs.db.api.repository.LanguageRepository;
-import rgo.cloud.docs.db.api.repository.ReadingDocumentRepository;
+import rgo.cloud.docs.db.config.PersistenceConfig;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static rgo.cloud.docs.boot.EntityGenerator.*;
-import static rgo.cloud.docs.boot.EntityGenerator.createRandomDocument;
+import static rgo.cloud.docs.db.utils.EntityGenerator.*;
 
-@SpringBootTest
 @ActiveProfiles("test")
-public class ReadingDocumentRepositoryTest extends CommonTest {
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = PersistenceConfig.class)
+public class ReadingDocumentRepositoryTest extends PersistenceTest {
 
     @Autowired
     private ReadingDocumentRepository readingDocumentRepository;

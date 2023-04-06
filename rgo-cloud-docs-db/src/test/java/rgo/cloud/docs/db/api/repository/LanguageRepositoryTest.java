@@ -1,24 +1,29 @@
-package rgo.cloud.docs.boot.storage.repository;
+package rgo.cloud.docs.db.api.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import rgo.cloud.common.spring.test.CommonTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import rgo.cloud.common.spring.test.PersistenceTest;
 import rgo.cloud.docs.db.api.entity.Language;
-import rgo.cloud.docs.db.api.repository.LanguageRepository;
+import rgo.cloud.docs.db.config.PersistenceConfig;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static rgo.cloud.common.spring.util.TestCommonUtil.*;
-import static rgo.cloud.docs.boot.EntityGenerator.createRandomLanguage;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
+import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
+import static rgo.cloud.docs.db.utils.EntityGenerator.createRandomLanguage;
 
-@SpringBootTest
 @ActiveProfiles("test")
-public class LanguageRepositoryTest extends CommonTest {
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = PersistenceConfig.class)
+public class LanguageRepositoryTest extends PersistenceTest {
 
     @Autowired
     private LanguageRepository languageRepository;

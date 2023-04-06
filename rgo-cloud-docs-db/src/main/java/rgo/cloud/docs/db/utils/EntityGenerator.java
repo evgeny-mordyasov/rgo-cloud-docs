@@ -1,14 +1,15 @@
-package rgo.cloud.docs.boot;
+package rgo.cloud.docs.db.utils;
 
 import org.apache.commons.lang3.RandomUtils;
 import rgo.cloud.docs.db.api.entity.*;
-import rgo.cloud.docs.rest.api.file.FileExtension;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
 
 public final class EntityGenerator {
+    private static final String[] EXTENSIONS = {"DOC", "DOCX", "RTF", "TXT", "PDF"};
+
     private EntityGenerator() {
     }
 
@@ -38,8 +39,7 @@ public final class EntityGenerator {
     }
 
     public static String generateExtension() {
-        return FileExtension.values()[ThreadLocalRandom.current().nextInt(FileExtension.values().length)]
-                .name();
+        return EXTENSIONS[ThreadLocalRandom.current().nextInt(EXTENSIONS.length)];
     }
 
     public static Translation createRandomTranslation(Document document, Language language) {

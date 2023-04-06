@@ -1,30 +1,33 @@
-package rgo.cloud.docs.boot.service;
+package rgo.cloud.docs.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
 import rgo.cloud.common.api.exception.ViolatesConstraintException;
-import rgo.cloud.common.spring.test.CommonTest;
-import rgo.cloud.docs.db.api.repository.ClassificationRepository;
-import rgo.cloud.docs.db.api.repository.DocumentRepository;
+import rgo.cloud.common.spring.test.PersistenceTest;
 import rgo.cloud.docs.db.api.entity.Classification;
 import rgo.cloud.docs.db.api.entity.Document;
-import rgo.cloud.docs.service.DocumentService;
+import rgo.cloud.docs.db.api.repository.ClassificationRepository;
+import rgo.cloud.docs.db.api.repository.DocumentRepository;
+import rgo.cloud.docs.service.config.ServiceConfig;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
 import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
-import static rgo.cloud.docs.boot.EntityGenerator.createRandomClassification;
-import static rgo.cloud.docs.boot.EntityGenerator.createRandomDocument;
+import static rgo.cloud.docs.db.utils.EntityGenerator.createRandomClassification;
+import static rgo.cloud.docs.db.utils.EntityGenerator.createRandomDocument;
 
-@SpringBootTest
 @ActiveProfiles("test")
-public class DocumentServiceTest extends CommonTest {
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = ServiceConfig.class)
+public class DocumentServiceTest extends PersistenceTest {
 
     @Autowired
     private DocumentService service;

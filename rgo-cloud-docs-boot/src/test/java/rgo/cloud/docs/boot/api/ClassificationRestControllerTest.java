@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import rgo.cloud.common.api.rest.StatusCode;
-import rgo.cloud.common.spring.test.CommonTest;
+import rgo.cloud.common.spring.test.WebTest;
 import rgo.cloud.docs.db.api.repository.ClassificationRepository;
 import rgo.cloud.docs.rest.api.classification.request.ClassificationSaveRequest;
 import rgo.cloud.docs.rest.api.classification.request.ClassificationUpdateRequest;
@@ -26,12 +26,12 @@ import static rgo.cloud.common.api.util.JsonUtil.toJson;
 import static rgo.cloud.common.spring.util.RequestUtil.JSON;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
 import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
-import static rgo.cloud.docs.boot.EntityGenerator.createRandomClassification;
+import static rgo.cloud.docs.db.utils.EntityGenerator.createRandomClassification;
 
 @SpringBootTest
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class ClassificationRestControllerTest extends CommonTest {
+public class ClassificationRestControllerTest extends WebTest {
 
     @Autowired
     private ClassificationRepository classificationRepository;

@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import rgo.cloud.common.api.rest.StatusCode;
-import rgo.cloud.common.spring.test.CommonTest;
+import rgo.cloud.common.spring.test.WebTest;
 import rgo.cloud.docs.rest.api.classification.request.ClassificationSaveRequest;
 import rgo.cloud.docs.rest.api.classification.request.ClassificationUpdateRequest;
 import rgo.cloud.security.config.util.Endpoint;
@@ -24,7 +24,7 @@ import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
 @SpringBootTest
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class ClassificationRestControllerValidateTest extends CommonTest {
+public class ClassificationRestControllerValidateTest extends WebTest {
 
     @BeforeEach
     public void setUp() {

@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import rgo.cloud.common.api.rest.StatusCode;
-import rgo.cloud.common.spring.test.CommonTest;
+import rgo.cloud.common.spring.test.WebTest;
 import rgo.cloud.docs.db.api.repository.LanguageRepository;
 import rgo.cloud.docs.rest.api.language.request.LanguageSaveRequest;
 import rgo.cloud.docs.rest.api.language.request.LanguageUpdateRequest;
@@ -26,12 +26,12 @@ import static rgo.cloud.common.api.util.JsonUtil.toJson;
 import static rgo.cloud.common.spring.util.RequestUtil.JSON;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
 import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
-import static rgo.cloud.docs.boot.EntityGenerator.createRandomLanguage;
+import static rgo.cloud.docs.db.utils.EntityGenerator.createRandomLanguage;
 
 @SpringBootTest
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class LanguageRestControllerTest extends CommonTest {
+public class LanguageRestControllerTest extends WebTest {
 
     @Autowired
     private LanguageRepository languageRepository;

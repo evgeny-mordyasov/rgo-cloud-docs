@@ -1,19 +1,16 @@
-package rgo.cloud.docs.boot.service;
+package rgo.cloud.docs.db.api.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
-import rgo.cloud.common.api.exception.ViolatesConstraintException;
-import rgo.cloud.common.spring.test.CommonTest;
+import rgo.cloud.common.spring.test.PersistenceTest;
 import rgo.cloud.docs.db.api.entity.*;
-import rgo.cloud.docs.db.api.repository.ClassificationRepository;
-import rgo.cloud.docs.db.api.repository.TranslationRepository;
-import rgo.cloud.docs.db.api.repository.DocumentRepository;
-import rgo.cloud.docs.db.api.repository.LanguageRepository;
-import rgo.cloud.docs.service.TranslationService;
+import rgo.cloud.docs.db.config.PersistenceConfig;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,24 +18,22 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
 import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
-import static rgo.cloud.docs.boot.EntityGenerator.*;
+import static rgo.cloud.docs.db.utils.EntityGenerator.*;
 
-@SpringBootTest
 @ActiveProfiles("test")
-public class TranslationServiceTest extends CommonTest {
-
-    @Autowired
-    private TranslationService service;
-
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = PersistenceConfig.class)
+public class TranslationRepositoryTest extends PersistenceTest {
+    
     @Autowired
     private TranslationRepository translationRepository;
-
+    
     @Autowired
     private DocumentRepository documentRepository;
-
+    
     @Autowired
     private ClassificationRepository classificationRepository;
-
+    
     @Autowired
     private LanguageRepository languageRepository;
 
@@ -62,7 +57,7 @@ public class TranslationServiceTest extends CommonTest {
     public void findAll_noOneHasBeenFound() {
         int noOneHasBeenFound = 0;
 
-        List<Translation> found = service.findAll();
+        List<Translation> found = translationRepository.findAll();
 
         assertEquals(noOneHasBeenFound, found.size());
     }
@@ -72,7 +67,7 @@ public class TranslationServiceTest extends CommonTest {
         int foundOne = 1;
         translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
 
-        List<Translation> found = service.findAll();
+        List<Translation> found = translationRepository.findAll();
 
         assertEquals(foundOne, found.size());
     }
@@ -83,7 +78,7 @@ public class TranslationServiceTest extends CommonTest {
         translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
         translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
 
-        List<Translation> found = service.findAll();
+        List<Translation> found = translationRepository.findAll();
 
         assertEquals(foundALot, found.size());
     }
@@ -93,7 +88,7 @@ public class TranslationServiceTest extends CommonTest {
         int noOneHasBeenFound = 0;
         long fakeDocumentId = generateId();
 
-        List<Translation> found = service.findByDocumentId(fakeDocumentId);
+        List<Translation> found = translationRepository.findByDocumentId(fakeDocumentId);
 
         assertEquals(noOneHasBeenFound, found.size());
     }
@@ -103,7 +98,7 @@ public class TranslationServiceTest extends CommonTest {
         int foundOne = 1;
         translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
 
-        List<Translation> found = service.findByDocumentId(savedDocument.getEntityId());
+        List<Translation> found = translationRepository.findByDocumentId(savedDocument.getEntityId());
 
         assertEquals(foundOne, found.size());
     }
@@ -114,7 +109,7 @@ public class TranslationServiceTest extends CommonTest {
         translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
         translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
 
-        List<Translation> found = service.findByDocumentId(savedDocument.getEntityId());
+        List<Translation> found = translationRepository.findByDocumentId(savedDocument.getEntityId());
 
         assertEquals(foundALot, found.size());
     }
@@ -124,7 +119,7 @@ public class TranslationServiceTest extends CommonTest {
         int noOneHasBeenFound = 0;
         long fakeClassificationId = generateId();
 
-        List<Translation> found = service.findByClassificationId(fakeClassificationId);
+        List<Translation> found = translationRepository.findByClassificationId(fakeClassificationId);
 
         assertEquals(noOneHasBeenFound, found.size());
     }
@@ -134,7 +129,7 @@ public class TranslationServiceTest extends CommonTest {
         int foundOne = 1;
         translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
 
-        List<Translation> found = service.findByClassificationId(savedDocument.getClassification().getEntityId());
+        List<Translation> found = translationRepository.findByClassificationId(savedDocument.getClassification().getEntityId());
 
         assertEquals(foundOne, found.size());
     }
@@ -145,7 +140,7 @@ public class TranslationServiceTest extends CommonTest {
         translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
         translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
 
-        List<Translation> found = service.findByClassificationId(savedDocument.getClassification().getEntityId());
+        List<Translation> found = translationRepository.findByClassificationId(savedDocument.getClassification().getEntityId());
 
         assertEquals(foundALot, found.size());
     }
@@ -155,7 +150,7 @@ public class TranslationServiceTest extends CommonTest {
         int noOneHasBeenFound = 0;
         String fakeFullName = randomString();
 
-        List<Translation> found = service.findByFullName(fakeFullName);
+        List<Translation> found = translationRepository.findByFullName(fakeFullName);
 
         assertEquals(noOneHasBeenFound, found.size());
     }
@@ -165,7 +160,7 @@ public class TranslationServiceTest extends CommonTest {
         int foundOne = 1;
         translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
 
-        List<Translation> found = service.findByFullName(savedDocument.getName());
+        List<Translation> found = translationRepository.findByFullName(savedDocument.getName());
 
         assertEquals(foundOne, found.size());
     }
@@ -188,7 +183,7 @@ public class TranslationServiceTest extends CommonTest {
         translationRepository.save(createRandomTranslation(saved2, savedLanguage));
         translationRepository.save(createRandomTranslation(saved3, savedLanguage));
 
-        List<Translation> documents = service.findByFullName(name);
+        List<Translation> documents = translationRepository.findByFullName(name);
 
         assertFalse(documents.isEmpty());
         assertEquals(foundALot, documents.size());
@@ -201,7 +196,7 @@ public class TranslationServiceTest extends CommonTest {
                 .languageId(generateId())
                 .build();
 
-        Optional<Translation> found = service.findByKey(fakeKey);
+        Optional<Translation> found = translationRepository.findByKey(fakeKey);
 
         assertTrue(found.isEmpty());
     }
@@ -211,7 +206,7 @@ public class TranslationServiceTest extends CommonTest {
         Translation saved = translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
 
         Optional<Translation> found =
-                service.findByKey(saved.key());
+                translationRepository.findByKey(saved.key());
 
         assertTrue(found.isPresent());
         assertEquals(saved.getEntityId(), found.get().getEntityId());
@@ -227,7 +222,7 @@ public class TranslationServiceTest extends CommonTest {
                 .languageId(generateId())
                 .build();
 
-        Optional<Translation> found = service.findByKeyWithData(fakeKey);
+        Optional<Translation> found = translationRepository.findByKeyWithData(fakeKey);
 
         assertTrue(found.isEmpty());
     }
@@ -237,7 +232,7 @@ public class TranslationServiceTest extends CommonTest {
         Translation saved = translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
 
         Optional<Translation> found =
-                service.findByKeyWithData(saved.key());
+                translationRepository.findByKeyWithData(saved.key());
 
         assertTrue(found.isPresent());
         assertEquals(saved.getDocument().getFullName(), found.get().getDocument().getFullName());
@@ -248,7 +243,7 @@ public class TranslationServiceTest extends CommonTest {
     public void save() {
         Translation created = createRandomTranslation(savedDocument, savedLanguage);
 
-        Translation saved = service.save(created);
+        Translation saved = translationRepository.save(created);
 
         assertEquals(created.getDocument().toString(), saved.getDocument().toString());
         assertEquals(created.getLanguage().toString(), saved.getLanguage().toString());
@@ -256,24 +251,27 @@ public class TranslationServiceTest extends CommonTest {
     }
 
     @Test
-    public void save_alreadyExists() {
-        Translation created = createRandomTranslation(savedDocument, savedLanguage);
-        translationRepository.save(created);
+    public void save_languageNotFound() {
+        Translation created = createRandomTranslation(savedDocument, createRandomLanguage());
 
-        assertThrows(ViolatesConstraintException.class, () -> service.save(created), "The translation by documentId and languageId already exists.");
-    }
-
-    @Test
-    public void deleteById_notFound() {
-        long fakeId = generateId();
-
-        assertThrows(EntityNotFoundException.class, () -> service.deleteById(fakeId), "The translation by id not found.");
+        assertThrows(EntityNotFoundException.class, () -> translationRepository.save(created), "Language by id not found.");
     }
 
     @Test
     public void deleteById() {
         Translation saved = translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
-        service.deleteById(saved.getEntityId());
+        translationRepository.deleteById(saved.getEntityId());
+
+        Optional<Translation> found =
+                translationRepository.findByKey(saved.key());
+
+        assertTrue(found.isEmpty());
+    }
+
+    @Test
+    public void deleteById_cascadeDocument() {
+        Translation saved = translationRepository.save(createRandomTranslation(savedDocument, savedLanguage));
+        documentRepository.deleteById(saved.getDocument().getEntityId());
 
         Optional<Translation> found =
                 translationRepository.findByKey(saved.key());

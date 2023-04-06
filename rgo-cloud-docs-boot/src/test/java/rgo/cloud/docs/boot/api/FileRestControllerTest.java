@@ -9,7 +9,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import rgo.cloud.common.api.rest.StatusCode;
-import rgo.cloud.common.spring.test.CommonTest;
+import rgo.cloud.common.spring.test.WebTest;
 import rgo.cloud.docs.facade.FileFacade;
 import rgo.cloud.docs.service.TranslationService;
 import rgo.cloud.docs.service.DocumentService;
@@ -37,15 +37,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static rgo.cloud.common.spring.util.RequestUtil.JSON;
 import static rgo.cloud.common.spring.util.TestCommonUtil.generateId;
 import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
-import static rgo.cloud.docs.boot.EntityGenerator.*;
-import static rgo.cloud.docs.boot.EntityGenerator.createRandomTranslation;
+import static rgo.cloud.docs.db.utils.EntityGenerator.*;
+import static rgo.cloud.docs.db.utils.EntityGenerator.createRandomTranslation;
 import static rgo.cloud.docs.boot.FileGenerator.createFile;
 import static rgo.cloud.docs.boot.FileGenerator.multipartPatch;
 
 @SpringBootTest
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class FileRestControllerTest extends CommonTest {
+public class FileRestControllerTest extends WebTest {
 
     @Autowired
     private FileFacade facade;

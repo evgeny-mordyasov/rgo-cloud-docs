@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import rgo.cloud.security.config.util.Endpoint;
 
 import static rgo.cloud.common.spring.util.TestCommonUtil.randomString;
-import static rgo.cloud.docs.boot.EntityGenerator.generateExtension;
+import static rgo.cloud.docs.db.utils.EntityGenerator.generateExtension;
 
 public final class FileGenerator {
     private FileGenerator() {
