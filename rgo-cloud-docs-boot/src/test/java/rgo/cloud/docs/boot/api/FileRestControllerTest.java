@@ -11,6 +11,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import rgo.cloud.common.api.rest.StatusCode;
 import rgo.cloud.common.spring.test.WebTest;
 import rgo.cloud.docs.facade.FileFacade;
+import rgo.cloud.docs.rest.api.file.FileExtension;
 import rgo.cloud.docs.service.TranslationService;
 import rgo.cloud.docs.service.DocumentService;
 import rgo.cloud.docs.db.api.repository.ClassificationRepository;
@@ -663,15 +664,16 @@ public class FileRestControllerTest extends WebTest {
 
     @Test
     public void patch_twoResources() throws Exception {
+        String extension = generateExtension();
         int twoResources = 2;
 
         Language savedLanguage1 = languageRepository.save(createRandomLanguage());
         Language savedLanguage2 = languageRepository.save(createRandomLanguage());
         Classification savedClassification = classificationRepository.save(createRandomClassification());
 
-        FileDto savedFile = facade.save(createRandomTranslation(createRandomDocument(savedClassification), savedLanguage1));
+        FileDto savedFile = facade.save(createRandomTranslation(createRandomDocument(savedClassification, extension), savedLanguage1));
 
-        MockMultipartFile file = createFile();
+        MockMultipartFile file = createFile(extension);
 
         mvc.perform(multipartPatch()
                 .file(file)
@@ -694,6 +696,29 @@ public class FileRestControllerTest extends WebTest {
                         containsInAnyOrder(savedLanguage1.getEntityId().intValue(), savedLanguage2.getEntityId().intValue())))
                 .andExpect(jsonPath("$.object.resources[*].language.name",
                         containsInAnyOrder(savedLanguage1.getName(), savedLanguage2.getName())));
+    }
+
+    @Test
+    public void patch_differentExtensions() throws Exception {
+        String extension1 = FileExtension.DOC.name();
+        String extension2 = FileExtension.PDF.name();;
+
+        Language savedLanguage1 = languageRepository.save(createRandomLanguage());
+        Language savedLanguage2 = languageRepository.save(createRandomLanguage());
+        Classification savedClassification = classificationRepository.save(createRandomClassification());
+
+        Document document = createRandomDocument(savedClassification, extension1);
+        FileDto savedFile = facade.save(createRandomTranslation(document, savedLanguage1));
+
+        MockMultipartFile file = createFile(extension2);
+
+        mvc.perform(multipartPatch()
+                .file(file)
+                .param("documentId", savedFile.getDocument().getEntityId().toString())
+                .param("languageId", savedLanguage2.getEntityId().toString()))
+                .andExpect(content().contentType(JSON))
+                .andExpect(jsonPath("$.status.code", is(StatusCode.ILLEGAL_STATE.name())))
+                .andExpect(jsonPath("$.status.description", notNullValue()));
     }
 
     @Test

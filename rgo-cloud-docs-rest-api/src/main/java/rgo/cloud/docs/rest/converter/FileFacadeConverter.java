@@ -33,6 +33,7 @@ public final class FileFacadeConverter {
         return Translation.builder()
                 .document(Document.builder()
                         .entityId(rq.getKey().getDocumentId())
+                        .extension(rq.getFile().getExtension())
                         .build())
                 .language(Language.builder()
                         .entityId(rq.getKey().getLanguageId())

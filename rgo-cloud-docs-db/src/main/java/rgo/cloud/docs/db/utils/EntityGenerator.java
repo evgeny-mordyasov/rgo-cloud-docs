@@ -38,6 +38,18 @@ public final class EntityGenerator {
                 .build();
     }
 
+    public static Document createRandomDocument(Classification classification, String extension) {
+        String name = randomString();
+        String fullName = name + "." + extension;
+
+        return Document.builder()
+                .fullName(fullName)
+                .name(name)
+                .extension(extension)
+                .classification(classification)
+                .build();
+    }
+
     public static String generateExtension() {
         return EXTENSIONS[ThreadLocalRandom.current().nextInt(EXTENSIONS.length)];
     }

@@ -23,6 +23,15 @@ public final class FileGenerator {
         );
     }
 
+    public static MockMultipartFile createFile(String extension) {
+        return new MockMultipartFile(
+                "file",
+                randomString() + "." + extension,
+                MediaType.TEXT_PLAIN_VALUE,
+                randomString().getBytes()
+        );
+    }
+
     public static MockMultipartFile createEmptyFile() {
         return new MockMultipartFile(
                 "file",

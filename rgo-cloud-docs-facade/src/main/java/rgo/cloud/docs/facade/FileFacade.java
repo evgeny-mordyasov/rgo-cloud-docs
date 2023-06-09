@@ -3,6 +3,7 @@ package rgo.cloud.docs.facade;
 import lombok.extern.slf4j.Slf4j;
 import one.util.streamex.StreamEx;
 import rgo.cloud.common.api.exception.EntityNotFoundException;
+import rgo.cloud.common.api.exception.IllegalStateException;
 import rgo.cloud.docs.facade.api.FileResource;
 import rgo.cloud.docs.service.TranslationService;
 import rgo.cloud.docs.service.DocumentService;
@@ -116,6 +117,12 @@ public class FileFacade {
             String errorMsg = "The document by documentId not found.";
             log.error(errorMsg);
             throw new EntityNotFoundException(errorMsg);
+        }
+
+        if (!opt.get().getExtension().equals(tr.getDocument().getExtension())) {
+            String errorMsg = "The document extension should be " + opt.get().getExtension() + ".";
+            log.error(errorMsg);
+            throw new IllegalStateException(errorMsg);
         }
 
         translationService.save(Translation.builder()
