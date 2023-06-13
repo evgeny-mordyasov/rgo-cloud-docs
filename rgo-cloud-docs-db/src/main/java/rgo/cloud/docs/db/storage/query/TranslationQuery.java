@@ -33,8 +33,9 @@ public final class TranslationQuery {
                 "       d.full_name AS document_full_name " +
                 "FROM " + TABLE_NAME + " AS tr " +
                 "    JOIN document AS d " +
-                "        ON tr.document_id = :document_id " +
-                "WHERE language_id = :language_id";
+                "        ON tr.document_id = d.entity_id " +
+                "WHERE language_id = :language_id" +
+                "      AND document_id = :document_id";
     }
 
     public static String findByClassificationId() {
